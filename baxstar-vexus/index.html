@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Boat — Baxstar Fishing | Vexus DVX 20S</title>
+<meta name="description" content="Every Baxstar Fishing trip runs on this Vexus DVX 20S — Mercury Pro XS power, Minn Kota Ultrex bow control, Power-Pole Drift Paddles. Scroll to walk the boat, then book your private trip.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Saira:wght@400;500;600&family=Archivo:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0a0a0d;            /* gelcoat black-blue page base */
+  --flake:#121218;          /* card / panel */
+  --flake-hi:#1a1a22;
+  --platinum:#e9e9ee;       /* silver logo tone — primary text */
+  --steel:#93939e;          /* secondary text */
+  --steel-dim:#5c5c66;
+  --pin:#b9bdc7;            /* hull pinstripe silver */
+  --red:#d51820;            /* Vexus / Baxstar red */
+  --red-glow:rgba(213,24,32,.38);
+  --red-soft:rgba(213,24,32,.09);
+  --display:'Saira Condensed','Arial Narrow',sans-serif;
+  --label:'Saira',sans-serif;
+  --body:'Archivo',-apple-system,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:auto}
+body{background:var(--ink);color:var(--platinum);font-family:var(--body);font-weight:300;overflow-x:hidden}
+::selection{background:var(--red);color:#fff}
+a{color:inherit}
+img{-webkit-user-drag:none;user-select:none}
+
+/* ---------- ambient layers ---------- */
+#grain{position:fixed;inset:-50%;width:200%;height:200%;pointer-events:none;z-index:9990;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  animation:grain 8s steps(10) infinite}
+@keyframes grain{0%,100%{transform:translate(0,0)}20%{transform:translate(-3%,2%)}40%{transform:translate(2%,-3%)}60%{transform:translate(-2%,-2%)}80%{transform:translate(3%,3%)}}
+#vignette{position:fixed;inset:0;pointer-events:none;z-index:9989;
+  background:radial-gradient(ellipse at 50% 45%,transparent 55%,rgba(0,0,0,.5) 100%)}
+#flakes{position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.5}
+
+/* ---------- custom cursor ---------- */
+#cur-dot,#cur-ring{position:fixed;top:0;left:0;pointer-events:none;border-radius:50%;z-index:9998;display:none}
+#cur-dot{width:5px;height:5px;background:var(--platinum);mix-blend-mode:difference}
+#cur-ring{width:34px;height:34px;border:1px solid rgba(233,233,238,.35);transition:width .25s,height .25s,border-color .25s}
+@media(pointer:fine){#cur-dot,#cur-ring{display:block}body{cursor:none}a,button{cursor:none}}
+#cur-ring.hover{width:52px;height:52px;border-color:var(--red)}
+
+/* ---------- loader ---------- */
+#loader{position:fixed;inset:0;background:var(--ink);z-index:9999;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:22px;transition:opacity .8s,filter .8s}
+#loader.done{opacity:0;filter:blur(8px);pointer-events:none}
+#loader .rule{width:120px;height:1px;background:linear-gradient(90deg,transparent,var(--steel-dim),transparent)}
+#loader .mark{font-family:var(--display);font-weight:700;font-size:26px;letter-spacing:.42em;text-indent:.42em;text-transform:uppercase}
+#loader .mark em{color:var(--red);font-style:normal}
+#loader .bar{width:140px;height:2px;background:rgba(233,233,238,.08);overflow:hidden;border-radius:2px}
+#loader .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--red),var(--pin));transition:width .3s}
+#loader .pct{font-family:var(--label);font-size:9px;letter-spacing:.35em;color:var(--steel)}
+
+/* ---------- chapter markers ---------- */
+#chapters{position:fixed;right:26px;top:50%;transform:translateY(-50%);z-index:200;display:flex;
+  flex-direction:column;gap:0;align-items:center;opacity:0;transition:opacity .6s}
+#chapters.on{opacity:1}
+#chapters .dot{width:5px;height:5px;border-radius:50%;background:var(--steel-dim);transition:all .4s;position:relative}
+#chapters .dot.active{background:var(--red);box-shadow:0 0 10px var(--red-glow);transform:scale(1.5)}
+#chapters .link{width:1px;height:26px;background:rgba(233,233,238,.1)}
+@media(max-width:768px){#chapters{display:none}}
+
+/* ---------- scroll stage ---------- */
+#stage{position:relative;height:640vh}
+#viewport{position:sticky;top:0;height:100vh;overflow:hidden;
+  background:
+    radial-gradient(ellipse 80% 55% at 50% 68%,rgba(213,24,32,.05),transparent 65%),
+    radial-gradient(ellipse 90% 70% at 50% 30%,rgba(185,189,199,.04),transparent 70%),
+    var(--ink)}
+#hull-light{position:absolute;left:50%;top:64%;width:70vw;height:24vh;transform:translate(-50%,-50%);
+  background:radial-gradient(ellipse,rgba(185,189,199,.07),transparent 70%);pointer-events:none}
+#boat{position:absolute;left:0;top:0;transform-origin:0 0;will-change:transform;pointer-events:none}
+#boat img{display:block;width:100%;height:auto;filter:drop-shadow(0 30px 60px rgba(0,0,0,.6))}
+
+/* ---------- svg leader lines + dots ---------- */
+#lines{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:40}
+#lines line{stroke:var(--pin);stroke-width:1;opacity:0}
+.anchor-dot{position:absolute;left:0;top:0;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;
+  border:1px solid var(--pin);background:rgba(10,10,13,.6);opacity:0;z-index:41;pointer-events:none}
+.anchor-dot::after{content:'';position:absolute;inset:2.5px;border-radius:50%;background:var(--red);
+  box-shadow:0 0 8px var(--red-glow)}
+
+/* ---------- phase overlays ---------- */
+.phase{position:absolute;inset:0;opacity:0;pointer-events:none;z-index:50}
+.phase .inner{pointer-events:auto}
+.eyebrow{font-family:var(--label);font-weight:600;font-size:10px;letter-spacing:.34em;text-transform:uppercase;color:var(--steel)}
+.eyebrow em{color:var(--red);font-style:normal}
+h1,h2,.h-display{font-family:var(--display);font-weight:700;text-transform:uppercase;line-height:.92;letter-spacing:.01em}
+
+/* phase 0 — hero */
+#p0 .inner{position:absolute;left:6vw;top:16vh;max-width:640px}
+#p0 h1{font-size:clamp(52px,8.5vw,124px);margin:18px 0 22px}
+#p0 h1 .ln{display:block;overflow:hidden}
+#p0 h1 .ch{display:inline-block;transform:translateY(110%);transition:transform .9s cubic-bezier(.2,.8,.2,1)}
+#p0.armed h1 .ch{transform:translateY(0)}
+#p0 h1 em{color:var(--red);font-style:normal}
+#p0 p{color:var(--steel);font-size:17px;line-height:1.65;max-width:440px}
+#scroll-cue{position:absolute;left:6vw;bottom:6vh;display:flex;align-items:center;gap:14px;
+  font-family:var(--label);font-size:9px;letter-spacing:.35em;text-transform:uppercase;color:var(--steel)}
+#scroll-cue .stem{width:1px;height:44px;background:linear-gradient(var(--red),transparent);animation:cue 2s ease-in-out infinite}
+@keyframes cue{0%,100%{opacity:.4;transform:scaleY(.7);transform-origin:top}50%{opacity:1;transform:scaleY(1)}}
+
+/* phase 1 — full profile + stat bar */
+#p1 .inner{position:absolute;left:50%;top:9vh;transform:translateX(-50%);text-align:center}
+#p1 h2{font-size:clamp(30px,4vw,54px);margin-top:14px}
+#statbar{position:absolute;left:50%;bottom:7vh;transform:translateX(-50%);display:flex;gap:0;
+  background:rgba(233,233,238,.03);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border:1px solid rgba(233,233,238,.07);border-radius:14px;overflow:hidden}
+#statbar .cell{padding:20px 34px;text-align:center;border-left:1px solid rgba(233,233,238,.06)}
+#statbar .cell:first-child{border-left:none}
+#statbar .k{font-family:var(--label);font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--steel);margin-bottom:7px}
+#statbar .v{font-family:var(--display);font-weight:600;font-size:19px;letter-spacing:.05em;text-transform:uppercase}
+#statbar .v em{color:var(--red);font-style:normal}
+
+/* phases 2–4 — feature callouts */
+.callout{position:absolute;max-width:360px;
+  background:rgba(18,18,24,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  border:1px solid rgba(233,233,238,.08);border-radius:14px;padding:26px 28px}
+.callout .idx{font-family:var(--label);font-weight:600;font-size:9px;letter-spacing:.32em;color:var(--red);text-transform:uppercase;margin-bottom:10px}
+.callout h3{font-family:var(--display);font-weight:600;font-size:26px;text-transform:uppercase;letter-spacing:.03em;margin-bottom:10px}
+.callout p{color:var(--steel);font-size:14.5px;line-height:1.6}
+#co-ultrex{left:6vw;top:22vh}
+#co-hull{left:6vw;bottom:12vh}
+#co-merc{right:6vw;top:18vh}
+#co-poles{right:6vw;bottom:14vh;max-width:320px}
+
+/* phase 5 — finale */
+#p5 .inner{position:absolute;left:50%;top:12vh;transform:translateX(-50%);text-align:center;width:min(760px,90vw)}
+#p5 h2{font-size:clamp(34px,5vw,66px);margin:16px 0 18px}
+#p5 h2 em{color:var(--red);font-style:normal}
+#p5 p{color:var(--steel);font-size:16.5px;line-height:1.65;max-width:520px;margin:0 auto 30px}
+.cta-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.btn{font-family:var(--label);font-weight:600;font-size:11px;letter-spacing:.28em;text-transform:uppercase;
+  text-decoration:none;padding:17px 34px;border-radius:100px;transition:all .3s;display:inline-block}
+.btn-red{background:var(--red);color:#fff;box-shadow:0 8px 30px var(--red-glow)}
+.btn-red:hover{background:#ee2530;transform:translateY(-2px)}
+.btn-ghost{border:1px solid rgba(233,233,238,.22);color:var(--platinum)}
+.btn-ghost:hover{border-color:var(--pin);background:rgba(233,233,238,.05)}
+
+/* ---------- below-stage content ---------- */
+section.block{position:relative;z-index:60;background:var(--ink);padding:120px 6vw}
+.block .head{max-width:1200px;margin:0 auto 56px}
+.block h2{font-size:clamp(30px,4vw,52px);margin-top:14px}
+.grid3{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.card{background:rgba(233,233,238,.03);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border:1px solid rgba(233,233,238,.06);border-radius:16px;padding:38px 32px;transition:all .4s;
+  opacity:0;transform:translateY(28px)}
+.card.in{opacity:1;transform:none}
+.card:hover{background:rgba(233,233,238,.055);border-color:rgba(213,24,32,.35)}
+.card .tag{font-family:var(--label);font-weight:600;font-size:9px;letter-spacing:.3em;color:var(--red);text-transform:uppercase;margin-bottom:14px}
+.card h3{font-family:var(--display);font-weight:600;font-size:24px;text-transform:uppercase;letter-spacing:.03em;margin-bottom:12px}
+.card p{color:var(--steel);font-size:14.5px;line-height:1.65}
+@media(max-width:900px){.grid3{grid-template-columns:1fr}}
+
+#book{background:linear-gradient(180deg,var(--ink),#0d0d11);text-align:center}
+#book h2 em{color:var(--red);font-style:normal}
+#book p.sub{color:var(--steel);font-size:16.5px;max-width:520px;margin:18px auto 34px;line-height:1.65}
+#book .fine{margin-top:26px;font-family:var(--label);font-size:9.5px;letter-spacing:.28em;text-transform:uppercase;color:var(--steel-dim)}
+#book .fine a{color:var(--steel);text-decoration:none}
+
+footer{border-top:1px solid rgba(233,233,238,.06);padding:44px 6vw;display:flex;justify-content:space-between;
+  align-items:center;flex-wrap:wrap;gap:16px;background:#0d0d11;position:relative;z-index:60}
+footer .brand{font-family:var(--display);font-weight:700;font-size:17px;letter-spacing:.3em;text-transform:uppercase}
+footer .brand em{color:var(--red);font-style:normal}
+footer .legal{font-family:var(--label);font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--steel-dim)}
+
+/* ---------- mobile ---------- */
+@media(max-width:768px){
+  #stage{height:520vh}
+  #p0 .inner{left:7vw;right:7vw;top:12vh}
+  #p0 p{font-size:15px}
+  .callout{left:6vw !important;right:6vw !important;top:auto !important;bottom:9vh !important;max-width:none !important;padding:20px 22px}
+  .callout h3{font-size:21px}
+  #statbar{flex-wrap:wrap;width:88vw;justify-content:center}
+  #statbar .cell{padding:14px 18px;flex:1 1 40%}
+  #statbar .v{font-size:15px}
+  section.block{padding:80px 7vw}
+}
+
+/* ---------- reduced motion ---------- */
+@media(prefers-reduced-motion:reduce){
+  #grain{animation:none}
+  #scroll-cue .stem{animation:none}
+}
+body.static #stage{height:auto}
+body.static #viewport{position:relative;height:auto;padding:14vh 0 8vh}
+body.static #boat{position:relative;transform:none !important;width:min(92vw,1300px);margin:0 auto}
+body.static .phase{position:relative;opacity:1 !important;inset:auto;padding:40px 6vw}
+body.static .phase .inner,body.static .callout,body.static #statbar{position:relative;left:auto;right:auto;top:auto;bottom:auto;transform:none;margin:0 auto 24px}
+body.static #lines,body.static .anchor-dot,body.static #scroll-cue,body.static #chapters{display:none}
+body.static #p0 h1 .ch{transform:none}
+</style>
+</head>
+<body>
+
+<div id="grain"></div>
+<div id="vignette"></div>
+<canvas id="flakes"></canvas>
+<div id="cur-dot"></div>
+<div id="cur-ring"></div>
+
+<div id="loader">
+  <div class="rule"></div>
+  <div class="mark">BAX<em>STAR</em></div>
+  <div class="bar"><i id="bar-fill"></i></div>
+  <div class="pct" id="pct">0%</div>
+  <div class="rule"></div>
+</div>
+
+<nav id="chapters" aria-hidden="true">
+  <div class="dot" data-c="0"></div><div class="link"></div>
+  <div class="dot" data-c="1"></div><div class="link"></div>
+  <div class="dot" data-c="2"></div><div class="link"></div>
+  <div class="dot" data-c="3"></div><div class="link"></div>
+  <div class="dot" data-c="4"></div><div class="link"></div>
+  <div class="dot" data-c="5"></div>
+</nav>
+
+<div id="stage">
+  <div id="viewport">
+    <div id="hull-light"></div>
+
+    <div id="boat"><img id="boat-img" src="assets/boat.webp"
+      srcset="assets/boat-mobile.webp 1280w, assets/boat.webp 3072w"
+      sizes="(max-width:768px) 160vw, 240vw" alt="Vexus DVX 20S — the Baxstar Fishing guide boat"></div>
+
+    <svg id="lines">
+      <line id="ln-ultrex"/><line id="ln-hull"/><line id="ln-merc"/><line id="ln-poles"/>
+    </svg>
+    <div class="anchor-dot" id="dot-ultrex"></div>
+    <div class="anchor-dot" id="dot-hull"></div>
+    <div class="anchor-dot" id="dot-merc"></div>
+    <div class="anchor-dot" id="dot-poles"></div>
+
+    <!-- P0 · hero -->
+    <div class="phase" id="p0">
+      <div class="inner">
+        <div class="eyebrow">Baxstar Fishing <em>·</em> Detroit Lakes, Minnesota</div>
+        <h1 id="hero-title"><span class="ln" data-split>MEET</span><span class="ln" data-split>THE BOAT.</span></h1>
+        <p>Every Baxstar trip runs on this Vexus DVX 20S — rigged, dialed, and waiting for you. Scroll to walk the boat.</p>
+      </div>
+      <div id="scroll-cue"><span class="stem"></span>Scroll</div>
+    </div>
+
+    <!-- P1 · full profile -->
+    <div class="phase" id="p1">
+      <div class="inner">
+        <div class="eyebrow">The Flagship</div>
+        <h2>Vexus <em style="color:var(--red)">DVX 20S</em></h2>
+      </div>
+      <div id="statbar">
+        <div class="cell"><div class="k">Model</div><div class="v">DVX <em>20S</em></div></div>
+        <div class="cell"><div class="k">Power</div><div class="v">Mercury Pro XS</div></div>
+        <div class="cell"><div class="k">Bow</div><div class="v">Minn Kota Ultrex</div></div>
+        <div class="cell"><div class="k">Stern</div><div class="v">Power-Pole ×2</div></div>
+      </div>
+    </div>
+
+    <!-- P2 · bow -->
+    <div class="phase" id="p2">
+      <div class="callout inner" id="co-ultrex">
+        <div class="idx">01 · Bow</div>
+        <h3>Minn Kota Ultrex</h3>
+        <p>GPS anchor-lock boat control. The bow holds the spot in wind and current — so your bait stays where the fish are, longer.</p>
+      </div>
+    </div>
+
+    <!-- P3 · helm / hull -->
+    <div class="phase" id="p3">
+      <div class="callout inner" id="co-hull">
+        <div class="idx">02 · Helm</div>
+        <h3>DVX Performance Hull</h3>
+        <p>Walk-through windshield, deep-V ride. When the wind comes up on big water, this hull keeps the day comfortable — and fishable.</p>
+      </div>
+    </div>
+
+    <!-- P4 · stern -->
+    <div class="phase" id="p4">
+      <div class="callout inner" id="co-merc">
+        <div class="idx">03 · Power</div>
+        <h3>Mercury Pro XS</h3>
+        <p>More water covered in a day means more spots on your trip. When the bite moves, we move.</p>
+      </div>
+      <div class="callout inner" id="co-poles">
+        <div class="idx">04 · Stern</div>
+        <h3>Power-Pole Drift Paddles</h3>
+        <p>Silent drift control for perfect presentations — the boat slows down so the fishing doesn't.</p>
+      </div>
+    </div>
+
+    <!-- P5 · finale -->
+    <div class="phase" id="p5">
+      <div class="inner">
+        <div class="eyebrow">Now the good part</div>
+        <h2>Fish it with a <em>5× Master Angler</em></h2>
+        <p>This boat doesn't sit at a dealership — it's on the water with Baxstar clients all season. Your private trip starts here.</p>
+        <div class="cta-row">
+          <a class="btn btn-red" href="https://baxstarfishing.com" target="_blank" rel="noopener">Book Your Trip</a>
+          <a class="btn btn-ghost" href="sms:2183256857">Text 218-325-6857</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<section class="block" id="trips">
+  <div class="head">
+    <div class="eyebrow">Where it takes you</div>
+    <h2>Built for the way <span style="color:var(--red)">you</span> fish</h2>
+  </div>
+  <div class="grid3">
+    <div class="card">
+      <div class="tag">Guided Fishing</div>
+      <h3>Multi-Species Trips</h3>
+      <p>Walleye, bass, panfish and more on Detroit Lakes area water — with a 5× Minnesota Master Angler running the boat and reading the day.</p>
+    </div>
+    <div class="card">
+      <div class="tag">Groups &amp; Families</div>
+      <h3>Family &amp; Action Trips</h3>
+      <p>Room for the crew. This layout was built for steady action, first fish, and the photos that come with them.</p>
+    </div>
+    <div class="card">
+      <div class="tag">Your Group Only</div>
+      <h3>Private Trips</h3>
+      <p>Every Baxstar trip is private — your people, your pace, gear and coaching included from the first cast.</p>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="book">
+  <div class="eyebrow">Reserve your date</div>
+  <h2>The boat is ready. <em>Are you?</em></h2>
+  <p class="sub">Prime dates go by reservation and the calendar fills fast in peak season. Book online in two minutes.</p>
+  <div class="cta-row">
+    <a class="btn btn-red" href="https://baxstarfishing.com" target="_blank" rel="noopener">Book at BaxstarFishing.com</a>
+    <a class="btn btn-ghost" href="tel:2183256857">Call 218-325-6857</a>
+  </div>
+  <div class="fine">Rigged with <a href="#">Vexus</a> · <a href="#">Mercury</a> · <a href="#">Minn Kota</a> · <a href="#">Power-Pole</a></div>
+</section>
+
+<footer>
+  <div class="brand">BAX<em>STAR</em> FISHING</div>
+  <div class="legal">Detroit Lakes, MN · BaxstarFishing.com</div>
+</footer>
+
+<script>
+(function(){
+'use strict';
+const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
+const stage=$('#stage'), viewport=$('#viewport'), boat=$('#boat'), boatImg=$('#boat-img');
+const IMG_AR=3072/1097;                 // trimmed cutout aspect (w/h)
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const isMobile=()=>innerWidth<768;
+
+/* ============ camera poses ============
+   fx,fy: focus point on the boat (0..1 of image)
+   cx,cy: where that point sits in the viewport (0..1)
+   wf:    boat display width as multiple of viewport width          */
+const POSES_D=[
+  {p:0.00, fx:0.00, fy:0.50, cx:1.35, cy:0.62, wf:0.92},  // off-screen right
+  {p:0.16, fx:0.50, fy:0.52, cx:0.50, cy:0.56, wf:0.88},  // full profile
+  {p:0.30, fx:0.50, fy:0.52, cx:0.50, cy:0.56, wf:0.88},
+  {p:0.42, fx:0.12, fy:0.30, cx:0.63, cy:0.42, wf:2.05},  // bow / Ultrex
+  {p:0.56, fx:0.53, fy:0.36, cx:0.50, cy:0.44, wf:2.25},  // helm / hull
+  {p:0.72, fx:0.90, fy:0.38, cx:0.42, cy:0.46, wf:1.95},  // stern
+  {p:0.88, fx:0.50, fy:0.54, cx:0.50, cy:0.62, wf:0.80},  // wide finale
+  {p:1.00, fx:0.50, fy:0.54, cx:0.50, cy:0.63, wf:0.78}
+];
+const POSES_M=[
+  {p:0.00, fx:0.00, fy:0.50, cx:1.60, cy:0.55, wf:1.55},
+  {p:0.16, fx:0.50, fy:0.52, cx:0.50, cy:0.46, wf:1.50},
+  {p:0.30, fx:0.50, fy:0.52, cx:0.50, cy:0.46, wf:1.50},
+  {p:0.42, fx:0.12, fy:0.30, cx:0.55, cy:0.36, wf:2.60},
+  {p:0.56, fx:0.53, fy:0.34, cx:0.50, cy:0.36, wf:2.80},
+  {p:0.72, fx:0.90, fy:0.36, cx:0.46, cy:0.36, wf:2.50},
+  {p:0.88, fx:0.50, fy:0.52, cx:0.50, cy:0.42, wf:1.45},
+  {p:1.00, fx:0.50, fy:0.52, cx:0.50, cy:0.43, wf:1.42}
+];
+
+/* phase text windows */
+const PHASES=[
+  {el:$('#p0'), a:0.000, b:0.105},
+  {el:$('#p1'), a:0.165, b:0.300},
+  {el:$('#p2'), a:0.360, b:0.480},
+  {el:$('#p3'), a:0.505, b:0.625},
+  {el:$('#p4'), a:0.655, b:0.790},
+  {el:$('#p5'), a:0.860, b:1.001}
+];
+
+/* anchored callouts: ax,ay in boat-image fractions */
+const CALLOUTS=[
+  {ph:2, ax:0.105, ay:0.28, dot:$('#dot-ultrex'), ln:$('#ln-ultrex'), label:$('#co-ultrex'), side:'right'},
+  {ph:3, ax:0.520, ay:0.32, dot:$('#dot-hull'),   ln:$('#ln-hull'),   label:$('#co-hull'),   side:'right'},
+  {ph:4, ax:0.885, ay:0.40, dot:$('#dot-merc'),   ln:$('#ln-merc'),   label:$('#co-merc'),   side:'left'},
+  {ph:4, ax:0.955, ay:0.22, dot:$('#dot-poles'),  ln:$('#ln-poles'),  label:$('#co-poles'),  side:'left'}
+];
+
+/* ============ dwell remap LUT ============ */
+const DWELLS=[0.05,0.23,0.42,0.565,0.72,0.93], PEAK=5.5, WIDTH=0.032, LUT_N=600;
+const LUT=(()=> {
+  const w=[]; let cum=0; const out=[0];
+  for(let i=0;i<=LUT_N;i++){
+    const t=i/LUT_N; let d=1;
+    for(const c of DWELLS) d+=PEAK*Math.exp(-((t-c)*(t-c))/(2*WIDTH*WIDTH));
+    w.push(1/d);
+  }
+  for(let i=1;i<=LUT_N;i++){cum+=(w[i-1]+w[i])/2; out.push(cum);}
+  return out.map(v=>v/cum);
+})();
+function remap(t){
+  const i=Math.min(LUT_N-1,Math.max(0,Math.floor(t*LUT_N)));
+  const f=t*LUT_N-i;
+  return LUT[i]+(LUT[i+1]-LUT[i])*f;
+}
+const smooth=t=>t*t*(3-2*t);
+const lerp=(a,b,t)=>a+(b-a)*t;
+
+function poseAt(t){
+  const P=isMobile()?POSES_M:POSES_D;
+  let i=0; while(i<P.length-2 && t>P[i+1].p) i++;
+  const a=P[i], b=P[i+1];
+  const f=smooth(Math.min(1,Math.max(0,(t-a.p)/(b.p-a.p||1))));
+  return {fx:lerp(a.fx,b.fx,f), fy:lerp(a.fy,b.fy,f),
+          cx:lerp(a.cx,b.cx,f), cy:lerp(a.cy,b.cy,f),
+          wf:lerp(a.wf,b.wf,f)};
+}
+
+/* ============ render loop ============ */
+let vw=innerWidth, vh=innerHeight;
+let cur={fx:0,fy:0.5,cx:1.35,cy:0.62,wf:0.92};
+let boatRect={x:0,y:0,w:0,h:0};
+const LERP_F=0.085;
+
+function layout(){ vw=innerWidth; vh=innerHeight; boat.style.width=vw+'px'; }
+addEventListener('resize',layout);
+
+function getProgress(){
+  const r=stage.getBoundingClientRect();
+  return Math.max(0,Math.min(1,-r.top/(r.height-vh)));
+}
+
+function applyPose(p,inst){
+  const t=poseAt(p);
+  if(inst){cur={...t};}
+  else for(const k in cur) cur[k]+=(t[k]-cur[k])*LERP_F;
+  const dispW=cur.wf*vw, dispH=dispW/IMG_AR;
+  const x=cur.cx*vw-cur.fx*dispW, y=cur.cy*vh-cur.fy*dispH;
+  boat.style.transform=`translate3d(${x}px,${y}px,0) scale(${cur.wf})`;
+  boatRect={x,y,w:dispW,h:dispH};
+}
+
+function phaseOpacity(p,ph){
+  if(p<ph.a||p>ph.b) return 0;
+  const span=ph.b-ph.a, edge=span*0.22;
+  const inn=Math.min(1,(p-ph.a)/edge), out=Math.min(1,(ph.b-p)/edge);
+  return smooth(Math.min(inn,out));
+}
+
+const dots=$$('#chapters .dot');
+function render(){
+  const raw=getProgress();
+  const p=remap(raw);
+  applyPose(p,false);
+
+  let active=0;
+  PHASES.forEach((ph,i)=>{
+    const o=phaseOpacity(p,ph);
+    ph.el.style.opacity=o;
+    ph.el.style.pointerEvents=o>0.5?'auto':'none';
+    if(o>0.4) active=i;
+    ph._o=o;
+  });
+  dots.forEach((d,i)=>d.classList.toggle('active',i===active));
+
+  for(const c of CALLOUTS){
+    const o=PHASES[c.ph]._o||0;
+    const dx=boatRect.x+c.ax*boatRect.w, dy=boatRect.y+c.ay*boatRect.h;
+    c.dot.style.opacity=o;
+    c.dot.style.transform=`translate3d(${dx}px,${dy}px,0)`;
+    const lr=c.label.getBoundingClientRect();
+    const lx=c.side==='right'?lr.right:lr.left;
+    const ly=lr.top+lr.height/2;
+    c.ln.setAttribute('x1',lx); c.ln.setAttribute('y1',ly);
+    c.ln.setAttribute('x2',dx); c.ln.setAttribute('y2',dy);
+    c.ln.style.opacity=o*0.7;
+  }
+  requestAnimationFrame(render);
+}
+
+/* ============ metal-flake particles ============ */
+const cv=$('#flakes'), cx2=cv.getContext('2d');
+let flakes=[];
+function seedFlakes(){
+  cv.width=innerWidth; cv.height=innerHeight;
+  const n=Math.min(90,Math.floor(innerWidth/16));
+  flakes=Array.from({length:n},()=>({
+    x:Math.random()*cv.width, y:Math.random()*cv.height,
+    r:Math.random()*1.4+0.3, tw:Math.random()*Math.PI*2,
+    ts:0.008+Math.random()*0.02, dy:0.05+Math.random()*0.12,
+    red:Math.random()<0.12
+  }));
+}
+addEventListener('resize',seedFlakes);
+function drawFlakes(){
+  cx2.clearRect(0,0,cv.width,cv.height);
+  for(const f of flakes){
+    f.tw+=f.ts; f.y-=f.dy; if(f.y<-4){f.y=cv.height+4; f.x=Math.random()*cv.width;}
+    const a=0.12+0.5*Math.abs(Math.sin(f.tw));
+    cx2.beginPath(); cx2.arc(f.x,f.y,f.r,0,7);
+    cx2.fillStyle=f.red?`rgba(213,24,32,${a*0.8})`:`rgba(200,205,215,${a})`;
+    cx2.fill();
+  }
+  if(!reduced) requestAnimationFrame(drawFlakes);
+}
+
+/* ============ custom cursor ============ */
+if(matchMedia('(pointer:fine)').matches){
+  const d=$('#cur-dot'), r=$('#cur-ring');
+  let mx=0,my=0,rx=0,ry=0;
+  addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;
+    d.style.transform=`translate(${mx-2.5}px,${my-2.5}px)`;});
+  (function ring(){rx+=(mx-rx)*0.16; ry+=(my-ry)*0.16;
+    r.style.transform=`translate(${rx-17}px,${ry-17}px)`; requestAnimationFrame(ring);})();
+  $$('a,button').forEach(el=>{
+    el.addEventListener('mouseenter',()=>r.classList.add('hover'));
+    el.addEventListener('mouseleave',()=>r.classList.remove('hover'));
+  });
+}
+
+/* ============ letter split ============ */
+$$('[data-split]').forEach(ln=>{
+  const txt=ln.textContent; ln.textContent='';
+  [...txt].forEach((ch,i)=>{
+    const s=document.createElement('span'); s.className='ch';
+    s.style.transitionDelay=(i*45)+'ms';
+    s.innerHTML=ch===' '?'&nbsp;':ch;
+    if(ln.textContent==='' && txt==='THE BOAT.' && ch==='.') s.style.color='var(--red)';
+    ln.appendChild(s);
+  });
+});
+
+/* ============ card reveals ============ */
+const io=new IntersectionObserver(es=>es.forEach(e=>{
+  if(e.isIntersecting){e.target.classList.add('in'); io.unobserve(e.target);}
+}),{threshold:0.15});
+$$('.card').forEach((c,i)=>{c.style.transitionDelay=(i*120)+'ms'; io.observe(c);});
+
+/* ============ boot ============ */
+const bar=$('#bar-fill'), pct=$('#pct');
+let fake=0;
+const tick=setInterval(()=>{fake=Math.min(fake+7,88); bar.style.width=fake+'%'; pct.textContent=Math.round(fake)+'%';},80);
+
+function start(){
+  clearInterval(tick);
+  bar.style.width='100%'; pct.textContent='100%';
+  layout(); seedFlakes();
+  if(reduced){
+    document.body.classList.add('static');
+    $('#loader').classList.add('done');
+    $('#p0').classList.add('armed');
+    drawFlakes();
+    return;
+  }
+  applyPose(remap(getProgress()),true);
+  setTimeout(()=>{
+    $('#loader').classList.add('done');
+    $('#chapters').classList.add('on');
+    $('#p0').classList.add('armed');
+  },350);
+  drawFlakes();
+  requestAnimationFrame(render);
+}
+if(boatImg.complete) start();
+else boatImg.decode().then(start).catch(start);
+})();
+</script>
+</body>
+</html>
