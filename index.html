@@ -4,7 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Boat — Baxstar Fishing | Vexus DVX 20S</title>
-<meta name="description" content="Every Baxstar Fishing trip runs on this Vexus DVX 20S — Mercury Pro XS power, Minn Kota Ultrex bow control, Power-Pole Drift Paddles. Scroll to walk the boat, then book your private trip.">
+<meta name="description" content="Every Baxstar trip runs on a Vexus DVX 20S — Mercury Pro XS power, Minn Kota Ultrex, Power-Pole Drift Paddles. Walk the boat, then book your private trip.">
+<link rel="canonical" href="https://boat.baxstarfishing.com/">
+<meta property="og:title" content="The Boat — Baxstar Fishing | Vexus DVX 20S">
+<meta property="og:description" content="Every Baxstar trip runs on a Vexus DVX 20S — Mercury Pro XS power, Minn Kota Ultrex, Power-Pole Drift Paddles. Walk the boat, then book your private trip.">
+<meta property="og:image" content="https://boat.baxstarfishing.com/assets/boat.webp">
+<meta property="og:url" content="https://boat.baxstarfishing.com/">
+<meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Saira:wght@400;500;600&family=Archivo:wght@300;400;500&display=swap" rel="stylesheet">
@@ -32,7 +38,7 @@ a{color:inherit}
 img{-webkit-user-drag:none;user-select:none}
 
 /* ---------- ambient layers ---------- */
-#grain{position:fixed;inset:-50%;width:200%;height:200%;pointer-events:none;z-index:9990;opacity:.05;
+#grain{position:fixed;inset:-10%;width:120%;height:120%;pointer-events:none;z-index:9990;opacity:.05;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
   animation:grain 8s steps(10) infinite}
 @keyframes grain{0%,100%{transform:translate(0,0)}20%{transform:translate(-3%,2%)}40%{transform:translate(2%,-3%)}60%{transform:translate(-2%,-2%)}80%{transform:translate(3%,3%)}}
@@ -68,7 +74,7 @@ img{-webkit-user-drag:none;user-select:none}
 @media(max-width:768px){#chapters{display:none}}
 
 /* ---------- scroll stage ---------- */
-#stage{position:relative;height:640vh}
+#stage{position:relative;height:740vh}
 #viewport{position:sticky;top:0;height:100vh;overflow:hidden;
   background:
     radial-gradient(ellipse 80% 55% at 50% 68%,rgba(213,24,32,.05),transparent 65%),
@@ -77,7 +83,7 @@ img{-webkit-user-drag:none;user-select:none}
 #hull-light{position:absolute;left:50%;top:64%;width:70vw;height:24vh;transform:translate(-50%,-50%);
   background:radial-gradient(ellipse,rgba(185,189,199,.07),transparent 70%);pointer-events:none}
 #boat{position:absolute;left:0;top:0;transform-origin:0 0;will-change:transform;pointer-events:none}
-#boat img{display:block;width:100%;height:auto;filter:drop-shadow(0 30px 60px rgba(0,0,0,.6))}
+#boat img{display:block;width:100%;height:auto}
 
 /* ---------- svg leader lines + dots ---------- */
 #lines{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:40}
@@ -95,12 +101,13 @@ img{-webkit-user-drag:none;user-select:none}
 h1,h2,.h-display{font-family:var(--display);font-weight:700;text-transform:uppercase;line-height:.92;letter-spacing:.01em}
 
 /* phase 0 — hero */
-#p0 .inner{position:absolute;left:6vw;top:16vh;max-width:640px}
-#p0 h1{font-size:clamp(52px,8.5vw,124px);margin:18px 0 22px}
+#p0 .inner{position:absolute;left:6vw;top:14vh;max-width:820px}
+#p0 h1{font-size:clamp(36px,6vw,88px);margin:18px 0 22px}
 #p0 h1 .ln{display:block;overflow:hidden}
 #p0 h1 .ch{display:inline-block;transform:translateY(110%);transition:transform .9s cubic-bezier(.2,.8,.2,1)}
 #p0.armed h1 .ch{transform:translateY(0)}
 #p0 h1 em{color:var(--red);font-style:normal}
+#p0 h1 .ln:last-child .ch{color:var(--red)}
 #p0 p{color:var(--steel);font-size:17px;line-height:1.65;max-width:440px}
 #scroll-cue{position:absolute;left:6vw;bottom:6vh;display:flex;align-items:center;gap:14px;
   font-family:var(--label);font-size:9px;letter-spacing:.35em;text-transform:uppercase;color:var(--steel)}
@@ -111,7 +118,7 @@ h1,h2,.h-display{font-family:var(--display);font-weight:700;text-transform:upper
 #p1 .inner{position:absolute;left:50%;top:9vh;transform:translateX(-50%);text-align:center}
 #p1 h2{font-size:clamp(30px,4vw,54px);margin-top:14px}
 #statbar{position:absolute;left:50%;bottom:7vh;transform:translateX(-50%);display:flex;gap:0;
-  background:rgba(233,233,238,.03);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  background:rgba(233,233,238,.03);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
   border:1px solid rgba(233,233,238,.07);border-radius:14px;overflow:hidden}
 #statbar .cell{padding:20px 34px;text-align:center;border-left:1px solid rgba(233,233,238,.06)}
 #statbar .cell:first-child{border-left:none}
@@ -121,7 +128,7 @@ h1,h2,.h-display{font-family:var(--display);font-weight:700;text-transform:upper
 
 /* phases 2–4 — feature callouts */
 .callout{position:absolute;max-width:360px;
-  background:rgba(18,18,24,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  background:rgba(18,18,24,.55);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
   border:1px solid rgba(233,233,238,.08);border-radius:14px;padding:26px 28px}
 .callout .idx{font-family:var(--label);font-weight:600;font-size:9px;letter-spacing:.32em;color:var(--red);text-transform:uppercase;margin-bottom:10px}
 .callout h3{font-family:var(--display);font-weight:600;font-size:26px;text-transform:uppercase;letter-spacing:.03em;margin-bottom:10px}
@@ -149,7 +156,7 @@ section.block{position:relative;z-index:60;background:var(--ink);padding:120px 6
 .block .head{max-width:1200px;margin:0 auto 56px}
 .block h2{font-size:clamp(30px,4vw,52px);margin-top:14px}
 .grid3{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
-.card{background:rgba(233,233,238,.03);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+.card{background:rgba(233,233,238,.04);
   border:1px solid rgba(233,233,238,.06);border-radius:16px;padding:38px 32px;transition:all .4s;
   opacity:0;transform:translateY(28px)}
 .card.in{opacity:1;transform:none}
@@ -173,8 +180,9 @@ footer .legal{font-family:var(--label);font-size:9px;letter-spacing:.25em;text-t
 
 /* ---------- mobile ---------- */
 @media(max-width:768px){
-  #stage{height:520vh}
-  #p0 .inner{left:7vw;right:7vw;top:12vh}
+  #stage{height:640vh}
+  #p0 .inner{left:7vw;right:7vw;top:10vh}
+  #p0 h1{font-size:clamp(30px,9.5vw,46px)}
   #p0 p{font-size:15px}
   .callout{left:6vw !important;right:6vw !important;top:auto !important;bottom:9vh !important;max-width:none !important;padding:20px 22px}
   .callout h3{font-size:21px}
@@ -227,7 +235,7 @@ body.static #p0 h1 .ch{transform:none}
   <div id="viewport">
     <div id="hull-light"></div>
 
-    <div id="boat"><img id="boat-img" src="assets/boat.webp"
+    <div id="boat"><img id="boat-img" fetchpriority="high" src="assets/boat.webp"
       srcset="assets/boat-mobile.webp 1280w, assets/boat.webp 3072w"
       sizes="(max-width:768px) 160vw, 240vw" alt="Vexus DVX 20S — the Baxstar Fishing guide boat"></div>
 
@@ -243,8 +251,8 @@ body.static #p0 h1 .ch{transform:none}
     <div class="phase" id="p0">
       <div class="inner">
         <div class="eyebrow">Baxstar Fishing <em>·</em> Detroit Lakes, Minnesota</div>
-        <h1 id="hero-title"><span class="ln" data-split>MEET</span><span class="ln" data-split>THE BOAT.</span></h1>
-        <p>Every Baxstar trip runs on this Vexus DVX 20S — rigged, dialed, and waiting for you. Scroll to walk the boat.</p>
+        <h1 id="hero-title"><span class="ln" data-split>ONCE IN A WHILE,</span><span class="ln" data-split>YOU STUMBLE ONTO</span><span class="ln" data-split>SOMETHING</span><span class="ln" data-split>TRULY GREAT.</span></h1>
+        <p>This is the boat your private trip runs on — the Vexus DVX 20S, rigged, dialed, and waiting. Scroll to walk it.</p>
       </div>
       <div id="scroll-cue"><span class="stem"></span>Scroll</div>
     </div>
@@ -375,19 +383,19 @@ const POSES_D=[
   {p:1.00, fx:0.50, fy:0.54, cx:0.50, cy:0.63, wf:0.78}
 ];
 const POSES_M=[
-  {p:0.00, fx:0.00, fy:0.50, cx:1.60, cy:0.55, wf:1.55},
-  {p:0.16, fx:0.50, fy:0.52, cx:0.50, cy:0.46, wf:1.50},
-  {p:0.30, fx:0.50, fy:0.52, cx:0.50, cy:0.46, wf:1.50},
+  {p:0.00, fx:0.00, fy:0.50, cx:1.45, cy:0.50, wf:1.00},
+  {p:0.16, fx:0.50, fy:0.52, cx:0.50, cy:0.47, wf:0.94},
+  {p:0.30, fx:0.50, fy:0.52, cx:0.50, cy:0.47, wf:0.94},
   {p:0.42, fx:0.12, fy:0.30, cx:0.55, cy:0.36, wf:2.60},
   {p:0.56, fx:0.53, fy:0.34, cx:0.50, cy:0.36, wf:2.80},
   {p:0.72, fx:0.90, fy:0.36, cx:0.46, cy:0.36, wf:2.50},
-  {p:0.88, fx:0.50, fy:0.52, cx:0.50, cy:0.42, wf:1.45},
-  {p:1.00, fx:0.50, fy:0.52, cx:0.50, cy:0.43, wf:1.42}
+  {p:0.88, fx:0.50, fy:0.52, cx:0.50, cy:0.44, wf:0.92},
+  {p:1.00, fx:0.50, fy:0.52, cx:0.50, cy:0.45, wf:0.90}
 ];
 
 /* phase text windows */
 const PHASES=[
-  {el:$('#p0'), a:0.000, b:0.105},
+  {el:$('#p0'), a:0.000, b:0.135, first:true},
   {el:$('#p1'), a:0.165, b:0.300},
   {el:$('#p2'), a:0.360, b:0.480},
   {el:$('#p3'), a:0.505, b:0.625},
@@ -404,12 +412,12 @@ const CALLOUTS=[
 ];
 
 /* ============ dwell remap LUT ============ */
-const DWELLS=[0.05,0.23,0.42,0.565,0.72,0.93], PEAK=5.5, WIDTH=0.032, LUT_N=600;
+const DWELLS=[{c:0.05,k:9},{c:0.23,k:5.5},{c:0.42,k:5.5},{c:0.565,k:5.5},{c:0.72,k:5.5},{c:0.93,k:5.5}], WIDTH=0.032, LUT_N=600;
 const LUT=(()=> {
   const w=[]; let cum=0; const out=[0];
   for(let i=0;i<=LUT_N;i++){
     const t=i/LUT_N; let d=1;
-    for(const c of DWELLS) d+=PEAK*Math.exp(-((t-c)*(t-c))/(2*WIDTH*WIDTH));
+    for(const c of DWELLS) d+=c.k*Math.exp(-((t-c.c)*(t-c.c))/(2*WIDTH*WIDTH));
     w.push(1/d);
   }
   for(let i=1;i<=LUT_N;i++){cum+=(w[i-1]+w[i])/2; out.push(cum);}
@@ -460,13 +468,17 @@ function applyPose(p,inst){
 function phaseOpacity(p,ph){
   if(p<ph.a||p>ph.b) return 0;
   const span=ph.b-ph.a, edge=span*0.22;
-  const inn=Math.min(1,(p-ph.a)/edge), out=Math.min(1,(ph.b-p)/edge);
+  const inn=ph.first?1:Math.min(1,(p-ph.a)/edge), out=Math.min(1,(ph.b-p)/edge);
   return smooth(Math.min(inn,out));
 }
 
 const dots=$$('#chapters .dot');
+let lastRaw=-1, settle=0;
 function render(){
   const raw=getProgress();
+  if(raw===lastRaw){ settle++; if(settle>90){requestAnimationFrame(render);return;} }
+  else settle=0;
+  lastRaw=raw;
   const p=remap(raw);
   applyPose(p,false);
 
@@ -482,6 +494,8 @@ function render(){
 
   for(const c of CALLOUTS){
     const o=PHASES[c.ph]._o||0;
+    if(o<=0.01 && !c._was){ continue; }
+    c._was=o>0.01;
     const dx=boatRect.x+c.ax*boatRect.w, dy=boatRect.y+c.ay*boatRect.h;
     c.dot.style.opacity=o;
     c.dot.style.transform=`translate3d(${dx}px,${dy}px,0)`;
@@ -542,7 +556,6 @@ $$('[data-split]').forEach(ln=>{
     const s=document.createElement('span'); s.className='ch';
     s.style.transitionDelay=(i*45)+'ms';
     s.innerHTML=ch===' '?'&nbsp;':ch;
-    if(ln.textContent==='' && txt==='THE BOAT.' && ch==='.') s.style.color='var(--red)';
     ln.appendChild(s);
   });
 });
