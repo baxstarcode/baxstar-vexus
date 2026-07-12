@@ -138,6 +138,12 @@ h1,h2,.h-display{font-family:var(--display);font-weight:700;text-transform:upper
 #co-merc{right:6vw;top:18vh}
 #co-poles{right:6vw;bottom:14vh;max-width:320px}
 
+/* phase E — electronics / command center */
+#pe .shot{position:absolute;left:6vw;top:13vh;width:min(46vw,660px);margin:0;border:1px solid rgba(233,233,238,.14);border-radius:14px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.6);transform:rotate(-1.2deg)}
+#pe .shot img{display:block;width:100%;height:auto}
+#pe .shot .cap{position:absolute;left:0;right:0;bottom:0;margin:0;padding:12px 16px;font-family:var(--label);font-weight:600;font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--platinum);background:linear-gradient(transparent,rgba(10,10,13,.88))}
+#co-sonar{right:6vw;top:22vh;max-width:390px}
+
 /* phase 5 — finale */
 #p5 .inner{position:absolute;left:50%;top:12vh;transform:translateX(-50%);text-align:center;width:min(760px,90vw)}
 #p5 h2{font-size:clamp(34px,5vw,66px);margin:16px 0 18px}
@@ -185,6 +191,7 @@ footer .legal{font-family:var(--label);font-size:9px;letter-spacing:.25em;text-t
   #p0 h1{font-size:clamp(30px,9.5vw,46px)}
   #p0 p{font-size:15px}
   .callout{left:6vw !important;right:6vw !important;top:auto !important;bottom:9vh !important;max-width:none !important;padding:20px 22px}
+  #pe .shot{left:6vw;right:6vw;top:8vh;width:auto;transform:none}
   .callout h3{font-size:21px}
   #statbar{flex-wrap:wrap;width:88vw;justify-content:center}
   #statbar .cell{padding:14px 18px;flex:1 1 40%}
@@ -228,7 +235,8 @@ body.static #p0 h1 .ch{transform:none}
   <div class="dot" data-c="2"></div><div class="link"></div>
   <div class="dot" data-c="3"></div><div class="link"></div>
   <div class="dot" data-c="4"></div><div class="link"></div>
-  <div class="dot" data-c="5"></div>
+  <div class="dot" data-c="5"></div><div class="link"></div>
+  <div class="dot" data-c="6"></div>
 </nav>
 
 <div id="stage">
@@ -268,6 +276,7 @@ body.static #p0 h1 .ch{transform:none}
         <div class="cell"><div class="k">Power</div><div class="v">Mercury Pro XS</div></div>
         <div class="cell"><div class="k">Bow</div><div class="v">Minn Kota Ultrex</div></div>
         <div class="cell"><div class="k">Stern</div><div class="v">Power-Pole ×2</div></div>
+        <div class="cell"><div class="k">Sonar</div><div class="v">2× <em>LiveScope</em></div></div>
       </div>
     </div>
 
@@ -280,10 +289,23 @@ body.static #p0 h1 .ch{transform:none}
       </div>
     </div>
 
+    <!-- PE · electronics -->
+    <div class="phase" id="pe">
+      <figure class="shot inner">
+        <img src="https://static.wixstatic.com/media/a30e59_4e87e2b9d15046109961f4c84236abd8~mv2.webp" alt="Bow command center — Garmin LiveScope units and fish finder screens running live imaging" loading="lazy" decoding="async">
+        <figcaption class="cap">Live Imaging · Bow Command Center</figcaption>
+      </figure>
+      <div class="callout inner" id="co-sonar">
+        <div class="idx">02 · Electronics</div>
+        <h3>The Command Center</h3>
+        <p>Two Garmin LiveScope units. Four 12-inch fish finders. A 16-inch Garmin display dedicated strictly to live imaging — you watch fish react to your bait in real time. It's the setup anglers dream about, and on your trip, you're the one running it.</p>
+      </div>
+    </div>
+
     <!-- P3 · helm / hull -->
     <div class="phase" id="p3">
       <div class="callout inner" id="co-hull">
-        <div class="idx">02 · Helm</div>
+        <div class="idx">03 · Helm</div>
         <h3>DVX Performance Hull</h3>
         <p>Walk-through windshield, deep-V ride. When the wind comes up on big water, this hull keeps the day comfortable — and fishable.</p>
       </div>
@@ -292,12 +314,12 @@ body.static #p0 h1 .ch{transform:none}
     <!-- P4 · stern -->
     <div class="phase" id="p4">
       <div class="callout inner" id="co-merc">
-        <div class="idx">03 · Power</div>
+        <div class="idx">04 · Power</div>
         <h3>Mercury Pro XS</h3>
         <p>More water covered in a day means more spots on your trip. When the bite moves, we move.</p>
       </div>
       <div class="callout inner" id="co-poles">
-        <div class="idx">04 · Stern</div>
+        <div class="idx">05 · Stern</div>
         <h3>Power-Pole Drift Paddles</h3>
         <p>Silent drift control for perfect presentations — the boat slows down so the fishing doesn't.</p>
       </div>
@@ -374,45 +396,48 @@ const isMobile=()=>innerWidth<768;
    wf:    boat display width as multiple of viewport width          */
 const POSES_D=[
   {p:0.00, fx:0.00, fy:0.50, cx:1.35, cy:0.62, wf:0.92},  // off-screen right
-  {p:0.16, fx:0.50, fy:0.52, cx:0.50, cy:0.56, wf:0.88},  // full profile
-  {p:0.30, fx:0.50, fy:0.52, cx:0.50, cy:0.56, wf:0.88},
-  {p:0.42, fx:0.12, fy:0.30, cx:0.63, cy:0.42, wf:2.05},  // bow / Ultrex
-  {p:0.56, fx:0.53, fy:0.36, cx:0.50, cy:0.44, wf:2.25},  // helm / hull
-  {p:0.72, fx:0.90, fy:0.38, cx:0.42, cy:0.46, wf:1.95},  // stern
-  {p:0.88, fx:0.50, fy:0.54, cx:0.50, cy:0.62, wf:0.80},  // wide finale
+  {p:0.14, fx:0.50, fy:0.52, cx:0.50, cy:0.56, wf:0.88},  // full profile
+  {p:0.26, fx:0.50, fy:0.52, cx:0.50, cy:0.56, wf:0.88},
+  {p:0.36, fx:0.12, fy:0.30, cx:0.63, cy:0.42, wf:2.05},  // bow / Ultrex
+  {p:0.50, fx:0.30, fy:0.30, cx:0.58, cy:0.42, wf:2.15},  // electronics / command center
+  {p:0.62, fx:0.53, fy:0.36, cx:0.50, cy:0.44, wf:2.25},  // helm / hull
+  {p:0.76, fx:0.90, fy:0.38, cx:0.42, cy:0.46, wf:1.95},  // stern
+  {p:0.90, fx:0.50, fy:0.54, cx:0.50, cy:0.62, wf:0.80},  // wide finale
   {p:1.00, fx:0.50, fy:0.54, cx:0.50, cy:0.63, wf:0.78}
 ];
 const POSES_M=[
   {p:0.00, fx:0.00, fy:0.50, cx:1.45, cy:0.50, wf:1.00},
-  {p:0.16, fx:0.50, fy:0.52, cx:0.50, cy:0.47, wf:0.94},
-  {p:0.30, fx:0.50, fy:0.52, cx:0.50, cy:0.47, wf:0.94},
-  {p:0.42, fx:0.12, fy:0.30, cx:0.55, cy:0.36, wf:2.60},
-  {p:0.56, fx:0.53, fy:0.34, cx:0.50, cy:0.36, wf:2.80},
-  {p:0.72, fx:0.90, fy:0.36, cx:0.46, cy:0.36, wf:2.50},
-  {p:0.88, fx:0.50, fy:0.52, cx:0.50, cy:0.44, wf:0.92},
+  {p:0.14, fx:0.50, fy:0.52, cx:0.50, cy:0.47, wf:0.94},
+  {p:0.26, fx:0.50, fy:0.52, cx:0.50, cy:0.47, wf:0.94},
+  {p:0.36, fx:0.12, fy:0.30, cx:0.55, cy:0.36, wf:2.60},
+  {p:0.50, fx:0.30, fy:0.30, cx:0.52, cy:0.68, wf:2.70},
+  {p:0.62, fx:0.53, fy:0.34, cx:0.50, cy:0.36, wf:2.80},
+  {p:0.76, fx:0.90, fy:0.36, cx:0.46, cy:0.36, wf:2.50},
+  {p:0.90, fx:0.50, fy:0.52, cx:0.50, cy:0.44, wf:0.92},
   {p:1.00, fx:0.50, fy:0.52, cx:0.50, cy:0.45, wf:0.90}
 ];
 
 /* phase text windows */
 const PHASES=[
-  {el:$('#p0'), a:0.000, b:0.135, first:true},
-  {el:$('#p1'), a:0.165, b:0.300},
-  {el:$('#p2'), a:0.360, b:0.480},
-  {el:$('#p3'), a:0.505, b:0.625},
-  {el:$('#p4'), a:0.655, b:0.790},
-  {el:$('#p5'), a:0.860, b:1.001}
+  {el:$('#p0'), a:0.000, b:0.125, first:true},
+  {el:$('#p1'), a:0.150, b:0.270},
+  {el:$('#p2'), a:0.315, b:0.420},
+  {el:$('#pe'), a:0.455, b:0.575},
+  {el:$('#p3'), a:0.605, b:0.700},
+  {el:$('#p4'), a:0.730, b:0.845},
+  {el:$('#p5'), a:0.885, b:1.001}
 ];
 
 /* anchored callouts: ax,ay in boat-image fractions */
 const CALLOUTS=[
   {ph:2, ax:0.105, ay:0.28, dot:$('#dot-ultrex'), ln:$('#ln-ultrex'), label:$('#co-ultrex'), side:'right'},
-  {ph:3, ax:0.520, ay:0.32, dot:$('#dot-hull'),   ln:$('#ln-hull'),   label:$('#co-hull'),   side:'right'},
-  {ph:4, ax:0.885, ay:0.40, dot:$('#dot-merc'),   ln:$('#ln-merc'),   label:$('#co-merc'),   side:'left'},
-  {ph:4, ax:0.955, ay:0.22, dot:$('#dot-poles'),  ln:$('#ln-poles'),  label:$('#co-poles'),  side:'left'}
+  {ph:4, ax:0.520, ay:0.32, dot:$('#dot-hull'),   ln:$('#ln-hull'),   label:$('#co-hull'),   side:'right'},
+  {ph:5, ax:0.885, ay:0.40, dot:$('#dot-merc'),   ln:$('#ln-merc'),   label:$('#co-merc'),   side:'left'},
+  {ph:5, ax:0.955, ay:0.22, dot:$('#dot-poles'),  ln:$('#ln-poles'),  label:$('#co-poles'),  side:'left'}
 ];
 
 /* ============ dwell remap LUT ============ */
-const DWELLS=[{c:0.05,k:9},{c:0.23,k:5.5},{c:0.42,k:5.5},{c:0.565,k:5.5},{c:0.72,k:5.5},{c:0.93,k:5.5}], WIDTH=0.032, LUT_N=600;
+const DWELLS=[{c:0.045,k:9},{c:0.21,k:5.5},{c:0.365,k:5.5},{c:0.515,k:6.5},{c:0.65,k:5.5},{c:0.785,k:5.5},{c:0.945,k:5.5}], WIDTH=0.030, LUT_N=600;
 const LUT=(()=> {
   const w=[]; let cum=0; const out=[0];
   for(let i=0;i<=LUT_N;i++){
