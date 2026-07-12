@@ -13,22 +13,19 @@
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Saira:wght@400;500;600&family=Archivo:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Saira:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
   --ink:#0a0a0d;            /* gelcoat black-blue page base */
-  --flake:#121218;          /* card / panel */
-  --flake-hi:#1a1a22;
   --platinum:#e9e9ee;       /* silver logo tone — primary text */
   --steel:#93939e;          /* secondary text */
   --steel-dim:#5c5c66;
   --pin:#b9bdc7;            /* hull pinstripe silver */
   --red:#d51820;            /* Vexus / Baxstar red */
   --red-glow:rgba(213,24,32,.38);
-  --red-soft:rgba(213,24,32,.09);
   --display:'Saira Condensed','Arial Narrow',sans-serif;
   --label:'Saira',sans-serif;
-  --body:'Archivo',-apple-system,sans-serif;
+  --body:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:auto}
@@ -37,32 +34,44 @@ body{background:var(--ink);color:var(--platinum);font-family:var(--body);font-we
 a{color:inherit}
 img{-webkit-user-drag:none;user-select:none}
 
-/* ---------- ambient layers ---------- */
-#grain{position:fixed;inset:-10%;width:120%;height:120%;pointer-events:none;z-index:9990;opacity:.05;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
-  animation:grain 8s steps(10) infinite}
-@keyframes grain{0%,100%{transform:translate(0,0)}20%{transform:translate(-3%,2%)}40%{transform:translate(2%,-3%)}60%{transform:translate(-2%,-2%)}80%{transform:translate(3%,3%)}}
+/* ---------- ambient layers (static) ---------- */
+#grain{position:fixed;inset:0;pointer-events:none;z-index:9990;opacity:.045;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E")}
 #vignette{position:fixed;inset:0;pointer-events:none;z-index:9989;
   background:radial-gradient(ellipse at 50% 45%,transparent 55%,rgba(0,0,0,.5) 100%)}
-#flakes{position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.5}
+#flakes{position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.35}
 
-/* ---------- custom cursor ---------- */
-#cur-dot,#cur-ring{position:fixed;top:0;left:0;pointer-events:none;border-radius:50%;z-index:9998;display:none}
-#cur-dot{width:5px;height:5px;background:var(--platinum);mix-blend-mode:difference}
-#cur-ring{width:34px;height:34px;border:1px solid rgba(233,233,238,.35);transition:width .25s,height .25s,border-color .25s}
-@media(pointer:fine){#cur-dot,#cur-ring{display:block}body{cursor:none}a,button{cursor:none}}
-#cur-ring.hover{width:52px;height:52px;border-color:var(--red)}
+/* ---------- persistent booking bar ---------- */
+#topbar{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;align-items:center;
+  justify-content:space-between;padding:14px 6vw;
+  background:transparent;border-bottom:1px solid transparent;
+  transition:background .4s,border-color .4s,padding .4s}
+#topbar.solid{background:rgba(10,10,13,.78);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom-color:rgba(233,233,238,.07);padding:10px 6vw}
+#topbar .tb-brand{font-family:var(--display);font-weight:700;font-size:16px;letter-spacing:.32em;
+  text-transform:uppercase;text-decoration:none}
+#topbar .tb-brand em{color:var(--red);font-style:normal}
+#topbar .tb-cta{font-family:var(--label);font-weight:600;font-size:10px;letter-spacing:.26em;
+  text-transform:uppercase;text-decoration:none;color:#fff;background:var(--red);
+  padding:12px 24px;border-radius:100px;box-shadow:0 6px 22px var(--red-glow);
+  transition:background .3s,transform .3s;white-space:nowrap}
+#topbar .tb-cta:hover{background:#ee2530;transform:translateY(-1px)}
+@media(max-width:900px){
+  #topbar{padding:12px 5vw}
+  #topbar.solid{padding:9px 5vw}
+  #topbar .tb-brand{font-size:14px;letter-spacing:.26em}
+  #topbar .tb-cta{padding:10px 18px;font-size:9.5px;letter-spacing:.22em}
+}
 
 /* ---------- loader ---------- */
 #loader{position:fixed;inset:0;background:var(--ink);z-index:9999;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;gap:22px;transition:opacity .8s,filter .8s}
+  align-items:center;justify-content:center;gap:22px;transition:opacity .5s,filter .5s}
 #loader.done{opacity:0;filter:blur(8px);pointer-events:none}
 #loader .rule{width:120px;height:1px;background:linear-gradient(90deg,transparent,var(--steel-dim),transparent)}
 #loader .mark{font-family:var(--display);font-weight:700;font-size:26px;letter-spacing:.42em;text-indent:.42em;text-transform:uppercase}
 #loader .mark em{color:var(--red);font-style:normal}
 #loader .bar{width:140px;height:2px;background:rgba(233,233,238,.08);overflow:hidden;border-radius:2px}
-#loader .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--red),var(--pin));transition:width .3s}
-#loader .pct{font-family:var(--label);font-size:9px;letter-spacing:.35em;color:var(--steel)}
+#loader .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--red),var(--pin));transition:width .2s}
 
 /* ---------- chapter markers ---------- */
 #chapters{position:fixed;right:26px;top:50%;transform:translateY(-50%);z-index:200;display:flex;
@@ -71,18 +80,18 @@ img{-webkit-user-drag:none;user-select:none}
 #chapters .dot{width:5px;height:5px;border-radius:50%;background:var(--steel-dim);transition:all .4s;position:relative}
 #chapters .dot.active{background:var(--red);box-shadow:0 0 10px var(--red-glow);transform:scale(1.5)}
 #chapters .link{width:1px;height:26px;background:rgba(233,233,238,.1)}
-@media(max-width:768px){#chapters{display:none}}
+@media(max-width:900px){#chapters{display:none}}
 
 /* ---------- scroll stage ---------- */
 #stage{position:relative;height:740vh}
-#viewport{position:sticky;top:0;height:100vh;overflow:hidden;
+#viewport{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;
   background:
     radial-gradient(ellipse 80% 55% at 50% 68%,rgba(213,24,32,.05),transparent 65%),
     radial-gradient(ellipse 90% 70% at 50% 30%,rgba(185,189,199,.04),transparent 70%),
     var(--ink)}
 #hull-light{position:absolute;left:50%;top:64%;width:70vw;height:24vh;transform:translate(-50%,-50%);
   background:radial-gradient(ellipse,rgba(185,189,199,.07),transparent 70%);pointer-events:none}
-#boat{position:absolute;left:0;top:0;transform-origin:0 0;will-change:transform;pointer-events:none}
+#boat{position:absolute;left:0;top:0;transform-origin:0 0;pointer-events:none}
 #boat img{display:block;width:100%;height:auto}
 
 /* ---------- svg leader lines + dots ---------- */
@@ -141,9 +150,11 @@ h1,h2,.h-display{font-family:var(--display);font-weight:700;text-transform:upper
 /* phase E — electronics text */
 #co-sonar{right:6vw;top:22vh;max-width:390px}
 
-/* phase F — deck photo beat */
-#pf .eyebrow{position:absolute;left:50%;top:9vh;transform:translateX(-50%);white-space:nowrap}
-#pf .shot{position:absolute;left:50%;top:53%;transform:translate(-50%,-50%) rotate(-1deg);width:min(60vw,840px);margin:0;border:1px solid rgba(233,233,238,.14);border-radius:14px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+/* phase F — deck photo beat: straight, near-fullscreen, settles 1.04 -> 1 */
+#pf .eyebrow{position:absolute;left:50%;top:8vh;transform:translateX(-50%);white-space:nowrap}
+#pf .shot{position:absolute;left:50%;top:53%;transform:translate(-50%,-50%) scale(var(--pfs,1.04));
+  width:min(86vw,1180px);margin:0;border:1px solid rgba(233,233,238,.12);border-radius:16px;
+  overflow:hidden;box-shadow:0 40px 100px rgba(0,0,0,.7)}
 #pf .shot img{display:block;width:100%;height:auto}
 #pf .shot .cap{position:absolute;left:0;right:0;bottom:0;margin:0;padding:12px 16px;font-family:var(--label);font-weight:600;font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--platinum);background:linear-gradient(transparent,rgba(10,10,13,.88))}
 
@@ -179,7 +190,6 @@ section.block{position:relative;z-index:60;background:var(--ink);padding:120px 6
 #book h2 em{color:var(--red);font-style:normal}
 #book p.sub{color:var(--steel);font-size:16.5px;max-width:520px;margin:18px auto 34px;line-height:1.65}
 #book .fine{margin-top:26px;font-family:var(--label);font-size:9.5px;letter-spacing:.28em;text-transform:uppercase;color:var(--steel-dim)}
-#book .fine a{color:var(--steel);text-decoration:none}
 
 footer{border-top:1px solid rgba(233,233,238,.06);padding:44px 6vw;display:flex;justify-content:space-between;
   align-items:center;flex-wrap:wrap;gap:16px;background:#0d0d11;position:relative;z-index:60}
@@ -187,14 +197,15 @@ footer .brand{font-family:var(--display);font-weight:700;font-size:17px;letter-s
 footer .brand em{color:var(--red);font-style:normal}
 footer .legal{font-family:var(--label);font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--steel-dim)}
 
-/* ---------- mobile ---------- */
-@media(max-width:768px){
+/* ---------- mobile / tablet ---------- */
+@media(max-width:900px){
   #stage{height:640vh}
-  #p0 .inner{left:7vw;right:7vw;top:10vh}
+  #p0 .inner{left:7vw;right:7vw;top:12vh}
   #p0 h1{font-size:clamp(30px,9.5vw,46px)}
   #p0 p{font-size:15px}
-  .callout{left:6vw !important;right:6vw !important;top:auto !important;bottom:9vh !important;max-width:none !important;padding:20px 22px}
-  #pf .shot{left:6vw;right:6vw;top:16vh;width:auto;transform:translate(0,0)}
+  .callout{left:6vw !important;right:6vw !important;top:auto !important;bottom:9vh !important;max-width:none !important;padding:20px 22px;
+    background:rgba(14,14,18,.94);backdrop-filter:none;-webkit-backdrop-filter:none}
+  #pf .shot{width:88vw}
   #pf .eyebrow{top:9vh}
   .callout h3{font-size:21px}
   #statbar{flex-wrap:wrap;width:88vw;justify-content:center}
@@ -205,14 +216,16 @@ footer .legal{font-family:var(--label);font-size:9px;letter-spacing:.25em;text-t
 
 /* ---------- reduced motion ---------- */
 @media(prefers-reduced-motion:reduce){
-  #grain{animation:none}
   #scroll-cue .stem{animation:none}
+  #pf .shot{transform:translate(-50%,-50%)}
 }
 body.static #stage{height:auto}
 body.static #viewport{position:relative;height:auto;padding:14vh 0 8vh}
-body.static #boat{position:relative;transform:none !important;width:min(92vw,1300px);margin:0 auto}
+body.static #boat{position:relative;transform:none !important;opacity:1 !important;width:min(92vw,1300px);margin:0 auto}
 body.static .phase{position:relative;opacity:1 !important;inset:auto;padding:40px 6vw}
 body.static .phase .inner,body.static .callout,body.static #statbar{position:relative;left:auto;right:auto;top:auto;bottom:auto;transform:none;margin:0 auto 24px}
+body.static #pf .shot{position:relative;left:auto;top:auto;transform:none;margin:24px auto}
+body.static #pf .eyebrow{position:relative;left:auto;top:auto;transform:none;margin-bottom:14px;text-align:center}
 body.static #lines,body.static .anchor-dot,body.static #scroll-cue,body.static #chapters{display:none}
 body.static #p0 h1 .ch{transform:none}
 </style>
@@ -222,16 +235,18 @@ body.static #p0 h1 .ch{transform:none}
 <div id="grain"></div>
 <div id="vignette"></div>
 <canvas id="flakes"></canvas>
-<div id="cur-dot"></div>
-<div id="cur-ring"></div>
 
 <div id="loader">
   <div class="rule"></div>
   <div class="mark">BAX<em>STAR</em></div>
   <div class="bar"><i id="bar-fill"></i></div>
-  <div class="pct" id="pct">0%</div>
   <div class="rule"></div>
 </div>
+
+<header id="topbar">
+  <a class="tb-brand" href="https://baxstarfishing.com" target="_blank" rel="noopener">BAX<em>STAR</em></a>
+  <a class="tb-cta" href="https://fareharbor.com/embeds/book/baxstarfishing/items/309836/calendar/?full-items=yes&back=https://www.baxstarfishing.com/" target="_blank" rel="noopener">Check Dates</a>
+</header>
 
 <nav id="chapters" aria-hidden="true">
   <div class="dot" data-c="0"></div><div class="link"></div>
@@ -250,7 +265,7 @@ body.static #p0 h1 .ch{transform:none}
 
     <div id="boat"><img id="boat-img" fetchpriority="high" src="assets/boat.webp"
       srcset="assets/boat-mobile.webp 1280w, assets/boat.webp 3072w"
-      sizes="(max-width:768px) 160vw, 240vw" alt="Vexus DVX 20S — the Baxstar Fishing guide boat"></div>
+      sizes="(max-width:900px) 160vw, 240vw" alt="Vexus DVX 20S — the Baxstar Fishing guide boat"></div>
 
     <svg id="lines">
       <line id="ln-ultrex"/><line id="ln-sonar"/><line id="ln-hull"/><line id="ln-merc"/><line id="ln-poles"/>
@@ -278,7 +293,7 @@ body.static #p0 h1 .ch{transform:none}
         <h2>Vexus <em style="color:var(--red)">DVX 20S</em></h2>
       </div>
       <div id="statbar">
-        <div class="cell"><div class="k">Model</div><div class="v">DVX <em>20S</em></div></div>
+        <div class="cell"><div class="k">Capacity</div><div class="v">5 Guests <em>+ Captain</em></div></div>
         <div class="cell"><div class="k">Power</div><div class="v">Mercury Pro XS</div></div>
         <div class="cell"><div class="k">Bow</div><div class="v">Minn Kota Ultrex</div></div>
         <div class="cell"><div class="k">Stern</div><div class="v">Power-Pole ×2</div></div>
@@ -308,7 +323,10 @@ body.static #p0 h1 .ch{transform:none}
     <div class="phase" id="pf">
       <div class="eyebrow">The View From <em>·</em> The Deck</div>
       <figure class="shot inner">
-        <img src="https://static.wixstatic.com/media/a30e59_4e87e2b9d15046109961f4c84236abd8~mv2.webp" alt="Bow command center — Garmin LiveScope units and fish finder screens running live imaging" loading="lazy" decoding="async">
+        <img src="assets/deck-1200.webp"
+             srcset="assets/deck-800.webp 800w, assets/deck-1200.webp 1200w"
+             sizes="(max-width:900px) 88vw, min(86vw, 1180px)"
+             alt="Bow command center — Garmin LiveScope units and fish finder screens running live imaging" loading="lazy" decoding="async">
         <figcaption class="cap">Live Imaging · Bow Command Center</figcaption>
       </figure>
     </div>
@@ -343,7 +361,7 @@ body.static #p0 h1 .ch{transform:none}
         <h2>Fish it with a <em>5× Master Angler</em></h2>
         <p>This boat doesn't sit at a dealership — it's on the water with Baxstar clients all season. Your private trip starts here.</p>
         <div class="cta-row">
-          <a class="btn btn-red" href="https://baxstarfishing.com" target="_blank" rel="noopener">Book Your Trip</a>
+          <a class="btn btn-red" href="https://fareharbor.com/embeds/book/baxstarfishing/items/309836/calendar/?full-items=yes&back=https://www.baxstarfishing.com/" target="_blank" rel="noopener">Check Dates</a>
           <a class="btn btn-ghost" href="sms:2183256857">Text 218-325-6857</a>
         </div>
       </div>
@@ -381,10 +399,10 @@ body.static #p0 h1 .ch{transform:none}
   <h2>The boat is ready. <em>Are you?</em></h2>
   <p class="sub">Prime dates go by reservation and the calendar fills fast in peak season. Book online in two minutes.</p>
   <div class="cta-row">
-    <a class="btn btn-red" href="https://baxstarfishing.com" target="_blank" rel="noopener">Book at BaxstarFishing.com</a>
+    <a class="btn btn-red" href="https://fareharbor.com/embeds/book/baxstarfishing/items/309836/calendar/?full-items=yes&back=https://www.baxstarfishing.com/" target="_blank" rel="noopener">Check Dates</a>
     <a class="btn btn-ghost" href="tel:2183256857">Call 218-325-6857</a>
   </div>
-  <div class="fine">Rigged with <a href="#">Vexus</a> · <a href="#">Mercury</a> · <a href="#">Minn Kota</a> · <a href="#">Power-Pole</a></div>
+  <div class="fine">Rigged with Vexus · Mercury · Minn Kota · Power-Pole</div>
 </section>
 
 <footer>
@@ -396,10 +414,11 @@ body.static #p0 h1 .ch{transform:none}
 (function(){
 'use strict';
 const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
-const stage=$('#stage'), viewport=$('#viewport'), boat=$('#boat'), boatImg=$('#boat-img');
+const stage=$('#stage'), boat=$('#boat'), boatImg=$('#boat-img'),
+      topbar=$('#topbar'), pfEl=$('#pf');
 const IMG_AR=3072/1097;                 // trimmed cutout aspect (w/h)
 const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
-const isMobile=()=>innerWidth<768;
+const isMobile=()=>innerWidth<900;
 
 /* ============ camera poses ============
    fx,fy: focus point on the boat (0..1 of image)
@@ -411,7 +430,7 @@ const POSES_D=[
   {p:0.235, fx:0.50, fy:0.52, cx:0.50, cy:0.56, wf:0.88},
   {p:0.325, fx:0.12, fy:0.30, cx:0.63, cy:0.42, wf:2.05},  // bow / Ultrex
   {p:0.45,  fx:0.20, fy:0.26, cx:0.55, cy:0.44, wf:2.15},  // electronics text
-  {p:0.60,  fx:0.30, fy:0.40, cx:0.50, cy:0.72, wf:1.55},  // deck photo backdrop
+  {p:0.60,  fx:0.30, fy:0.40, cx:0.50, cy:0.72, wf:1.55},  // deck photo backdrop (boat fades out)
   {p:0.715, fx:0.53, fy:0.36, cx:0.50, cy:0.44, wf:2.25},  // helm / hull
   {p:0.83,  fx:0.90, fy:0.38, cx:0.42, cy:0.46, wf:1.95},  // stern
   {p:0.925, fx:0.50, fy:0.54, cx:0.50, cy:0.62, wf:0.80},  // wide finale
@@ -441,6 +460,7 @@ const PHASES=[
   {el:$('#p4'), a:0.780, b:0.875},
   {el:$('#p5'), a:0.910, b:1.001}
 ];
+const PF_IDX=4;
 
 /* anchored callouts: ax,ay in boat-image fractions */
 const CALLOUTS=[
@@ -481,27 +501,33 @@ function poseAt(t){
           wf:lerp(a.wf,b.wf,f)};
 }
 
-/* ============ render loop ============ */
-let vw=innerWidth, vh=innerHeight;
-let cur={fx:0,fy:0.5,cx:1.35,cy:0.62,wf:0.92};
-let boatRect={x:0,y:0,w:0,h:0};
-const LERP_F=0.085;
+/* ============ unified time-damped render loop ============
+   ONE smoothed master progress drives camera, text, dots, callouts.
+   Frame-rate independent (exponential damping over real dt).
+   The loop stops completely once settled and wakes on scroll/resize. */
+let vw=innerWidth, vh=innerHeight, stageH=0;
+let target=0, sm=0, lastT=0, running=false;
+let boatRect={x:0,y:0,w:0,h:0}, lastPF=-1;
+const TAU=140;          // ms — damping time constant
+const EPS=0.0004;
 
-function layout(){ vw=innerWidth; vh=innerHeight; boat.style.width=vw+'px'; }
-addEventListener('resize',layout);
-
-function getProgress(){
-  const r=stage.getBoundingClientRect();
-  return Math.max(0,Math.min(1,-r.top/(r.height-vh)));
+function layout(){
+  vw=innerWidth; vh=innerHeight;
+  boat.style.width=vw+'px';
+  stageH=stage.offsetHeight;
+  CALLOUTS.forEach(c=>c._cached=false);
 }
 
-function applyPose(p,inst){
+function rawProgress(){
+  const denom=stageH-vh;
+  return denom>0?Math.max(0,Math.min(1,(scrollY-stage.offsetTop)/denom)):0;
+}
+
+function applyPose(p){
   const t=poseAt(p);
-  if(inst){cur={...t};}
-  else for(const k in cur) cur[k]+=(t[k]-cur[k])*LERP_F;
-  const dispW=cur.wf*vw, dispH=dispW/IMG_AR;
-  const x=cur.cx*vw-cur.fx*dispW, y=cur.cy*vh-cur.fy*dispH;
-  boat.style.transform=`translate3d(${x}px,${y}px,0) scale(${cur.wf})`;
+  const dispW=t.wf*vw, dispH=dispW/IMG_AR;
+  const x=t.cx*vw-t.fx*dispW, y=t.cy*vh-t.fy*dispH;
+  boat.style.transform=`translate3d(${x}px,${y}px,0) scale(${t.wf})`;
   boatRect={x,y,w:dispW,h:dispH};
 }
 
@@ -513,14 +539,15 @@ function phaseOpacity(p,ph){
 }
 
 const dots=$$('#chapters .dot');
-let lastRaw=-1, settle=0;
-function render(){
-  const raw=getProgress();
-  if(raw===lastRaw){ settle++; if(settle>90){requestAnimationFrame(render);return;} }
-  else settle=0;
-  lastRaw=raw;
-  const p=remap(raw);
-  applyPose(p,false);
+function cacheAnchor(c){
+  const lr=c.label.getBoundingClientRect();
+  c.lx=c.side==='right'?lr.right:lr.left;
+  c.ly=lr.top+lr.height/2;
+  c._cached=true;
+}
+
+function draw(p){
+  applyPose(p);
 
   let active=0;
   PHASES.forEach((ph,i)=>{
@@ -532,61 +559,70 @@ function render(){
   });
   dots.forEach((d,i)=>d.classList.toggle('active',i===active));
 
+  /* photo beat: boat fades fully out; panel settles 1.04 -> 1 */
+  const pfO=PHASES[PF_IDX]._o;
+  if(pfO!==lastPF){
+    boat.style.opacity=(1-pfO).toFixed(3);
+    pfEl.style.setProperty('--pfs',(1.04-0.04*pfO).toFixed(4));
+    lastPF=pfO;
+  }
+
   for(const c of CALLOUTS){
     const o=PHASES[c.ph]._o||0;
-    if(o<=0.01 && !c._was){ continue; }
-    c._was=o>0.01;
+    if(o<=0.01){ if(c._was){c.dot.style.opacity=0;c.ln.style.opacity=0;c._was=false;} continue; }
+    c._was=true;
+    if(!c._cached) cacheAnchor(c);
     const dx=boatRect.x+c.ax*boatRect.w, dy=boatRect.y+c.ay*boatRect.h;
     c.dot.style.opacity=o;
     c.dot.style.transform=`translate3d(${dx}px,${dy}px,0)`;
-    const lr=c.label.getBoundingClientRect();
-    const lx=c.side==='right'?lr.right:lr.left;
-    const ly=lr.top+lr.height/2;
-    c.ln.setAttribute('x1',lx); c.ln.setAttribute('y1',ly);
+    c.ln.setAttribute('x1',c.lx); c.ln.setAttribute('y1',c.ly);
     c.ln.setAttribute('x2',dx); c.ln.setAttribute('y2',dy);
     c.ln.style.opacity=o*0.7;
   }
-  requestAnimationFrame(render);
 }
 
-/* ============ metal-flake particles ============ */
+function frame(now){
+  const dt=Math.min(50, now-lastT||16.7); lastT=now;
+  sm+=(target-sm)*(1-Math.exp(-dt/TAU));
+  if(Math.abs(target-sm)<EPS) sm=target;
+  draw(sm);
+  if(sm===target){
+    running=false;
+    boat.style.willChange='auto';
+    return;
+  }
+  requestAnimationFrame(frame);
+}
+
+function wake(){
+  target=remap(rawProgress());
+  topbar.classList.toggle('solid', reduced || scrollY>vh*0.5);
+  if(!running && !reduced){
+    running=true;
+    boat.style.willChange='transform';
+    lastT=performance.now();
+    requestAnimationFrame(frame);
+  }
+}
+
+addEventListener('scroll', wake, {passive:true});
+addEventListener('resize', ()=>{layout(); seedFlakes(); wake();});
+if(document.fonts && document.fonts.ready)
+  document.fonts.ready.then(()=>{CALLOUTS.forEach(c=>c._cached=false); wake();});
+
+/* ============ metal-flake particles — static field ============ */
 const cv=$('#flakes'), cx2=cv.getContext('2d');
-let flakes=[];
 function seedFlakes(){
   cv.width=innerWidth; cv.height=innerHeight;
-  const n=Math.min(90,Math.floor(innerWidth/16));
-  flakes=Array.from({length:n},()=>({
-    x:Math.random()*cv.width, y:Math.random()*cv.height,
-    r:Math.random()*1.4+0.3, tw:Math.random()*Math.PI*2,
-    ts:0.008+Math.random()*0.02, dy:0.05+Math.random()*0.12,
-    red:Math.random()<0.12
-  }));
-}
-addEventListener('resize',seedFlakes);
-function drawFlakes(){
+  const n=Math.min(70,Math.floor(innerWidth/22));
   cx2.clearRect(0,0,cv.width,cv.height);
-  for(const f of flakes){
-    f.tw+=f.ts; f.y-=f.dy; if(f.y<-4){f.y=cv.height+4; f.x=Math.random()*cv.width;}
-    const a=0.12+0.5*Math.abs(Math.sin(f.tw));
-    cx2.beginPath(); cx2.arc(f.x,f.y,f.r,0,7);
-    cx2.fillStyle=f.red?`rgba(213,24,32,${a*0.8})`:`rgba(200,205,215,${a})`;
+  for(let i=0;i<n;i++){
+    const r=Math.random()*1.3+0.3, a=0.08+Math.random()*0.28;
+    cx2.beginPath();
+    cx2.arc(Math.random()*cv.width,Math.random()*cv.height,r,0,7);
+    cx2.fillStyle=Math.random()<0.12?`rgba(213,24,32,${a*0.8})`:`rgba(200,205,215,${a})`;
     cx2.fill();
   }
-  if(!reduced) requestAnimationFrame(drawFlakes);
-}
-
-/* ============ custom cursor ============ */
-if(matchMedia('(pointer:fine)').matches){
-  const d=$('#cur-dot'), r=$('#cur-ring');
-  let mx=0,my=0,rx=0,ry=0;
-  addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;
-    d.style.transform=`translate(${mx-2.5}px,${my-2.5}px)`;});
-  (function ring(){rx+=(mx-rx)*0.16; ry+=(my-ry)*0.16;
-    r.style.transform=`translate(${rx-17}px,${ry-17}px)`; requestAnimationFrame(ring);})();
-  $$('a,button').forEach(el=>{
-    el.addEventListener('mouseenter',()=>r.classList.add('hover'));
-    el.addEventListener('mouseleave',()=>r.classList.remove('hover'));
-  });
 }
 
 /* ============ letter split ============ */
@@ -607,29 +643,29 @@ const io=new IntersectionObserver(es=>es.forEach(e=>{
 $$('.card').forEach((c,i)=>{c.style.transitionDelay=(i*120)+'ms'; io.observe(c);});
 
 /* ============ boot ============ */
-const bar=$('#bar-fill'), pct=$('#pct');
+const bar=$('#bar-fill');
 let fake=0;
-const tick=setInterval(()=>{fake=Math.min(fake+7,88); bar.style.width=fake+'%'; pct.textContent=Math.round(fake)+'%';},80);
+const tick=setInterval(()=>{fake=Math.min(fake+16,90); bar.style.width=fake+'%';},40);
 
 function start(){
   clearInterval(tick);
-  bar.style.width='100%'; pct.textContent='100%';
+  bar.style.width='100%';
   layout(); seedFlakes();
+  topbar.classList.toggle('solid', reduced || scrollY>vh*0.5);
   if(reduced){
     document.body.classList.add('static');
+    topbar.classList.add('solid');
     $('#loader').classList.add('done');
     $('#p0').classList.add('armed');
-    drawFlakes();
     return;
   }
-  applyPose(remap(getProgress()),true);
+  target=sm=remap(rawProgress());
+  draw(sm);
   setTimeout(()=>{
     $('#loader').classList.add('done');
     $('#chapters').classList.add('on');
     $('#p0').classList.add('armed');
-  },350);
-  drawFlakes();
-  requestAnimationFrame(render);
+  },100);
 }
 if(boatImg.complete) start();
 else boatImg.decode().then(start).catch(start);
