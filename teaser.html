@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Boat — Baxstar Fishing teaser</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@600;700&family=Archivo:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0a0a0d;
+  --platinum:#e9e9ee;
+  --steel:#93939e;
+  --red:#d51820;
+  --red-glow:rgba(213,24,32,.38);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--ink);color:var(--platinum);font-family:'Archivo',-apple-system,sans-serif;font-weight:300;overflow:hidden}
+a{-webkit-tap-highlight-color:transparent}
+
+#teaser{height:100dvh;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:clamp(8px,2vh,20px);padding:clamp(14px,3vh,28px) 4vw;position:relative}
+
+/* ---------- copy ---------- */
+.copy{text-align:center;opacity:0;transform:translateY(10px);transition:opacity .7s ease,transform .7s ease}
+.play .copy{opacity:1;transform:none}
+.eyebrow{color:var(--red);font-family:'Saira Condensed',sans-serif;font-weight:600;letter-spacing:.42em;text-transform:uppercase;font-size:clamp(11px,1.6vh,13px);margin-bottom:6px}
+h2{font-family:'Saira Condensed',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.04em;line-height:1.05;font-size:clamp(30px,7.2vh,54px)}
+.sub{color:var(--steel);font-size:clamp(13px,2vh,16px);letter-spacing:.02em;margin-top:8px;max-width:60ch}
+
+/* ---------- boat ---------- */
+.stage{position:relative;width:100%;display:flex;justify-content:center}
+#boat{width:min(88vw,1400px);max-height:46vh;object-fit:contain;transform:translateX(118%);filter:drop-shadow(0 26px 34px rgba(0,0,0,.55));will-change:transform}
+.play #boat{animation:drive 2.4s cubic-bezier(.16,.8,.3,1) forwards}
+@keyframes drive{
+  0%{transform:translateX(118%)}
+  80%{transform:translateX(-1.6%)}   /* momentum overshoot */
+  100%{transform:translateX(0)}      /* settle */
+}
+
+/* speed streaks while the boat is moving */
+.wake{position:absolute;inset:0;pointer-events:none;opacity:0}
+.play .wake{animation:wake 2.4s ease forwards}
+@keyframes wake{0%{opacity:0}18%{opacity:.8}70%{opacity:.3}100%{opacity:0}}
+.wake i{position:absolute;right:-4%;height:2px;background:linear-gradient(90deg,transparent,rgba(233,233,238,.5));border-radius:2px}
+.wake i:nth-child(1){top:36%;width:46%}
+.wake i:nth-child(2){top:52%;width:60%}
+.wake i:nth-child(3){top:67%;width:38%}
+
+/* ---------- CTA ---------- */
+.cta{opacity:0;transform:translateY(14px);pointer-events:none;display:inline-flex;align-items:center;gap:10px;background:var(--red);color:#fff;text-decoration:none;font-family:'Saira Condensed',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.18em;font-size:clamp(13px,1.9vh,15px);padding:14px 30px;border-radius:3px;box-shadow:0 8px 28px var(--red-glow);transition:opacity .6s ease,transform .6s ease,box-shadow .25s ease}
+.play .cta{opacity:1;transform:none;pointer-events:auto;transition-delay:2.05s,2.05s,0s}
+.cta:hover{box-shadow:0 10px 34px rgba(213,24,32,.55)}
+.cta:focus-visible{outline:2px solid #fff;outline-offset:3px}
+.arr{transition:transform .25s}
+.cta:hover .arr{transform:translateX(4px)}
+
+/* reduced motion / instant fallback: final state, no animation */
+.instant .copy,.instant .cta{transition:none;opacity:1;transform:none;pointer-events:auto}
+.instant #boat{animation:none;transform:none}
+.instant .wake{display:none}
+</style>
+</head>
+<body>
+<section id="teaser" aria-label="The Baxstar boat — Vexus DVX 20S">
+  <div class="copy">
+    <p class="eyebrow">The Boat</p>
+    <h2>Vexus DVX 20S</h2>
+    <p class="sub">Mercury Pro XS. Ultrex on the bow. Power-Poles on the stern. Every private trip runs on it.</p>
+  </div>
+  <div class="stage">
+    <div class="wake" aria-hidden="true"><i></i><i></i><i></i></div>
+    <img id="boat"
+         src="assets/boat.webp"
+         srcset="assets/boat-mobile.webp 1280w, assets/boat.webp 3072w"
+         sizes="(max-width:700px) 96vw, 88vw"
+         alt="Vexus DVX 20S bass boat, full side profile" decoding="async">
+  </div>
+  <a class="cta" href="./" target="_top">Walk the Boat <span class="arr">&#8594;</span></a>
+</section>
+
+<script>
+(function(){
+  var sec  = document.getElementById('teaser');
+  var boat = document.getElementById('boat');
+  var played = false, armedOnce = false;
+
+  function play(){
+    if(played) return;
+    played = true;
+    sec.classList.add('play');
+  }
+
+  function arm(){
+    if(armedOnce) return;
+    armedOnce = true;
+
+    /* reduced motion: show final state immediately */
+    if(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches){
+      played = true;
+      sec.classList.add('play','instant');
+      return;
+    }
+
+    /* primary trigger: section becomes visible in the top-level viewport
+       (IntersectionObserver measures against the parent page viewport
+       even inside a cross-origin iframe) */
+    var ioOK = false;
+    try{
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(e){
+          if(e.isIntersecting){ play(); io.disconnect(); }
+        });
+      },{threshold:0.25});
+      io.observe(sec);
+      ioOK = true;
+    }catch(_){}
+
+    /* backup: any interaction over the section means it is on screen */
+    ['pointerdown','wheel','touchstart','keydown'].forEach(function(ev){
+      window.addEventListener(ev, play, {once:true, passive:true});
+    });
+
+    /* last resort: no IntersectionObserver support — just play */
+    if(!ioOK) play();
+  }
+
+  /* animate only once the image is ready, so the boat never drives in broken */
+  if(boat.complete && boat.naturalWidth > 0){ arm(); }
+  else{
+    boat.addEventListener('load',  arm, {once:true});
+    boat.addEventListener('error', arm, {once:true});
+    setTimeout(arm, 3500); /* image stalls: arm anyway */
+  }
+})();
+</script>
+</body>
+</html>
