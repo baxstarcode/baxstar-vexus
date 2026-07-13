@@ -83,7 +83,7 @@ img{-webkit-user-drag:none;user-select:none}
 @media(max-width:900px){#chapters{display:none}}
 
 /* ---------- scroll stage ---------- */
-#stage{position:relative;height:740vh}
+#stage{position:relative;height:600vh}
 #viewport{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;
   background:
     radial-gradient(ellipse 80% 55% at 50% 68%,rgba(213,24,32,.05),transparent 65%),
@@ -199,12 +199,15 @@ footer .legal{font-family:var(--label);font-size:9px;letter-spacing:.25em;text-t
 
 /* ---------- mobile / tablet ---------- */
 @media(max-width:900px){
-  #stage{height:640vh}
+  #stage{height:540vh}
+  .phase .inner{background:rgba(14,14,18,.82);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:18px 16px;border-radius:12px;border:1px solid rgba(233,233,238,.06)}
   #p0 .inner{left:7vw;right:7vw;top:12vh}
   #p0 h1{font-size:clamp(30px,9.5vw,46px)}
   #p0 p{font-size:15px}
   .callout{left:6vw !important;right:6vw !important;top:auto !important;bottom:9vh !important;max-width:none !important;padding:20px 22px;
     background:rgba(14,14,18,.94);backdrop-filter:none;-webkit-backdrop-filter:none}
+  /* stern phase shows two callouts: stack Mercury above Power-Pole (height set by layout()) */
+  #co-merc{bottom:calc(9vh + var(--poles-h,164px)) !important}
   #pf .shot{width:88vw}
   #pf .eyebrow{top:9vh}
   .callout h3{font-size:21px}
@@ -425,8 +428,8 @@ const isMobile=()=>innerWidth<900;
    cx,cy: where that point sits in the viewport (0..1)
    wf:    boat display width as multiple of viewport width          */
 const POSES_D=[
-  {p:0.00,  fx:0.00, fy:0.50, cx:1.35, cy:0.62, wf:0.92},  // off-screen right
-  {p:0.125, fx:0.50, fy:0.52, cx:0.50, cy:0.56, wf:0.88},  // full profile
+  {p:0.00,  fx:0.00, fy:0.50, cx:1.08, cy:0.62, wf:0.92},  // just off-screen right; responds on first scroll
+  {p:0.095, fx:0.50, fy:0.52, cx:0.50, cy:0.56, wf:0.88},  // full profile
   {p:0.235, fx:0.50, fy:0.52, cx:0.50, cy:0.56, wf:0.88},
   {p:0.325, fx:0.12, fy:0.30, cx:0.63, cy:0.42, wf:2.05},  // bow / Ultrex
   {p:0.45,  fx:0.20, fy:0.26, cx:0.55, cy:0.44, wf:2.15},  // electronics text
@@ -437,16 +440,16 @@ const POSES_D=[
   {p:1.00,  fx:0.50, fy:0.54, cx:0.50, cy:0.63, wf:0.78}
 ];
 const POSES_M=[
-  {p:0.00,  fx:0.00, fy:0.50, cx:1.45, cy:0.50, wf:1.00},
-  {p:0.125, fx:0.50, fy:0.52, cx:0.50, cy:0.47, wf:0.94},
-  {p:0.235, fx:0.50, fy:0.52, cx:0.50, cy:0.47, wf:0.94},
+  {p:0.00,  fx:0.00, fy:0.50, cx:1.12, cy:0.60, wf:1.00},
+  {p:0.095, fx:0.50, fy:0.52, cx:0.50, cy:0.62, wf:0.94},
+  {p:0.235, fx:0.50, fy:0.52, cx:0.50, cy:0.62, wf:0.94},
   {p:0.325, fx:0.12, fy:0.30, cx:0.55, cy:0.36, wf:2.60},
   {p:0.45,  fx:0.20, fy:0.26, cx:0.52, cy:0.32, wf:2.65},
   {p:0.60,  fx:0.30, fy:0.40, cx:0.50, cy:0.90, wf:1.60},
   {p:0.715, fx:0.53, fy:0.34, cx:0.50, cy:0.36, wf:2.80},
   {p:0.83,  fx:0.90, fy:0.36, cx:0.46, cy:0.36, wf:2.50},
-  {p:0.925, fx:0.50, fy:0.52, cx:0.50, cy:0.44, wf:0.92},
-  {p:1.00,  fx:0.50, fy:0.52, cx:0.50, cy:0.45, wf:0.90}
+  {p:0.925, fx:0.50, fy:0.52, cx:0.50, cy:0.63, wf:0.92},
+  {p:1.00,  fx:0.50, fy:0.52, cx:0.50, cy:0.64, wf:0.90}
 ];
 
 /* phase text windows */
@@ -471,23 +474,11 @@ const CALLOUTS=[
   {ph:6, ax:0.955, ay:0.22, dot:$('#dot-poles'),  ln:$('#ln-poles'),  label:$('#co-poles'),  side:'left'}
 ];
 
-/* ============ dwell remap LUT ============ */
-const DWELLS=[{c:0.04,k:9},{c:0.19,k:5.5},{c:0.33,k:5.5},{c:0.462,k:6},{c:0.595,k:6},{c:0.715,k:5.5},{c:0.827,k:5.5},{c:0.952,k:5.5}], WIDTH=0.028, LUT_N=600;
-const LUT=(()=> {
-  const w=[]; let cum=0; const out=[0];
-  for(let i=0;i<=LUT_N;i++){
-    const t=i/LUT_N; let d=1;
-    for(const c of DWELLS) d+=c.k*Math.exp(-((t-c.c)*(t-c.c))/(2*WIDTH*WIDTH));
-    w.push(1/d);
-  }
-  for(let i=1;i<=LUT_N;i++){cum+=(w[i-1]+w[i])/2; out.push(cum);}
-  return out.map(v=>v/cum);
-})();
-function remap(t){
-  const i=Math.min(LUT_N-1,Math.max(0,Math.floor(t*LUT_N)));
-  const f=t*LUT_N-i;
-  return LUT[i]+(LUT[i+1]-LUT[i])*f;
-}
+/* ============ direct scroll mapping ============
+   The old dwell LUT held almost still, then compressed the camera moves into
+   short bursts. Direct mapping keeps every swipe proportional and predictable;
+   the time-damped render loop below supplies the visual softness. */
+const remap=t=>t;
 const smooth=t=>t*t*(3-2*t);
 const lerp=(a,b,t)=>a+(b-a)*t;
 
@@ -508,13 +499,19 @@ function poseAt(t){
 let vw=innerWidth, vh=innerHeight, stageH=0;
 let target=0, sm=0, lastT=0, running=false;
 let boatRect={x:0,y:0,w:0,h:0}, lastPF=-1;
-const TAU=140;          // ms — damping time constant
-const EPS=0.0004;
+const TAU=220;          // ms — slower, silkier response without a long dead zone
+const EPS=0.0003;
 
 function layout(){
   vw=innerWidth; vh=innerHeight;
   boat.style.width=vw+'px';
   stageH=stage.offsetHeight;
+  /* mobile: stern phase stacks two callouts — publish Power-Pole card height so
+     Mercury sits directly above it at any width (measured once, not per frame) */
+  if(isMobile()){
+    const ph=$('#co-poles').offsetHeight;
+    if(ph) document.documentElement.style.setProperty('--poles-h',(ph+16)+'px');
+  }
   CALLOUTS.forEach(c=>c._cached=false);
 }
 
@@ -533,7 +530,7 @@ function applyPose(p){
 
 function phaseOpacity(p,ph){
   if(p<ph.a||p>ph.b) return 0;
-  const span=ph.b-ph.a, edge=span*0.22;
+  const span=ph.b-ph.a, edge=span*0.34;
   const inn=ph.first?1:Math.min(1,(p-ph.a)/edge), out=Math.min(1,(ph.b-p)/edge);
   return smooth(Math.min(inn,out));
 }
