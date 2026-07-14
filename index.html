@@ -82,7 +82,7 @@ img{-webkit-user-drag:none;user-select:none}
 @media(max-width:900px){#chapters{display:none}}
 
 /* ---------- scroll stage ---------- */
-#stage{position:relative;height:900vh}
+#stage{position:relative;height:960vh}
 #viewport{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;
   background:
     radial-gradient(ellipse 80% 55% at 50% 68%,rgba(213,24,32,.05),transparent 65%),
@@ -200,7 +200,7 @@ footer .legal{font-family:var(--label);font-size:9px;letter-spacing:.25em;text-t
 
 /* ---------- mobile / tablet ---------- */
 @media(max-width:900px){
-  #stage{height:800vh}
+  #stage{height:860vh}
   .phase .inner{background:rgba(14,14,18,.82);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:18px 16px;border-radius:12px;border:1px solid rgba(233,233,238,.06)}
   #p0 .inner{left:7vw;right:7vw;top:12vh}
   #p0 h1{font-size:clamp(30px,9.5vw,46px)}
@@ -435,8 +435,9 @@ const POSES_D=[
   {p:0.710, fx:0.53, fy:0.36, cx:0.50, cy:0.44, wf:2.25},  // helm
   {p:0.805, fx:0.53, fy:0.36, cx:0.50, cy:0.44, wf:2.25},  // HOLD
   {p:0.850, fx:0.90, fy:0.38, cx:0.42, cy:0.46, wf:1.95},  // stern
-  {p:0.935, fx:0.90, fy:0.38, cx:0.42, cy:0.46, wf:1.95},  // HOLD
-  {p:1.000, fx:0.50, fy:0.54, cx:0.50, cy:0.74, wf:0.80}   // wide finale, boat below the card
+  {p:0.900, fx:0.90, fy:0.38, cx:0.42, cy:0.46, wf:1.95},  // HOLD
+  {p:0.925, fx:0.50, fy:0.54, cx:0.50, cy:0.74, wf:0.80},  // wide pull lands BEFORE the text
+  {p:1.000, fx:0.50, fy:0.54, cx:0.50, cy:0.74, wf:0.80}   // frozen finale — text reads over a still scene
 ];
 const POSES_M=[
   {p:0.000, fx:0.00, fy:0.50, cx:1.15, cy:0.60, wf:1.00},
@@ -450,8 +451,9 @@ const POSES_M=[
   {p:0.710, fx:0.53, fy:0.34, cx:0.50, cy:0.36, wf:2.80},
   {p:0.805, fx:0.53, fy:0.34, cx:0.50, cy:0.36, wf:2.80},  // HOLD
   {p:0.850, fx:0.90, fy:0.36, cx:0.46, cy:0.36, wf:2.50},
-  {p:0.935, fx:0.90, fy:0.36, cx:0.46, cy:0.36, wf:2.50},  // HOLD
-  {p:1.000, fx:0.50, fy:0.52, cx:0.50, cy:0.78, wf:0.90}   // finale: boat LOW, clear of card + buttons
+  {p:0.900, fx:0.90, fy:0.36, cx:0.46, cy:0.36, wf:2.50},  // HOLD
+  {p:0.925, fx:0.50, fy:0.52, cx:0.50, cy:0.78, wf:0.90},  // wide pull lands BEFORE the text
+  {p:1.000, fx:0.50, fy:0.52, cx:0.50, cy:0.78, wf:0.90}   // frozen finale: boat LOW, clear of card + buttons
 ];
 
 /* phase text windows */
@@ -461,8 +463,8 @@ const PHASES=[
   {el:$('#p2'), a:0.262, b:0.405},
   {el:$('#pf'), a:0.552, b:0.658},
   {el:$('#p3'), a:0.717, b:0.802},
-  {el:$('#p4'), a:0.857, b:0.932},
-  {el:$('#p5'), a:0.948, b:1.001}
+  {el:$('#p4'), a:0.857, b:0.895},
+  {el:$('#p5'), a:0.932, b:1.001}
 ];
 const PF_IDX=3;
 
