@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Boat — Baxstar Fishing | Vexus DVX 20S</title>
-<meta name="description" content="Every Baxstar trip runs on a Vexus DVX 20S — Mercury Pro XS power, Minn Kota Ultrex, Power-Pole Drift Paddles. Walk the boat, then book your private trip.">
+<meta name="description" content="Every Baxstar trip runs on a Vexus DVX 20S — Mercury Pro XS 300 HP, Minn Kota Ultrex, Power-Pole Drift Paddles. Check out the boat, then book your private trip.">
 <link rel="canonical" href="https://boat.baxstarfishing.com/">
 <meta property="og:title" content="The Boat — Baxstar Fishing | Vexus DVX 20S">
-<meta property="og:description" content="Every Baxstar trip runs on a Vexus DVX 20S — Mercury Pro XS power, Minn Kota Ultrex, Power-Pole Drift Paddles. Walk the boat, then book your private trip.">
+<meta property="og:description" content="Every Baxstar trip runs on a Vexus DVX 20S — Mercury Pro XS 300 HP, Minn Kota Ultrex, Power-Pole Drift Paddles. Check out the boat, then book your private trip.">
 <meta property="og:image" content="https://boat.baxstarfishing.com/assets/boat.webp">
 <meta property="og:url" content="https://boat.baxstarfishing.com/">
 <meta property="og:type" content="website">
@@ -48,9 +48,8 @@ img{-webkit-user-drag:none;user-select:none}
   transition:background .4s,border-color .4s,padding .4s}
 #topbar.solid{background:rgba(10,10,13,.78);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
   border-bottom-color:rgba(233,233,238,.07);padding:10px 6vw}
-#topbar .tb-brand{font-family:var(--display);font-weight:700;font-size:16px;letter-spacing:.32em;
-  text-transform:uppercase;text-decoration:none}
-#topbar .tb-brand em{color:var(--red);font-style:normal}
+#topbar .tb-brand{display:block;line-height:0;text-decoration:none}
+#topbar .tb-brand img{height:46px;width:auto;display:block}
 #topbar .tb-cta{font-family:var(--label);font-weight:600;font-size:10px;letter-spacing:.26em;
   text-transform:uppercase;text-decoration:none;color:#fff;background:var(--red);
   padding:12px 24px;border-radius:100px;box-shadow:0 6px 22px var(--red-glow);
@@ -59,7 +58,7 @@ img{-webkit-user-drag:none;user-select:none}
 @media(max-width:900px){
   #topbar{padding:12px 5vw}
   #topbar.solid{padding:9px 5vw}
-  #topbar .tb-brand{font-size:14px;letter-spacing:.26em}
+  #topbar .tb-brand img{height:36px}
   #topbar .tb-cta{padding:10px 18px;font-size:9.5px;letter-spacing:.22em}
 }
 
@@ -83,7 +82,7 @@ img{-webkit-user-drag:none;user-select:none}
 @media(max-width:900px){#chapters{display:none}}
 
 /* ---------- scroll stage ---------- */
-#stage{position:relative;height:600vh}
+#stage{position:relative;height:900vh}
 #viewport{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;
   background:
     radial-gradient(ellipse 80% 55% at 50% 68%,rgba(213,24,32,.05),transparent 65%),
@@ -129,10 +128,10 @@ h1,h2,.h-display{font-family:var(--display);font-weight:700;text-transform:upper
 #statbar{position:absolute;left:50%;bottom:7vh;transform:translateX(-50%);display:flex;gap:0;
   background:rgba(233,233,238,.03);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
   border:1px solid rgba(233,233,238,.07);border-radius:14px;overflow:hidden}
-#statbar .cell{padding:20px 34px;text-align:center;border-left:1px solid rgba(233,233,238,.06)}
+#statbar .cell{padding:18px 24px;text-align:center;border-left:1px solid rgba(233,233,238,.06)}
 #statbar .cell:first-child{border-left:none}
 #statbar .k{font-family:var(--label);font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--steel);margin-bottom:7px}
-#statbar .v{font-family:var(--display);font-weight:600;font-size:19px;letter-spacing:.05em;text-transform:uppercase}
+#statbar .v{font-family:var(--display);font-weight:600;font-size:17px;letter-spacing:.05em;text-transform:uppercase}
 #statbar .v em{color:var(--red);font-style:normal}
 
 /* phases 2–4 — feature callouts */
@@ -172,7 +171,7 @@ h1,h2,.h-display{font-family:var(--display);font-weight:700;text-transform:upper
 .btn-ghost:hover{border-color:var(--pin);background:rgba(233,233,238,.05)}
 
 /* ---------- below-stage content ---------- */
-section.block{position:relative;z-index:60;background:var(--ink);padding:120px 6vw}
+section.block{position:relative;z-index:60;background:var(--ink);padding:120px 6vw;content-visibility:auto;contain-intrinsic-size:auto 640px}
 .block .head{max-width:1200px;margin:0 auto 56px}
 .block h2{font-size:clamp(30px,4vw,52px);margin-top:14px}
 .grid3{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
@@ -199,7 +198,7 @@ footer .legal{font-family:var(--label);font-size:9px;letter-spacing:.25em;text-t
 
 /* ---------- mobile / tablet ---------- */
 @media(max-width:900px){
-  #stage{height:540vh}
+  #stage{height:800vh}
   .phase .inner{background:rgba(14,14,18,.82);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:18px 16px;border-radius:12px;border:1px solid rgba(233,233,238,.06)}
   #p0 .inner{left:7vw;right:7vw;top:12vh}
   #p0 h1{font-size:clamp(30px,9.5vw,46px)}
@@ -247,7 +246,7 @@ body.static #p0 h1 .ch{transform:none}
 </div>
 
 <header id="topbar">
-  <a class="tb-brand" href="https://baxstarfishing.com" target="_blank" rel="noopener">BAX<em>STAR</em></a>
+  <a class="tb-brand" href="https://baxstarfishing.com" aria-label="Baxstar Fishing home"><img src="https://static.wixstatic.com/media/a30e59_413146f7cd6a496a823309aefc67e66c~mv2.png" alt="Baxstar Fishing" width="82" height="46" decoding="async"></a>
   <a class="tb-cta" href="https://fareharbor.com/embeds/book/baxstarfishing/items/309836/calendar/?full-items=yes&back=https://www.baxstarfishing.com/" target="_blank" rel="noopener">Check Dates</a>
 </header>
 
@@ -284,7 +283,7 @@ body.static #p0 h1 .ch{transform:none}
       <div class="inner">
         <div class="eyebrow">Baxstar Fishing <em>·</em> Detroit Lakes, Minnesota</div>
         <h1 id="hero-title"><span class="ln" data-split>ONCE IN A WHILE,</span><span class="ln" data-split>YOU STUMBLE ONTO</span><span class="ln" data-split>SOMETHING</span><span class="ln" data-split>TRULY GREAT.</span></h1>
-        <p>This is the boat your private trip runs on — the Vexus DVX 20S, rigged, dialed, and waiting. Scroll to walk it.</p>
+        <p>This is the boat your private trip runs on — the Vexus DVX 20S, rigged, dialed, and waiting. Scroll to check it out.</p>
       </div>
       <div id="scroll-cue"><span class="stem"></span>Scroll</div>
     </div>
@@ -296,11 +295,11 @@ body.static #p0 h1 .ch{transform:none}
         <h2>Vexus <em style="color:var(--red)">DVX 20S</em></h2>
       </div>
       <div id="statbar">
-        <div class="cell"><div class="k">Capacity</div><div class="v">5 Guests <em>+ Captain</em></div></div>
-        <div class="cell"><div class="k">Power</div><div class="v">Mercury Pro XS</div></div>
+        <div class="cell"><div class="k">Capacity</div><div class="v">Up to 5 Guests <em>+ Captain</em></div></div>
+        <div class="cell"><div class="k">Power</div><div class="v">Mercury Pro XS <em>300 HP</em></div></div>
         <div class="cell"><div class="k">Bow</div><div class="v">Minn Kota Ultrex</div></div>
-        <div class="cell"><div class="k">Stern</div><div class="v">Power-Pole ×2</div></div>
-        <div class="cell"><div class="k">Sonar</div><div class="v">2× <em>LiveScope</em></div></div>
+        <div class="cell"><div class="k">Stern</div><div class="v">2 Power-Poles <em>with Drift Paddles</em></div></div>
+        <div class="cell"><div class="k">Sonar</div><div class="v">2× <em>Garmin LiveScope</em></div></div>
       </div>
     </div>
 
@@ -338,7 +337,7 @@ body.static #p0 h1 .ch{transform:none}
     <div class="phase" id="p3">
       <div class="callout inner" id="co-hull">
         <div class="idx">03 · Helm</div>
-        <h3>DVX Performance Hull</h3>
+        <h3>DVX Performance Build</h3>
         <p>Walk-through windshield, deep-V ride. When the wind comes up on big water, this hull keeps the day comfortable — and fishable.</p>
       </div>
     </div>
@@ -347,7 +346,7 @@ body.static #p0 h1 .ch{transform:none}
     <div class="phase" id="p4">
       <div class="callout inner" id="co-merc">
         <div class="idx">04 · Power</div>
-        <h3>Mercury Pro XS</h3>
+        <h3>Mercury Pro XS 300 HP</h3>
         <p>More water covered in a day means more spots on your trip. When the bite moves, we move.</p>
       </div>
       <div class="callout inner" id="co-poles">
@@ -365,7 +364,7 @@ body.static #p0 h1 .ch{transform:none}
         <p>This boat doesn't sit at a dealership — it's on the water with Baxstar clients all season. Your private trip starts here.</p>
         <div class="cta-row">
           <a class="btn btn-red" href="https://fareharbor.com/embeds/book/baxstarfishing/items/309836/calendar/?full-items=yes&back=https://www.baxstarfishing.com/" target="_blank" rel="noopener">Check Dates</a>
-          <a class="btn btn-ghost" href="sms:2183256857">Text 218-325-6857</a>
+          <a class="btn btn-ghost" href="tel:2183256857">Text/Call 218-325-6857</a>
         </div>
       </div>
     </div>
@@ -403,7 +402,7 @@ body.static #p0 h1 .ch{transform:none}
   <p class="sub">Prime dates go by reservation and the calendar fills fast in peak season. Book online in two minutes.</p>
   <div class="cta-row">
     <a class="btn btn-red" href="https://fareharbor.com/embeds/book/baxstarfishing/items/309836/calendar/?full-items=yes&back=https://www.baxstarfishing.com/" target="_blank" rel="noopener">Check Dates</a>
-    <a class="btn btn-ghost" href="tel:2183256857">Call 218-325-6857</a>
+    <a class="btn btn-ghost" href="tel:2183256857">Text/Call 218-325-6857</a>
   </div>
   <div class="fine">Rigged with Vexus · Mercury · Minn Kota · Power-Pole</div>
 </section>
@@ -428,40 +427,50 @@ const isMobile=()=>innerWidth<900;
    cx,cy: where that point sits in the viewport (0..1)
    wf:    boat display width as multiple of viewport width          */
 const POSES_D=[
-  {p:0.00,  fx:0.00, fy:0.50, cx:1.08, cy:0.62, wf:0.92},  // just off-screen right; responds on first scroll
-  {p:0.095, fx:0.50, fy:0.52, cx:0.50, cy:0.56, wf:0.88},  // full profile
-  {p:0.235, fx:0.50, fy:0.52, cx:0.50, cy:0.56, wf:0.88},
-  {p:0.325, fx:0.12, fy:0.30, cx:0.63, cy:0.42, wf:2.05},  // bow / Ultrex
-  {p:0.45,  fx:0.20, fy:0.26, cx:0.55, cy:0.44, wf:2.15},  // electronics text
-  {p:0.60,  fx:0.30, fy:0.40, cx:0.50, cy:0.72, wf:1.55},  // deck photo backdrop (boat fades out)
-  {p:0.715, fx:0.53, fy:0.36, cx:0.50, cy:0.44, wf:2.25},  // helm / hull
-  {p:0.83,  fx:0.90, fy:0.38, cx:0.42, cy:0.46, wf:1.95},  // stern
-  {p:0.925, fx:0.50, fy:0.54, cx:0.50, cy:0.62, wf:0.80},  // wide finale
-  {p:1.00,  fx:0.50, fy:0.54, cx:0.50, cy:0.63, wf:0.78}
+  {p:0.000, fx:0.00, fy:0.50, cx:1.10, cy:0.62, wf:0.92},  // off-screen right while hero reads
+  {p:0.048, fx:0.00, fy:0.50, cx:1.10, cy:0.62, wf:0.92},  // hold off until hero has faded
+  {p:0.100, fx:0.50, fy:0.52, cx:0.50, cy:0.53, wf:0.88},  // arrive full profile
+  {p:0.205, fx:0.50, fy:0.52, cx:0.50, cy:0.53, wf:0.88},  // HOLD — flagship text
+  {p:0.255, fx:0.12, fy:0.30, cx:0.63, cy:0.42, wf:2.05},  // bow / Ultrex
+  {p:0.355, fx:0.12, fy:0.30, cx:0.63, cy:0.42, wf:2.05},  // HOLD
+  {p:0.405, fx:0.20, fy:0.26, cx:0.55, cy:0.44, wf:2.15},  // electronics
+  {p:0.500, fx:0.20, fy:0.26, cx:0.55, cy:0.44, wf:2.15},  // HOLD
+  {p:0.555, fx:0.30, fy:0.40, cx:0.50, cy:0.72, wf:1.55},  // deck photo backdrop (boat fades)
+  {p:0.655, fx:0.30, fy:0.40, cx:0.50, cy:0.72, wf:1.55},  // HOLD under photo
+  {p:0.710, fx:0.53, fy:0.36, cx:0.50, cy:0.44, wf:2.25},  // helm
+  {p:0.805, fx:0.53, fy:0.36, cx:0.50, cy:0.44, wf:2.25},  // HOLD
+  {p:0.850, fx:0.90, fy:0.38, cx:0.42, cy:0.46, wf:1.95},  // stern
+  {p:0.935, fx:0.90, fy:0.38, cx:0.42, cy:0.46, wf:1.95},  // HOLD
+  {p:1.000, fx:0.50, fy:0.54, cx:0.50, cy:0.74, wf:0.80}   // wide finale, boat below the card
 ];
 const POSES_M=[
-  {p:0.00,  fx:0.00, fy:0.50, cx:1.12, cy:0.60, wf:1.00},
-  {p:0.095, fx:0.50, fy:0.52, cx:0.50, cy:0.62, wf:0.94},
-  {p:0.235, fx:0.50, fy:0.52, cx:0.50, cy:0.62, wf:0.94},
-  {p:0.325, fx:0.12, fy:0.30, cx:0.55, cy:0.36, wf:2.60},
-  {p:0.45,  fx:0.20, fy:0.26, cx:0.52, cy:0.32, wf:2.65},
-  {p:0.60,  fx:0.30, fy:0.40, cx:0.50, cy:0.90, wf:1.60},
-  {p:0.715, fx:0.53, fy:0.34, cx:0.50, cy:0.36, wf:2.80},
-  {p:0.83,  fx:0.90, fy:0.36, cx:0.46, cy:0.36, wf:2.50},
-  {p:0.925, fx:0.50, fy:0.52, cx:0.50, cy:0.63, wf:0.92},
-  {p:1.00,  fx:0.50, fy:0.52, cx:0.50, cy:0.64, wf:0.90}
+  {p:0.000, fx:0.00, fy:0.50, cx:1.15, cy:0.60, wf:1.00},
+  {p:0.048, fx:0.00, fy:0.50, cx:1.15, cy:0.60, wf:1.00},  // hold off until hero has faded
+  {p:0.100, fx:0.50, fy:0.52, cx:0.50, cy:0.40, wf:0.94},  // full profile ABOVE the stat bar
+  {p:0.205, fx:0.50, fy:0.52, cx:0.50, cy:0.40, wf:0.94},  // HOLD
+  {p:0.255, fx:0.12, fy:0.30, cx:0.55, cy:0.36, wf:2.60},
+  {p:0.355, fx:0.12, fy:0.30, cx:0.55, cy:0.36, wf:2.60},  // HOLD
+  {p:0.405, fx:0.20, fy:0.26, cx:0.52, cy:0.32, wf:2.65},
+  {p:0.500, fx:0.20, fy:0.26, cx:0.52, cy:0.32, wf:2.65},  // HOLD
+  {p:0.555, fx:0.30, fy:0.40, cx:0.50, cy:0.90, wf:1.60},
+  {p:0.655, fx:0.30, fy:0.40, cx:0.50, cy:0.90, wf:1.60},  // HOLD
+  {p:0.710, fx:0.53, fy:0.34, cx:0.50, cy:0.36, wf:2.80},
+  {p:0.805, fx:0.53, fy:0.34, cx:0.50, cy:0.36, wf:2.80},  // HOLD
+  {p:0.850, fx:0.90, fy:0.36, cx:0.46, cy:0.36, wf:2.50},
+  {p:0.935, fx:0.90, fy:0.36, cx:0.46, cy:0.36, wf:2.50},  // HOLD
+  {p:1.000, fx:0.50, fy:0.52, cx:0.50, cy:0.78, wf:0.90}   // finale: boat LOW, clear of card + buttons
 ];
 
 /* phase text windows */
 const PHASES=[
-  {el:$('#p0'), a:0.000, b:0.115, first:true},
-  {el:$('#p1'), a:0.140, b:0.245},
-  {el:$('#p2'), a:0.285, b:0.380},
-  {el:$('#pe'), a:0.415, b:0.510},
-  {el:$('#pf'), a:0.545, b:0.645},
-  {el:$('#p3'), a:0.675, b:0.755},
-  {el:$('#p4'), a:0.780, b:0.875},
-  {el:$('#p5'), a:0.910, b:1.001}
+  {el:$('#p0'), a:0.000, b:0.048, first:true},
+  {el:$('#p1'), a:0.108, b:0.200},
+  {el:$('#p2'), a:0.262, b:0.352},
+  {el:$('#pe'), a:0.412, b:0.497},
+  {el:$('#pf'), a:0.552, b:0.658},
+  {el:$('#p3'), a:0.717, b:0.802},
+  {el:$('#p4'), a:0.857, b:0.932},
+  {el:$('#p5'), a:0.948, b:1.001}
 ];
 const PF_IDX=4;
 
@@ -498,8 +507,8 @@ function poseAt(t){
    The loop stops completely once settled and wakes on scroll/resize. */
 let vw=innerWidth, vh=innerHeight, stageH=0;
 let target=0, sm=0, lastT=0, running=false;
-let boatRect={x:0,y:0,w:0,h:0}, lastPF=-1;
-const TAU=220;          // ms — slower, silkier response without a long dead zone
+let boatRect={x:0,y:0,w:0,h:0}, lastPF=-1, lastTf='', lastActive=-1;
+const TAU=240;          // ms — slower, silkier response without a long dead zone
 const EPS=0.0003;
 
 function layout(){
@@ -524,7 +533,8 @@ function applyPose(p){
   const t=poseAt(p);
   const dispW=t.wf*vw, dispH=dispW/IMG_AR;
   const x=t.cx*vw-t.fx*dispW, y=t.cy*vh-t.fy*dispH;
-  boat.style.transform=`translate3d(${x}px,${y}px,0) scale(${t.wf})`;
+  const tf=`translate3d(${x.toFixed(1)}px,${y.toFixed(1)}px,0) scale(${t.wf.toFixed(4)})`;
+  if(tf!==lastTf){boat.style.transform=tf;lastTf=tf;}
   boatRect={x,y,w:dispW,h:dispH};
 }
 
@@ -549,12 +559,17 @@ function draw(p){
   let active=0;
   PHASES.forEach((ph,i)=>{
     const o=phaseOpacity(p,ph);
-    ph.el.style.opacity=o;
-    ph.el.style.pointerEvents=o>0.5?'auto':'none';
+    if(ph._o===undefined||Math.abs(o-ph._o)>0.002||(o===0)!==(ph._o===0)){
+      ph.el.style.opacity=o;
+      ph.el.style.pointerEvents=o>0.5?'auto':'none';
+    }
     if(o>0.4) active=i;
     ph._o=o;
   });
-  dots.forEach((d,i)=>d.classList.toggle('active',i===active));
+  if(active!==lastActive){
+    dots.forEach((d,i)=>d.classList.toggle('active',i===active));
+    lastActive=active;
+  }
 
   /* photo beat: boat fades fully out; panel settles 1.04 -> 1 */
   const pfO=PHASES[PF_IDX]._o;
