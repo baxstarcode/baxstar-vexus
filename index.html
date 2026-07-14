@@ -146,8 +146,8 @@ h1,h2,.h-display{font-family:var(--display);font-weight:700;text-transform:upper
 #co-merc{right:6vw;top:18vh}
 #co-poles{right:6vw;bottom:14vh;max-width:320px}
 
-/* phase E — electronics text */
-#co-sonar{right:6vw;top:22vh;max-width:390px}
+/* command center card — lives on the deck beat */
+#co-sonar{left:6vw;bottom:10vh;max-width:340px}
 
 /* phase F — deck photo beat: straight, near-fullscreen, settles 1.04 -> 1 */
 #pf .eyebrow{position:absolute;left:50%;top:8vh;transform:translateX(-50%);white-space:nowrap}
@@ -157,8 +157,7 @@ h1,h2,.h-display{font-family:var(--display);font-weight:700;text-transform:upper
   -webkit-mask-image:linear-gradient(to bottom,#000 74%,transparent 99%);
   mask-image:linear-gradient(to bottom,#000 74%,transparent 99%);
   filter:drop-shadow(0 30px 60px rgba(0,0,0,.55))}
-#pf .shot .cap{position:absolute;left:50%;bottom:2px;transform:translateX(-50%);margin:0;white-space:nowrap;
-  font-family:var(--label);font-weight:600;font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--steel)}
+
 
 /* phase 5 — finale */
 #p5 .inner{position:absolute;left:50%;top:12vh;transform:translateX(-50%);text-align:center;width:min(760px,90vw)}
@@ -260,8 +259,7 @@ body.static #p0 h1 .ch{transform:none}
   <div class="dot" data-c="3"></div><div class="link"></div>
   <div class="dot" data-c="4"></div><div class="link"></div>
   <div class="dot" data-c="5"></div><div class="link"></div>
-  <div class="dot" data-c="6"></div><div class="link"></div>
-  <div class="dot" data-c="7"></div>
+  <div class="dot" data-c="6"></div>
 </nav>
 
 <div id="stage">
@@ -316,15 +314,7 @@ body.static #p0 h1 .ch{transform:none}
     </div>
 
     <!-- PE · electronics -->
-    <div class="phase" id="pe">
-      <div class="callout inner" id="co-sonar">
-        <div class="idx">02 · Electronics</div>
-        <h3>The Command Center</h3>
-        <p>Two Garmin LiveScope units running on dedicated Garmin displays. You watch fish react to your bait in real time — and on your trip, you're the one running it.</p>
-      </div>
-    </div>
-
-    <!-- PF · deck photo -->
+    <!-- PF · deck view + command center -->
     <div class="phase" id="pf">
       <div class="eyebrow">The View From <em>·</em> The Deck</div>
       <figure class="shot inner">
@@ -332,8 +322,12 @@ body.static #p0 h1 .ch{transform:none}
              srcset="https://static.wixstatic.com/media/a30e59_9d970c99de294b34a853d7966d2dadd2~mv2.webp 900w, https://static.wixstatic.com/media/a30e59_3f5334a07f994b58b5b2332c964b8716~mv2.webp 1600w"
              sizes="(max-width:900px) 92vw, min(78vw, 1150px)"
              alt="Standing on the Vexus bow casting deck — Garmin LiveScope screens running live imaging" loading="lazy" decoding="async">
-        <figcaption class="cap">Live Imaging · Bow Command Center</figcaption>
       </figure>
+      <div class="callout inner" id="co-sonar">
+        <div class="idx">02 · Electronics</div>
+        <h3>The Command Center</h3>
+        <p>Two Garmin LiveScope units running on dedicated Garmin displays. You watch fish react to your bait in real time — and on your trip, you're the one running it.</p>
+      </div>
     </div>
 
     <!-- P3 · helm / hull -->
@@ -435,10 +429,8 @@ const POSES_D=[
   {p:0.100, fx:0.50, fy:0.52, cx:0.50, cy:0.53, wf:0.88},  // arrive full profile
   {p:0.205, fx:0.50, fy:0.52, cx:0.50, cy:0.53, wf:0.88},  // HOLD — flagship text
   {p:0.255, fx:0.12, fy:0.30, cx:0.63, cy:0.42, wf:2.05},  // bow / Ultrex
-  {p:0.355, fx:0.12, fy:0.30, cx:0.63, cy:0.42, wf:2.05},  // HOLD
-  {p:0.405, fx:0.20, fy:0.26, cx:0.55, cy:0.44, wf:2.15},  // electronics
-  {p:0.500, fx:0.20, fy:0.26, cx:0.55, cy:0.44, wf:2.15},  // HOLD
-  {p:0.555, fx:0.30, fy:0.40, cx:0.50, cy:0.72, wf:1.55},  // deck photo backdrop (boat fades)
+  {p:0.415, fx:0.12, fy:0.30, cx:0.63, cy:0.42, wf:2.05},  // HOLD
+  {p:0.555, fx:0.30, fy:0.40, cx:0.50, cy:0.72, wf:1.55},  // deck view backdrop (boat fades)
   {p:0.655, fx:0.30, fy:0.40, cx:0.50, cy:0.72, wf:1.55},  // HOLD under photo
   {p:0.710, fx:0.53, fy:0.36, cx:0.50, cy:0.44, wf:2.25},  // helm
   {p:0.805, fx:0.53, fy:0.36, cx:0.50, cy:0.44, wf:2.25},  // HOLD
@@ -452,9 +444,7 @@ const POSES_M=[
   {p:0.100, fx:0.50, fy:0.52, cx:0.50, cy:0.40, wf:0.94},  // full profile ABOVE the stat bar
   {p:0.205, fx:0.50, fy:0.52, cx:0.50, cy:0.40, wf:0.94},  // HOLD
   {p:0.255, fx:0.12, fy:0.30, cx:0.55, cy:0.36, wf:2.60},
-  {p:0.355, fx:0.12, fy:0.30, cx:0.55, cy:0.36, wf:2.60},  // HOLD
-  {p:0.405, fx:0.20, fy:0.26, cx:0.52, cy:0.32, wf:2.65},
-  {p:0.500, fx:0.20, fy:0.26, cx:0.52, cy:0.32, wf:2.65},  // HOLD
+  {p:0.415, fx:0.12, fy:0.30, cx:0.55, cy:0.36, wf:2.60},  // HOLD
   {p:0.555, fx:0.30, fy:0.40, cx:0.50, cy:0.90, wf:1.60},
   {p:0.655, fx:0.30, fy:0.40, cx:0.50, cy:0.90, wf:1.60},  // HOLD
   {p:0.710, fx:0.53, fy:0.34, cx:0.50, cy:0.36, wf:2.80},
@@ -468,22 +458,21 @@ const POSES_M=[
 const PHASES=[
   {el:$('#p0'), a:0.000, b:0.048, first:true},
   {el:$('#p1'), a:0.108, b:0.200},
-  {el:$('#p2'), a:0.262, b:0.352},
-  {el:$('#pe'), a:0.412, b:0.497},
+  {el:$('#p2'), a:0.262, b:0.405},
   {el:$('#pf'), a:0.552, b:0.658},
   {el:$('#p3'), a:0.717, b:0.802},
   {el:$('#p4'), a:0.857, b:0.932},
   {el:$('#p5'), a:0.948, b:1.001}
 ];
-const PF_IDX=4;
+const PF_IDX=3;
 
 /* anchored callouts: ax,ay in boat-image fractions */
 const CALLOUTS=[
   {ph:2, ax:0.105, ay:0.28, dot:$('#dot-ultrex'), ln:$('#ln-ultrex'), label:$('#co-ultrex'), side:'right'},
-  {ph:3, ax:0.190, ay:0.22, dot:$('#dot-sonar'),  ln:$('#ln-sonar'),  label:$('#co-sonar'),  side:'left'},
-  {ph:5, ax:0.520, ay:0.32, dot:$('#dot-hull'),   ln:$('#ln-hull'),   label:$('#co-hull'),   side:'right'},
-  {ph:6, ax:0.885, ay:0.40, dot:$('#dot-merc'),   ln:$('#ln-merc'),   label:$('#co-merc'),   side:'left'},
-  {ph:6, ax:0.955, ay:0.22, dot:$('#dot-poles'),  ln:$('#ln-poles'),  label:$('#co-poles'),  side:'left'}
+  {ph:3, ax:0.390, ay:0.41, dot:$('#dot-sonar'),  ln:$('#ln-sonar'),  label:$('#co-sonar'),  side:'right', ref:'pf'},
+  {ph:4, ax:0.520, ay:0.32, dot:$('#dot-hull'),   ln:$('#ln-hull'),   label:$('#co-hull'),   side:'right'},
+  {ph:5, ax:0.885, ay:0.40, dot:$('#dot-merc'),   ln:$('#ln-merc'),   label:$('#co-merc'),   side:'left'},
+  {ph:5, ax:0.955, ay:0.22, dot:$('#dot-poles'),  ln:$('#ln-poles'),  label:$('#co-poles'),  side:'left'}
 ];
 
 /* ============ direct scroll mapping ============
@@ -510,7 +499,8 @@ function poseAt(t){
    The loop stops completely once settled and wakes on scroll/resize. */
 let vw=innerWidth, vh=innerHeight, stageH=0;
 let target=0, sm=0, lastT=0, running=false;
-let boatRect={x:0,y:0,w:0,h:0}, lastPF=-1, lastTf='', lastActive=-1;
+let boatRect={x:0,y:0,w:0,h:0}, pfRect={x:0,y:0,w:0,h:0}, lastPF=-1, lastTf='', lastActive=-1;
+const PF_AR=1600/947;
 const TAU=240;          // ms — slower, silkier response without a long dead zone
 const EPS=0.0003;
 
@@ -518,6 +508,9 @@ function layout(){
   vw=innerWidth; vh=innerHeight;
   boat.style.width=vw+'px';
   stageH=stage.offsetHeight;
+  /* deck-view image rect — pure geometry (centered 50%/52%), no DOM reads */
+  const pw=isMobile()?vw*0.92:Math.min(vw*0.78,1150), phh=pw/PF_AR;
+  pfRect={x:vw*0.5-pw/2, y:vh*0.52-phh/2, w:pw, h:phh};
   /* mobile: stern phase stacks two callouts — publish Power-Pole card height so
      Mercury sits directly above it at any width (measured once, not per frame) */
   if(isMobile()){
@@ -587,7 +580,8 @@ function draw(p){
     if(o<=0.01){ if(c._was){c.dot.style.opacity=0;c.ln.style.opacity=0;c._was=false;} continue; }
     c._was=true;
     if(!c._cached) cacheAnchor(c);
-    const dx=boatRect.x+c.ax*boatRect.w, dy=boatRect.y+c.ay*boatRect.h;
+    const R=c.ref==='pf'?pfRect:boatRect;
+    const dx=R.x+c.ax*R.w, dy=R.y+c.ay*R.h;
     c.dot.style.opacity=o;
     c.dot.style.transform=`translate3d(${dx}px,${dy}px,0)`;
     c.ln.setAttribute('x1',c.lx); c.ln.setAttribute('y1',c.ly);
