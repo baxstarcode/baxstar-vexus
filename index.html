@@ -82,7 +82,7 @@ img{-webkit-user-drag:none;user-select:none}
 @media(max-width:900px){#chapters{display:none}}
 
 /* ---------- scroll stage ---------- */
-#stage{position:relative;height:960vh}
+#stage{position:relative;height:1080vh}
 #viewport{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;
   background:
     radial-gradient(ellipse 80% 55% at 50% 68%,rgba(213,24,32,.05),transparent 65%),
@@ -435,8 +435,8 @@ const POSES_D=[
   {p:0.710, fx:0.53, fy:0.36, cx:0.50, cy:0.44, wf:2.25},  // helm
   {p:0.805, fx:0.53, fy:0.36, cx:0.50, cy:0.44, wf:2.25},  // HOLD
   {p:0.850, fx:0.90, fy:0.38, cx:0.42, cy:0.46, wf:1.95},  // stern
-  {p:0.900, fx:0.90, fy:0.38, cx:0.42, cy:0.46, wf:1.95},  // HOLD
-  {p:0.925, fx:0.50, fy:0.54, cx:0.50, cy:0.74, wf:0.80},  // wide pull lands BEFORE the text
+  {p:0.912, fx:0.90, fy:0.38, cx:0.42, cy:0.46, wf:1.95},  // HOLD (widened — stern cards get real time)
+  {p:0.934, fx:0.50, fy:0.54, cx:0.50, cy:0.74, wf:0.80},  // wide pull lands BEFORE the text
   {p:1.000, fx:0.50, fy:0.54, cx:0.50, cy:0.74, wf:0.80}   // frozen finale — text reads over a still scene
 ];
 const POSES_M=[
@@ -451,8 +451,8 @@ const POSES_M=[
   {p:0.710, fx:0.53, fy:0.34, cx:0.50, cy:0.36, wf:2.80},
   {p:0.805, fx:0.53, fy:0.34, cx:0.50, cy:0.36, wf:2.80},  // HOLD
   {p:0.850, fx:0.90, fy:0.36, cx:0.46, cy:0.36, wf:2.50},
-  {p:0.900, fx:0.90, fy:0.36, cx:0.46, cy:0.36, wf:2.50},  // HOLD
-  {p:0.925, fx:0.50, fy:0.52, cx:0.50, cy:0.78, wf:0.90},  // wide pull lands BEFORE the text
+  {p:0.912, fx:0.90, fy:0.36, cx:0.46, cy:0.36, wf:2.50},  // HOLD (widened)
+  {p:0.934, fx:0.50, fy:0.52, cx:0.50, cy:0.78, wf:0.90},  // wide pull lands BEFORE the text
   {p:1.000, fx:0.50, fy:0.52, cx:0.50, cy:0.78, wf:0.90}   // frozen finale: boat LOW, clear of card + buttons
 ];
 
@@ -463,8 +463,8 @@ const PHASES=[
   {el:$('#p2'), a:0.262, b:0.405},
   {el:$('#pf'), a:0.552, b:0.658},
   {el:$('#p3'), a:0.717, b:0.802},
-  {el:$('#p4'), a:0.857, b:0.895},
-  {el:$('#p5'), a:0.932, b:1.001}
+  {el:$('#p4'), a:0.857, b:0.908},
+  {el:$('#p5'), a:0.940, b:1.001}
 ];
 const PF_IDX=3;
 
@@ -477,11 +477,27 @@ const CALLOUTS=[
   {ph:5, ax:0.955, ay:0.22, dot:$('#dot-poles'),  ln:$('#ln-poles'),  label:$('#co-poles'),  side:'left'}
 ];
 
-/* ============ direct scroll mapping ============
-   The old dwell LUT held almost still, then compressed the camera moves into
-   short bursts. Direct mapping keeps every swipe proportional and predictable;
-   the time-damped render loop below supplies the visual softness. */
-const remap=t=>t;
+/* ============ scroll mapping with gentle card detents (desktop) ============
+   Scroll density rises smoothly around each card's peak visibility, so the
+   page rests there for a beat — a soft notch, never a scroll hijack. Camera
+   holds mean the scene is already still there; this just buys reading time.
+   Monotonic + reversible. Mobile keeps the direct 1:1 mapping Brady approved. */
+const DWELL_A=1.4, DWELL_W=0.55;
+const dwellLUT=(()=>{
+  const wins=[PHASES[1],PHASES[2],PHASES[3],PHASES[4],PHASES[5]]
+    .map(ph=>({c:(ph.a+ph.b)/2, hw:(ph.b-ph.a)*DWELL_W/2}));
+  const dens=t=>{let d=1;for(const w of wins){const u=Math.abs(t-w.c);
+    if(u<w.hw)d+=DWELL_A*0.5*(1+Math.cos(Math.PI*u/w.hw));}return d;};
+  const N=1024, F=new Float64Array(N+1); let acc=0;
+  for(let i=1;i<=N;i++){acc+=dens((i-0.5)/N)/N;F[i]=acc;}
+  for(let i=0;i<=N;i++)F[i]/=acc;
+  const inv=new Float64Array(N+1); let j=0;
+  for(let k=0;k<=N;k++){const r=k/N;while(j<N&&F[j+1]<r)j++;
+    const f0=F[j],f1=F[j+1];inv[k]=(j+(r-f0)/((f1-f0)||1))/N;}
+  return r=>{const x=Math.min(1,Math.max(0,r))*N,i=Math.floor(x);
+    return i>=N?1:inv[i]+(inv[i+1]-inv[i])*(x-i);};
+})();
+const remap=t=>isMobile()?t:dwellLUT(t);
 const smooth=t=>t*t*(3-2*t);
 const lerp=(a,b,t)=>a+(b-a)*t;
 
