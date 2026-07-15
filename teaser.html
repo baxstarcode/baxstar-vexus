@@ -24,14 +24,14 @@ a{-webkit-tap-highlight-color:transparent}
 #teaser{height:100dvh;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:clamp(8px,2vh,20px);padding:clamp(14px,3vh,28px) 4vw;position:relative}
 
 /* ---------- copy ---------- */
-.copy{text-align:center;opacity:0;transform:translateY(10px);transition:opacity .7s ease,transform .7s ease}
+.copy{flex-shrink:0;text-align:center;opacity:0;transform:translateY(10px);transition:opacity .7s ease,transform .7s ease}
 .play .copy{opacity:1;transform:none}
 .eyebrow{color:var(--red);font-family:'Saira Condensed',sans-serif;font-weight:600;letter-spacing:.42em;text-transform:uppercase;font-size:clamp(11px,1.6vh,13px);margin-bottom:6px}
 h2{font-family:'Saira Condensed',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.04em;line-height:1.05;font-size:clamp(30px,7.2vh,54px)}
 .sub{color:var(--steel);font-size:clamp(13px,2vh,16px);letter-spacing:.02em;margin-top:8px;max-width:60ch}
 
 /* ---------- boat ---------- */
-.stage{position:relative;width:100%;display:flex;justify-content:center}
+.stage{position:relative;width:100%;display:flex;justify-content:center;min-height:0;margin-top:clamp(18px,6vh,64px)}
 #boat{width:min(88vw,1400px);max-height:46vh;object-fit:contain;transform:translateX(118%);filter:drop-shadow(0 26px 34px rgba(0,0,0,.55));will-change:transform}
 .play #boat{animation:drive 2.2s cubic-bezier(.25,.8,.25,1) forwards}
 @keyframes drive{
@@ -53,7 +53,7 @@ h2{font-family:'Saira Condensed',sans-serif;font-weight:700;text-transform:upper
   background:var(--red);color:#fff;text-decoration:none;
   font-family:'Saira',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.28em;
   font-size:11px;padding:17px 34px;border-radius:100px;box-shadow:0 8px 30px var(--red-glow);
-  transition:opacity .6s ease,transform .6s ease,background .3s ease}
+  flex-shrink:0;transition:opacity .6s ease,transform .6s ease,background .3s ease}
 .play .cta{opacity:1;transform:none;pointer-events:auto;transition-delay:1.85s,1.85s,0s}
 .cta:hover{background:#ee2530}
 .cta:focus-visible{outline:2px solid #fff;outline-offset:3px}
