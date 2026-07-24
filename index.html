@@ -221,6 +221,7 @@ footer .legal{font-family:var(--label);font-size:9px;letter-spacing:.25em;text-t
   #p0 .inner{left:7vw;right:7vw;top:12%}
   #p0 h1{font-size:clamp(30px,9.5vw,46px)}
   #p0 p{font-size:15px}
+  #p1 .inner{top:13%}
   .callout{left:6vw !important;right:6vw !important;top:auto !important;bottom:8% !important;max-width:none !important;padding:20px 22px;
     background:rgba(14,14,18,.94);backdrop-filter:none;-webkit-backdrop-filter:none}
   /* stern phase shows two callouts: stack Mercury above Power-Pole (height set by layout()) */
@@ -228,7 +229,7 @@ footer .legal{font-family:var(--label);font-size:9px;letter-spacing:.25em;text-t
   #pf .shot{width:92vw}
   #pf .eyebrow{top:9%}
   .callout h3{font-size:21px}
-  #statbar{flex-wrap:wrap;width:88vw;justify-content:center;bottom:5%}
+  #statbar{flex-wrap:wrap;width:88vw;justify-content:center;bottom:6.5%}
   #statbar .cell{padding:11px 14px;flex:1 1 40%}
   #statbar .v{font-size:14px}
   #statbar .k{margin-bottom:5px}
@@ -451,8 +452,8 @@ const isMobile=()=>innerWidth<900;
 const POSES_D=[
   {p:0.000, fx:0.00, fy:0.50, cx:1.10, cy:0.62, wf:0.92},  // off-screen right while hero reads
   {p:0.048, fx:0.00, fy:0.50, cx:1.10, cy:0.62, wf:0.92},  // hold off until hero has faded
-  {p:0.100, fx:0.50, fy:0.52, cx:0.50, cy:0.49, wf:0.88},  // arrive full profile — raised clear of the stat bar
-  {p:0.205, fx:0.50, fy:0.52, cx:0.50, cy:0.49, wf:0.88},  // HOLD — flagship text
+  {p:0.100, fx:0.50, fy:0.50, cx:0.50, cy:0.50, wf:0.88},  // arrive full profile — cy/wf set by centerProfilePose()
+  {p:0.205, fx:0.50, fy:0.50, cx:0.50, cy:0.50, wf:0.88},  // HOLD — flagship text
   {p:0.255, fx:0.12, fy:0.30, cx:0.63, cy:0.42, wf:2.05},  // bow / Ultrex
   {p:0.415, fx:0.12, fy:0.30, cx:0.63, cy:0.42, wf:2.05},  // HOLD
   {p:0.555, fx:0.30, fy:0.40, cx:0.50, cy:0.72, wf:1.55},  // deck view backdrop (boat fades)
@@ -467,8 +468,8 @@ const POSES_D=[
 const POSES_M=[
   {p:0.000, fx:0.00, fy:0.50, cx:1.15, cy:0.60, wf:1.00},
   {p:0.048, fx:0.00, fy:0.50, cx:1.15, cy:0.60, wf:1.00},  // hold off until hero has faded
-  {p:0.100, fx:0.50, fy:0.52, cx:0.50, cy:0.36, wf:0.94},  // full profile ABOVE the stat bar
-  {p:0.205, fx:0.50, fy:0.52, cx:0.50, cy:0.36, wf:0.94},  // HOLD
+  {p:0.100, fx:0.50, fy:0.50, cx:0.50, cy:0.50, wf:0.94},  // full profile — cy/wf set by centerProfilePose()
+  {p:0.205, fx:0.50, fy:0.50, cx:0.50, cy:0.50, wf:0.94},  // HOLD
   {p:0.255, fx:0.12, fy:0.30, cx:0.55, cy:0.36, wf:2.60},
   {p:0.415, fx:0.12, fy:0.30, cx:0.55, cy:0.36, wf:2.60},  // HOLD
   {p:0.555, fx:0.30, fy:0.40, cx:0.50, cy:0.90, wf:1.60},
@@ -569,6 +570,26 @@ function layout(){
     if(ph) document.documentElement.style.setProperty('--poles-h',(ph+16)+'px');
   }
   CALLOUTS.forEach(c=>c._cached=false);
+  centerProfilePose();
+}
+
+/* center the flagship composition: the boat sits exactly midway between the
+   title card and the stat bar, shrinking if the viewport is too short for the
+   full-size profile. Runs at layout time so every device height balances. */
+function centerProfilePose(){
+  const ti=$('#p1 .inner'), sb=$('#statbar');
+  if(!ti||!sb||!vh) return;
+  const tB=(ti.offsetTop+ti.offsetHeight)/vh, sT=sb.offsetTop/vh, gap=0.02;
+  const avail=Math.max(0.15, sT-tB-gap*2);
+  const cy=Math.min(0.62, Math.max(0.38, (tB+sT)/2));
+  const fit=(P,base)=>{
+    let wf=base;
+    const hf=(wf*vw/IMG_AR)/vh;
+    if(hf>avail) wf=base*avail/hf;
+    P[2].cy=P[3].cy=cy;
+    P[2].wf=P[3].wf=wf;
+  };
+  fit(POSES_D,0.88); fit(POSES_M,0.94);
 }
 
 function rawProgress(){
@@ -667,11 +688,12 @@ function wake(){
 }
 
 addEventListener('scroll', wake, {passive:true});
-addEventListener('resize', ()=>{layout(); seedFlakes(); wake();});
+const relayout=()=>{layout(); lastTf=''; draw(sm); wake();};
+addEventListener('resize', ()=>{seedFlakes(); relayout();});
 if(window.visualViewport)
-  visualViewport.addEventListener('resize', ()=>{layout(); wake();}, {passive:true});
+  visualViewport.addEventListener('resize', relayout, {passive:true});
 if(document.fonts && document.fonts.ready)
-  document.fonts.ready.then(()=>{CALLOUTS.forEach(c=>c._cached=false); wake();});
+  document.fonts.ready.then(relayout);
 
 /* ============ scene magnet ============
    Two behaviors, both cancelled instantly by any user input:
