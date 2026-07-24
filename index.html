@@ -11,9 +11,25 @@
 <meta property="og:image" content="https://boat.baxstarfishing.com/assets/boat.webp">
 <meta property="og:url" content="https://boat.baxstarfishing.com/">
 <meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The Boat — Baxstar Fishing | Vexus DVX 20S">
+<meta name="twitter:image" content="https://boat.baxstarfishing.com/assets/boat.webp">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230a0a0d'/%3E%3Cpath d='M4 19c7-1.5 17-1.5 24-6l-3.5 7c-6 3-14.5 3-20.5-1z' fill='%23d51820'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Saira:wght@400;500;600&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+ "@context":"https://schema.org",
+ "@graph":[
+  {"@type":"WebSite","@id":"https://www.baxstarfishing.com/#website","url":"https://www.baxstarfishing.com/","name":"Baxstar Fishing"},
+  {"@type":"WebPage","@id":"https://boat.baxstarfishing.com/#webpage","url":"https://boat.baxstarfishing.com/","name":"The Boat — Baxstar Fishing | Vexus DVX 20S","isPartOf":{"@id":"https://www.baxstarfishing.com/#website"},"about":{"@id":"https://www.baxstarfishing.com/#business"},"primaryImageOfPage":"https://boat.baxstarfishing.com/assets/boat.webp","description":"Every Baxstar private trip runs on a Vexus DVX 20S — Mercury Pro XS 300 HP, Minn Kota Ultrex, Power-Pole Drift Paddles, 2x Garmin LiveScope."},
+  {"@type":"LocalBusiness","@id":"https://www.baxstarfishing.com/#business","name":"Baxstar Fishing","url":"https://www.baxstarfishing.com/","telephone":"+1-218-325-6857","image":"https://boat.baxstarfishing.com/assets/boat.webp","address":{"@type":"PostalAddress","addressLocality":"Detroit Lakes","addressRegion":"MN","addressCountry":"US"},"founder":{"@id":"https://www.baxstarfishing.com/#brady"}},
+  {"@type":"Person","@id":"https://www.baxstarfishing.com/#brady","name":"Brady Baxter","jobTitle":"Owner & Lead Fishing Guide","award":"5x Minnesota Master Angler","worksFor":{"@id":"https://www.baxstarfishing.com/#business"}},
+  {"@type":"Service","@id":"https://boat.baxstarfishing.com/#service","serviceType":"Private guided fishing trips","provider":{"@id":"https://www.baxstarfishing.com/#business"},"areaServed":["Detroit Lake","Pelican Lake","Lake Lida","Big Cormorant Lake","Lake Sallie","Detroit Lakes, Minnesota"],"description":"Private guided multi-species fishing trips aboard a Vexus DVX 20S rigged with Mercury Pro XS 300 HP, Minn Kota Ultrex, Power-Pole Drift Paddles, and 2x Garmin LiveScope."}
+ ]
+}
+</script>
 <style>
 :root{
   --ink:#0a0a0d;            /* gelcoat black-blue page base */
@@ -28,7 +44,7 @@
   --body:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
 }
 *{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:auto}
+html{scroll-behavior:auto;overscroll-behavior-y:none}
 body{background:var(--ink);color:var(--platinum);font-family:var(--body);font-weight:300;overflow-x:hidden}
 ::selection{background:var(--red);color:#fff}
 a{color:inherit}
@@ -82,13 +98,13 @@ img{-webkit-user-drag:none;user-select:none}
 @media(max-width:900px){#chapters{display:none}}
 
 /* ---------- scroll stage ---------- */
-#stage{position:relative;height:1080vh}
-#viewport{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;
+#stage{position:relative;height:1200vh}
+#viewport{position:sticky;top:0;height:100vh;height:100dvh;overflow:hidden;
   background:
     radial-gradient(ellipse 80% 55% at 50% 68%,rgba(213,24,32,.05),transparent 65%),
     radial-gradient(ellipse 90% 70% at 50% 30%,rgba(185,189,199,.04),transparent 70%),
     var(--ink)}
-#hull-light{position:absolute;left:50%;top:64%;width:70vw;height:24vh;transform:translate(-50%,-50%);
+#hull-light{position:absolute;left:50%;top:64%;width:70vw;height:24%;transform:translate(-50%,-50%);
   background:radial-gradient(ellipse,rgba(185,189,199,.07),transparent 70%);pointer-events:none}
 #boat{position:absolute;left:0;top:0;transform-origin:0 0;pointer-events:none}
 #boat img{display:block;width:100%;height:auto}
@@ -109,7 +125,7 @@ img{-webkit-user-drag:none;user-select:none}
 h1,h2,.h-display{font-family:var(--display);font-weight:700;text-transform:uppercase;line-height:.92;letter-spacing:.01em}
 
 /* phase 0 — hero */
-#p0 .inner{position:absolute;left:6vw;top:14vh;max-width:820px}
+#p0 .inner{position:absolute;left:6vw;top:14%;max-width:820px}
 #p0 h1{font-size:clamp(36px,6vw,88px);margin:18px 0 22px}
 #p0 h1 .ln{display:block;overflow:hidden}
 #p0 h1 .ch{display:inline-block;transform:translateY(110%);transition:transform .9s cubic-bezier(.2,.8,.2,1)}
@@ -117,18 +133,18 @@ h1,h2,.h-display{font-family:var(--display);font-weight:700;text-transform:upper
 #p0 h1 em{color:var(--red);font-style:normal}
 #p0 h1 .ln:last-child .ch{color:var(--red)}
 #p0 p{color:var(--steel);font-size:17px;line-height:1.65;max-width:440px}
-#scroll-cue{position:absolute;left:6vw;bottom:6vh;display:flex;align-items:center;gap:14px;
+#scroll-cue{position:absolute;left:6vw;bottom:6%;display:flex;align-items:center;gap:14px;
   font-family:var(--label);font-size:9px;letter-spacing:.35em;text-transform:uppercase;color:var(--steel)}
 #scroll-cue .stem{width:1px;height:44px;background:linear-gradient(var(--red),transparent);animation:cue 2s ease-in-out infinite}
 @keyframes cue{0%,100%{opacity:.4;transform:scaleY(.7);transform-origin:top}50%{opacity:1;transform:scaleY(1)}}
 
 /* phase 1 — full profile + stat bar */
-#p1 .inner{position:absolute;left:50%;top:9vh;transform:translateX(-50%);text-align:center}
+#p1 .inner{position:absolute;left:50%;top:8%;transform:translateX(-50%);text-align:center}
 #p1 h2{font-size:clamp(30px,4vw,54px);margin-top:14px}
-#statbar{position:absolute;left:50%;bottom:7vh;transform:translateX(-50%);display:flex;gap:0;
+#statbar{position:absolute;left:50%;bottom:6%;transform:translateX(-50%);display:flex;gap:0;
   background:rgba(233,233,238,.03);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
   border:1px solid rgba(233,233,238,.07);border-radius:14px;overflow:hidden}
-#statbar .cell{padding:18px 24px;text-align:center;border-left:1px solid rgba(233,233,238,.06)}
+#statbar .cell{padding:16px 22px;text-align:center;border-left:1px solid rgba(233,233,238,.06)}
 #statbar .cell:first-child{border-left:none}
 #statbar .k{font-family:var(--label);font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--steel);margin-bottom:7px}
 #statbar .v{font-family:var(--display);font-weight:600;font-size:17px;letter-spacing:.05em;text-transform:uppercase}
@@ -141,16 +157,16 @@ h1,h2,.h-display{font-family:var(--display);font-weight:700;text-transform:upper
 .callout .idx{font-family:var(--label);font-weight:600;font-size:9px;letter-spacing:.32em;color:var(--red);text-transform:uppercase;margin-bottom:10px}
 .callout h3{font-family:var(--display);font-weight:600;font-size:26px;text-transform:uppercase;letter-spacing:.03em;margin-bottom:10px}
 .callout p{color:var(--steel);font-size:14.5px;line-height:1.6}
-#co-ultrex{left:6vw;top:22vh}
-#co-hull{left:6vw;bottom:12vh}
-#co-merc{right:6vw;top:18vh}
-#co-poles{right:6vw;bottom:14vh;max-width:320px}
+#co-ultrex{left:6vw;top:22%}
+#co-hull{left:6vw;bottom:12%}
+#co-merc{right:6vw;top:18%}
+#co-poles{right:6vw;bottom:14%;max-width:320px}
 
 /* command center card — lives on the deck beat */
-#co-sonar{left:6vw;bottom:10vh;max-width:340px}
+#co-sonar{left:6vw;bottom:10%;max-width:340px}
 
 /* phase F — deck photo beat: straight, near-fullscreen, settles 1.04 -> 1 */
-#pf .eyebrow{position:absolute;left:50%;top:8vh;transform:translateX(-50%);white-space:nowrap}
+#pf .eyebrow{position:absolute;left:50%;top:8%;transform:translateX(-50%);white-space:nowrap}
 #pf .shot{position:absolute;left:50%;top:52%;transform:translate(-50%,-50%) scale(var(--pfs,1.04));
   width:min(78vw,1150px);margin:0;background:none;border:none;box-shadow:none}
 #pf .shot img{display:block;width:100%;height:auto;
@@ -160,7 +176,7 @@ h1,h2,.h-display{font-family:var(--display);font-weight:700;text-transform:upper
 
 
 /* phase 5 — finale */
-#p5 .inner{position:absolute;left:50%;top:12vh;transform:translateX(-50%);text-align:center;width:min(760px,90vw)}
+#p5 .inner{position:absolute;left:50%;top:12%;transform:translateX(-50%);text-align:center;width:min(760px,90vw)}
 #p5 h2{font-size:clamp(34px,5vw,66px);margin:16px 0 18px}
 #p5 h2 em{color:var(--red);font-style:normal}
 #p5 p{color:var(--steel);font-size:16.5px;line-height:1.65;max-width:520px;margin:0 auto 30px}
@@ -173,7 +189,7 @@ h1,h2,.h-display{font-family:var(--display);font-weight:700;text-transform:upper
 .btn-ghost:hover{border-color:var(--pin);background:rgba(233,233,238,.05)}
 
 /* ---------- below-stage content ---------- */
-section.block{position:relative;z-index:60;background:var(--ink);padding:120px 6vw;content-visibility:auto;contain-intrinsic-size:auto 640px}
+section.block{position:relative;z-index:60;background:var(--ink);padding:120px 6vw}
 .block .head{max-width:1200px;margin:0 auto 56px}
 .block h2{font-size:clamp(30px,4vw,52px);margin-top:14px}
 .grid3{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
@@ -192,30 +208,39 @@ section.block{position:relative;z-index:60;background:var(--ink);padding:120px 6
 #book p.sub{color:var(--steel);font-size:16.5px;max-width:520px;margin:18px auto 34px;line-height:1.65}
 #book .fine{margin-top:26px;font-family:var(--label);font-size:9.5px;letter-spacing:.28em;text-transform:uppercase;color:var(--steel-dim)}
 
-footer{border-top:1px solid rgba(233,233,238,.06);padding:44px 6vw;display:flex;justify-content:space-between;
-  align-items:center;flex-wrap:wrap;gap:16px;background:#0d0d11;position:relative;z-index:60}
+footer{border-top:1px solid rgba(233,233,238,.06);padding:34px 6vw;display:flex;justify-content:space-between;
+  align-items:center;flex-wrap:wrap;gap:12px;background:#0d0d11;position:relative;z-index:60}
 footer .brand{font-family:var(--display);font-weight:700;font-size:17px;letter-spacing:.3em;text-transform:uppercase}
 footer .brand em{color:var(--red);font-style:normal}
 footer .legal{font-family:var(--label);font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--steel-dim)}
 
 /* ---------- mobile / tablet ---------- */
 @media(max-width:900px){
-  #stage{height:860vh}
+  #stage{height:1000vh}
   .phase .inner{background:rgba(14,14,18,.82);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:18px 16px;border-radius:12px;border:1px solid rgba(233,233,238,.06)}
-  #p0 .inner{left:7vw;right:7vw;top:12vh}
+  #p0 .inner{left:7vw;right:7vw;top:12%}
   #p0 h1{font-size:clamp(30px,9.5vw,46px)}
   #p0 p{font-size:15px}
-  .callout{left:6vw !important;right:6vw !important;top:auto !important;bottom:9vh !important;max-width:none !important;padding:20px 22px;
+  .callout{left:6vw !important;right:6vw !important;top:auto !important;bottom:8% !important;max-width:none !important;padding:20px 22px;
     background:rgba(14,14,18,.94);backdrop-filter:none;-webkit-backdrop-filter:none}
   /* stern phase shows two callouts: stack Mercury above Power-Pole (height set by layout()) */
-  #co-merc{bottom:calc(9vh + var(--poles-h,164px)) !important}
+  #co-merc{bottom:calc(8% + var(--poles-h,164px)) !important}
   #pf .shot{width:92vw}
-  #pf .eyebrow{top:9vh}
+  #pf .eyebrow{top:9%}
   .callout h3{font-size:21px}
-  #statbar{flex-wrap:wrap;width:88vw;justify-content:center}
-  #statbar .cell{padding:14px 18px;flex:1 1 40%}
-  #statbar .v{font-size:15px}
-  section.block{padding:80px 7vw}
+  #statbar{flex-wrap:wrap;width:88vw;justify-content:center;bottom:5%}
+  #statbar .cell{padding:11px 14px;flex:1 1 40%}
+  #statbar .v{font-size:14px}
+  #statbar .k{margin-bottom:5px}
+  section.block{padding:72px 7vw}
+  #book{padding-bottom:56px}
+  footer{padding:28px 7vw 34px}
+}
+
+/* short viewports: keep the flagship title clear of the Power-Pole tips */
+@media(max-width:900px) and (max-height:700px){
+  #p1 .inner{top:5%}
+  #p1 h2{font-size:clamp(26px,7.5vw,38px)}
 }
 
 /* ---------- reduced motion ---------- */
@@ -414,7 +439,7 @@ body.static #p0 h1 .ch{transform:none}
 'use strict';
 const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
 const stage=$('#stage'), boat=$('#boat'), boatImg=$('#boat-img'),
-      topbar=$('#topbar'), pfEl=$('#pf');
+      topbar=$('#topbar'), pfEl=$('#pf'), viewportEl=$('#viewport');
 const IMG_AR=3072/1097;                 // trimmed cutout aspect (w/h)
 const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const isMobile=()=>innerWidth<900;
@@ -426,33 +451,33 @@ const isMobile=()=>innerWidth<900;
 const POSES_D=[
   {p:0.000, fx:0.00, fy:0.50, cx:1.10, cy:0.62, wf:0.92},  // off-screen right while hero reads
   {p:0.048, fx:0.00, fy:0.50, cx:1.10, cy:0.62, wf:0.92},  // hold off until hero has faded
-  {p:0.100, fx:0.50, fy:0.52, cx:0.50, cy:0.53, wf:0.88},  // arrive full profile
-  {p:0.205, fx:0.50, fy:0.52, cx:0.50, cy:0.53, wf:0.88},  // HOLD — flagship text
+  {p:0.100, fx:0.50, fy:0.52, cx:0.50, cy:0.49, wf:0.88},  // arrive full profile — raised clear of the stat bar
+  {p:0.205, fx:0.50, fy:0.52, cx:0.50, cy:0.49, wf:0.88},  // HOLD — flagship text
   {p:0.255, fx:0.12, fy:0.30, cx:0.63, cy:0.42, wf:2.05},  // bow / Ultrex
   {p:0.415, fx:0.12, fy:0.30, cx:0.63, cy:0.42, wf:2.05},  // HOLD
   {p:0.555, fx:0.30, fy:0.40, cx:0.50, cy:0.72, wf:1.55},  // deck view backdrop (boat fades)
   {p:0.655, fx:0.30, fy:0.40, cx:0.50, cy:0.72, wf:1.55},  // HOLD under photo
-  {p:0.710, fx:0.53, fy:0.36, cx:0.50, cy:0.44, wf:2.25},  // helm
-  {p:0.805, fx:0.53, fy:0.36, cx:0.50, cy:0.44, wf:2.25},  // HOLD
-  {p:0.850, fx:0.90, fy:0.38, cx:0.42, cy:0.46, wf:1.95},  // stern
-  {p:0.912, fx:0.90, fy:0.38, cx:0.42, cy:0.46, wf:1.95},  // HOLD (widened — stern cards get real time)
-  {p:0.934, fx:0.50, fy:0.54, cx:0.50, cy:0.74, wf:0.80},  // wide pull lands BEFORE the text
+  {p:0.700, fx:0.53, fy:0.36, cx:0.50, cy:0.44, wf:2.25},  // helm
+  {p:0.790, fx:0.53, fy:0.36, cx:0.50, cy:0.44, wf:2.25},  // HOLD
+  {p:0.832, fx:0.90, fy:0.38, cx:0.42, cy:0.46, wf:1.95},  // stern
+  {p:0.930, fx:0.90, fy:0.38, cx:0.42, cy:0.46, wf:1.95},  // HOLD — stern cards get real reading time
+  {p:0.950, fx:0.50, fy:0.54, cx:0.50, cy:0.74, wf:0.80},  // wide pull lands BEFORE the text
   {p:1.000, fx:0.50, fy:0.54, cx:0.50, cy:0.74, wf:0.80}   // frozen finale — text reads over a still scene
 ];
 const POSES_M=[
   {p:0.000, fx:0.00, fy:0.50, cx:1.15, cy:0.60, wf:1.00},
   {p:0.048, fx:0.00, fy:0.50, cx:1.15, cy:0.60, wf:1.00},  // hold off until hero has faded
-  {p:0.100, fx:0.50, fy:0.52, cx:0.50, cy:0.40, wf:0.94},  // full profile ABOVE the stat bar
-  {p:0.205, fx:0.50, fy:0.52, cx:0.50, cy:0.40, wf:0.94},  // HOLD
+  {p:0.100, fx:0.50, fy:0.52, cx:0.50, cy:0.36, wf:0.94},  // full profile ABOVE the stat bar
+  {p:0.205, fx:0.50, fy:0.52, cx:0.50, cy:0.36, wf:0.94},  // HOLD
   {p:0.255, fx:0.12, fy:0.30, cx:0.55, cy:0.36, wf:2.60},
   {p:0.415, fx:0.12, fy:0.30, cx:0.55, cy:0.36, wf:2.60},  // HOLD
   {p:0.555, fx:0.30, fy:0.40, cx:0.50, cy:0.90, wf:1.60},
   {p:0.655, fx:0.30, fy:0.40, cx:0.50, cy:0.90, wf:1.60},  // HOLD
-  {p:0.710, fx:0.53, fy:0.34, cx:0.50, cy:0.36, wf:2.80},
-  {p:0.805, fx:0.53, fy:0.34, cx:0.50, cy:0.36, wf:2.80},  // HOLD
-  {p:0.850, fx:0.90, fy:0.36, cx:0.46, cy:0.36, wf:2.50},
-  {p:0.912, fx:0.90, fy:0.36, cx:0.46, cy:0.36, wf:2.50},  // HOLD (widened)
-  {p:0.934, fx:0.50, fy:0.52, cx:0.50, cy:0.78, wf:0.90},  // wide pull lands BEFORE the text
+  {p:0.700, fx:0.53, fy:0.34, cx:0.50, cy:0.36, wf:2.80},
+  {p:0.790, fx:0.53, fy:0.34, cx:0.50, cy:0.36, wf:2.80},  // HOLD
+  {p:0.832, fx:0.90, fy:0.36, cx:0.46, cy:0.36, wf:2.50},
+  {p:0.930, fx:0.90, fy:0.36, cx:0.46, cy:0.36, wf:2.50},  // HOLD — stern cards get real reading time
+  {p:0.950, fx:0.50, fy:0.52, cx:0.50, cy:0.78, wf:0.90},  // wide pull lands BEFORE the text
   {p:1.000, fx:0.50, fy:0.52, cx:0.50, cy:0.78, wf:0.90}   // frozen finale: boat LOW, clear of card + buttons
 ];
 
@@ -462,42 +487,47 @@ const PHASES=[
   {el:$('#p1'), a:0.108, b:0.200},
   {el:$('#p2'), a:0.262, b:0.405},
   {el:$('#pf'), a:0.552, b:0.658},
-  {el:$('#p3'), a:0.717, b:0.802},
-  {el:$('#p4'), a:0.857, b:0.908},
-  {el:$('#p5'), a:0.940, b:1.001}
+  {el:$('#p3'), a:0.706, b:0.788},
+  {el:$('#p4'), a:0.840, b:0.926},
+  {el:$('#p5'), a:0.958, b:1.001}
 ];
 const PF_IDX=3;
 
 /* anchored callouts: ax,ay in boat-image fractions */
 const CALLOUTS=[
-  {ph:2, ax:0.105, ay:0.28, dot:$('#dot-ultrex'), ln:$('#ln-ultrex'), label:$('#co-ultrex'), side:'right'},
+  {ph:2, ax:0.030, ay:0.385, dot:$('#dot-ultrex'), ln:$('#ln-ultrex'), label:$('#co-ultrex'), side:'right'},
   {ph:3, ax:0.390, ay:0.41, dot:$('#dot-sonar'),  ln:$('#ln-sonar'),  label:$('#co-sonar'),  side:'right', ref:'pf'},
   {ph:4, ax:0.520, ay:0.32, dot:$('#dot-hull'),   ln:$('#ln-hull'),   label:$('#co-hull'),   side:'right'},
   {ph:5, ax:0.885, ay:0.40, dot:$('#dot-merc'),   ln:$('#ln-merc'),   label:$('#co-merc'),   side:'left'},
   {ph:5, ax:0.955, ay:0.22, dot:$('#dot-poles'),  ln:$('#ln-poles'),  label:$('#co-poles'),  side:'left'}
 ];
 
-/* ============ scroll mapping with gentle card detents (desktop) ============
-   Scroll density rises smoothly around each card's peak visibility, so the
-   page rests there for a beat — a soft notch, never a scroll hijack. Camera
-   holds mean the scene is already still there; this just buys reading time.
-   Monotonic + reversible. Mobile keeps the direct 1:1 mapping Brady approved. */
-const DWELL_A=1.4, DWELL_W=0.55;
-const dwellLUT=(()=>{
+/* ============ scroll mapping with magnetic scene detents ============
+   Scroll density rises smoothly around each scene's peak visibility, so each
+   scene consumes real scroll distance before it lets go — sticky, but always
+   monotonic + reversible, never a scroll hijack. Now runs on BOTH desktop and
+   mobile (mobile slightly lighter), and the forward map feeds the scene
+   magnet below so glides land exactly on a scene's peak. */
+const DWELL_D={A:2.1,W:0.62}, DWELL_M={A:1.7,W:0.62};
+function buildLUT(cfg){
   const wins=[PHASES[1],PHASES[2],PHASES[3],PHASES[4],PHASES[5]]
-    .map(ph=>({c:(ph.a+ph.b)/2, hw:(ph.b-ph.a)*DWELL_W/2}));
+    .map(ph=>({c:(ph.a+ph.b)/2, hw:(ph.b-ph.a)*cfg.W/2}));
   const dens=t=>{let d=1;for(const w of wins){const u=Math.abs(t-w.c);
-    if(u<w.hw)d+=DWELL_A*0.5*(1+Math.cos(Math.PI*u/w.hw));}return d;};
+    if(u<w.hw)d+=cfg.A*0.5*(1+Math.cos(Math.PI*u/w.hw));}return d;};
   const N=1024, F=new Float64Array(N+1); let acc=0;
   for(let i=1;i<=N;i++){acc+=dens((i-0.5)/N)/N;F[i]=acc;}
   for(let i=0;i<=N;i++)F[i]/=acc;
   const inv=new Float64Array(N+1); let j=0;
   for(let k=0;k<=N;k++){const r=k/N;while(j<N&&F[j+1]<r)j++;
     const f0=F[j],f1=F[j+1];inv[k]=(j+(r-f0)/((f1-f0)||1))/N;}
-  return r=>{const x=Math.min(1,Math.max(0,r))*N,i=Math.floor(x);
-    return i>=N?1:inv[i]+(inv[i+1]-inv[i])*(x-i);};
-})();
-const remap=t=>isMobile()?t:dwellLUT(t);
+  const at=(arr,t)=>{const x=Math.min(1,Math.max(0,t))*N,i=Math.floor(x);
+    return i>=N?arr[N]:arr[i]+(arr[i+1]-arr[i])*(x-i);};
+  return {fwd:p=>at(F,p), inv:r=>at(inv,r)};
+}
+const LUT_D=buildLUT(DWELL_D), LUT_M=buildLUT(DWELL_M);
+const lut=()=>isMobile()?LUT_M:LUT_D;
+const remap=t=>lut().inv(t);
+const rawFor=p=>lut().fwd(p);
 const smooth=t=>t*t*(3-2*t);
 const lerp=(a,b,t)=>a+(b-a)*t;
 
@@ -523,7 +553,10 @@ const TAU=240;          // ms — slower, silkier response without a long dead z
 const EPS=0.0003;
 
 function layout(){
-  vw=innerWidth; vh=innerHeight;
+  /* vh comes from the sticky viewport itself (100dvh) — NOT window.innerHeight.
+     On iOS those differ while the browser chrome expands/collapses, which used
+     to sink the boat into the stat bar and leave dead black under the scenes. */
+  vw=innerWidth; vh=viewportEl.clientHeight||innerHeight;
   boat.style.width=vw+'px';
   stageH=stage.offsetHeight;
   /* deck-view image rect — pure geometry (centered 50%/52%), no DOM reads */
@@ -613,6 +646,7 @@ function frame(now){
   sm+=(target-sm)*(1-Math.exp(-dt/TAU));
   if(Math.abs(target-sm)<EPS) sm=target;
   draw(sm);
+  for(let i=1;i<PHASES.length;i++) if(PHASES[i]._o>0.5){seenAcc[i]+=dt; if(seenAcc[i]>800) seen.add(i-1);}
   if(sm===target){
     running=false;
     boat.style.willChange='auto';
@@ -634,8 +668,71 @@ function wake(){
 
 addEventListener('scroll', wake, {passive:true});
 addEventListener('resize', ()=>{layout(); seedFlakes(); wake();});
+if(window.visualViewport)
+  visualViewport.addEventListener('resize', ()=>{layout(); wake();}, {passive:true});
 if(document.fonts && document.fonts.ready)
   document.fonts.ready.then(()=>{CALLOUTS.forEach(c=>c._cached=false); wake();});
+
+/* ============ scene magnet ============
+   Two behaviors, both cancelled instantly by any user input:
+   1. SETTLE — when scrolling stops within about half a screen of a scene's
+      peak, the page glides the rest of the way on its own, so getting close
+      to a scene is enough to land on it.
+   2. CATCH — if one fast fling blows straight past a scene that hasn't been
+      read yet, the page pulls back to that scene instead of leaving it
+      unseen. Once a scene has been on screen for a beat it's marked seen and
+      never trapped again, so repeat passes scroll freely. */
+const seen=new Set(), seenAcc=new Float32Array(PHASES.length);
+const sceneP=PHASES.slice(1).map(ph=>(ph.a+ph.b)/2);
+const sceneY=p=>Math.round(rawFor(p)*(stageH-vh));
+let magRaf=0, idleT=0, touching=false, lastY=scrollY, lastDir=0, burstFrom=scrollY;
+function cancelMag(){ if(magRaf){cancelAnimationFrame(magRaf); magRaf=0;} }
+function glideTo(y,idx){
+  cancelMag();
+  const from=scrollY, d=y-from; if(Math.abs(d)<2) return;
+  const t0=performance.now(), dur=Math.min(750, 340+Math.abs(d)*0.4);
+  const ease=x=>1-Math.pow(1-x,3);
+  const step=now=>{
+    const k=Math.min(1,(now-t0)/dur);
+    scrollTo(0, Math.round(from+d*ease(k)));
+    if(k<1){ magRaf=requestAnimationFrame(step); }
+    else { magRaf=0; if(idx!==undefined) seen.add(idx); }
+  };
+  magRaf=requestAnimationFrame(step);
+}
+function settle(){
+  if(touching || reduced || magRaf) return;
+  if(scrollY>stageH-vh-2) return;                    // past the stage — free scrolling
+  let ni=-1, ny=0, nd=1e9;
+  sceneP.forEach((p,i)=>{ const y=sceneY(p), d=Math.abs(scrollY-y);
+    if(d<nd){ nd=d; ni=i; ny=y; } });
+  if(nd<=vh*0.08) seen.add(ni);                      // already parked on it
+  if(nd>1 && nd<vh*0.55){ glideTo(ny,ni); return; }  // magnetic settle
+  const dir=Math.sign(scrollY-burstFrom);            // fling-past catch
+  if(!dir) return;
+  let cy=0, ci=-1, cd=1e9;
+  sceneP.forEach((p,i)=>{
+    if(seen.has(i)) return;
+    const y=sceneY(p);
+    const passed=dir>0 ? (burstFrom<y-vh*0.3 && scrollY>y) : (burstFrom>y+vh*0.3 && scrollY<y);
+    const over=Math.abs(scrollY-y);
+    if(passed && over<vh*1.2 && over<cd){ cd=over; cy=y; ci=i; }
+  });
+  if(ci>=0) glideTo(cy,ci);
+}
+addEventListener('scroll', ()=>{
+  const dir=Math.sign(scrollY-lastY);
+  if(dir && dir!==lastDir){ burstFrom=lastY; lastDir=dir; }
+  lastY=scrollY;
+  clearTimeout(idleT);
+  if(!magRaf && !reduced) idleT=setTimeout(settle,150);
+},{passive:true});
+['wheel','keydown','pointerdown'].forEach(ev=>
+  addEventListener(ev, cancelMag, {passive:true}));
+addEventListener('touchstart', ()=>{ touching=true; cancelMag(); }, {passive:true});
+addEventListener('touchend',   ()=>{ touching=false; clearTimeout(idleT); idleT=setTimeout(settle,150); }, {passive:true});
+addEventListener('touchcancel',()=>{ touching=false; }, {passive:true});
+window.__bax={sceneY, phases:()=>PHASES.map(ph=>[ph.a,ph.b])};   // audit/debug hook
 
 /* ============ metal-flake particles — static field ============ */
 const cv=$('#flakes'), cx2=cv.getContext('2d');
