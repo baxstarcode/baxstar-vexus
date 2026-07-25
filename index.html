@@ -44,7 +44,7 @@
   --body:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
 }
 *{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:auto;overscroll-behavior-y:none}
+html{scroll-behavior:auto;overscroll-behavior-y:none;scroll-snap-type:y mandatory}
 body{background:var(--ink);color:var(--platinum);font-family:var(--body);font-weight:300;overflow-x:hidden}
 ::selection{background:var(--red);color:#fff}
 a{color:inherit}
@@ -92,13 +92,18 @@ img{-webkit-user-drag:none;user-select:none}
 #chapters{position:fixed;right:26px;top:50%;transform:translateY(-50%);z-index:200;display:flex;
   flex-direction:column;gap:0;align-items:center;opacity:0;transition:opacity .6s}
 #chapters.on{opacity:1}
-#chapters .dot{width:5px;height:5px;border-radius:50%;background:var(--steel-dim);transition:all .4s;position:relative}
+#chapters .dot{width:5px;height:5px;border-radius:50%;background:var(--steel-dim);transition:all .4s;position:relative;cursor:pointer}
+#chapters .dot::after{content:'';position:absolute;inset:-9px}
 #chapters .dot.active{background:var(--red);box-shadow:0 0 10px var(--red-glow);transform:scale(1.5)}
 #chapters .link{width:1px;height:26px;background:rgba(233,233,238,.1)}
 @media(max-width:900px){#chapters{display:none}}
 
 /* ---------- scroll stage ---------- */
 #stage{position:relative;height:1200vh}
+/* speed bumps: 1px markers at each scene's peak — mandatory + snap-stop means
+   one swipe can never carry past a scene; the scroll halts on its middle */
+.snap{position:absolute;left:0;width:1px;height:2px;pointer-events:none;
+  scroll-snap-align:start;scroll-snap-stop:always}
 #viewport{position:sticky;top:0;height:100vh;height:100dvh;overflow:hidden;
   background:
     radial-gradient(ellipse 80% 55% at 50% 68%,rgba(213,24,32,.05),transparent 65%),
@@ -153,7 +158,8 @@ h1,h2,.h-display{font-family:var(--display);font-weight:700;text-transform:upper
 /* phases 2–4 — feature callouts */
 .callout{position:absolute;max-width:360px;
   background:rgba(18,18,24,.55);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-  border:1px solid rgba(233,233,238,.08);border-radius:14px;padding:26px 28px}
+  border:1px solid rgba(233,233,238,.08);border-radius:14px;padding:26px 28px;
+  transform:translateY(calc((1 - var(--ph-o,1))*16px))}
 .callout .idx{font-family:var(--label);font-weight:600;font-size:9px;letter-spacing:.32em;color:var(--red);text-transform:uppercase;margin-bottom:10px}
 .callout h3{font-family:var(--display);font-weight:600;font-size:26px;text-transform:uppercase;letter-spacing:.03em;margin-bottom:10px}
 .callout p{color:var(--steel);font-size:14.5px;line-height:1.6}
@@ -190,6 +196,9 @@ h1,h2,.h-display{font-family:var(--display);font-weight:700;text-transform:upper
 
 /* ---------- below-stage content ---------- */
 section.block{position:relative;z-index:60;background:var(--ink);padding:120px 6vw}
+/* the tail keeps its own snap points so nothing below the stage is stranded */
+section.block,.grid3 .card,#book .cta-row{scroll-snap-align:start}
+footer{scroll-snap-align:end}
 .block .head{max-width:1200px;margin:0 auto 56px}
 .block h2{font-size:clamp(30px,4vw,52px);margin-top:14px}
 .grid3{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
@@ -246,8 +255,10 @@ footer .legal{font-family:var(--label);font-size:9px;letter-spacing:.25em;text-t
 
 /* ---------- reduced motion ---------- */
 @media(prefers-reduced-motion:reduce){
+  html{scroll-snap-type:none}
   #scroll-cue .stem{animation:none}
   #pf .shot{transform:translate(-50%,-50%)}
+  .callout{transform:none}
 }
 body.static #stage{height:auto}
 body.static #viewport{position:relative;height:auto;padding:14vh 0 8vh}
@@ -279,13 +290,13 @@ body.static #p0 h1 .ch{transform:none}
 </header>
 
 <nav id="chapters" aria-hidden="true">
-  <div class="dot" data-c="0"></div><div class="link"></div>
-  <div class="dot" data-c="1"></div><div class="link"></div>
-  <div class="dot" data-c="2"></div><div class="link"></div>
-  <div class="dot" data-c="3"></div><div class="link"></div>
-  <div class="dot" data-c="4"></div><div class="link"></div>
-  <div class="dot" data-c="5"></div><div class="link"></div>
-  <div class="dot" data-c="6"></div>
+  <div class="dot" data-c="0" title="Intro"></div><div class="link"></div>
+  <div class="dot" data-c="1" title="The Flagship"></div><div class="link"></div>
+  <div class="dot" data-c="2" title="Bow · Minn Kota Ultrex"></div><div class="link"></div>
+  <div class="dot" data-c="3" title="The Deck"></div><div class="link"></div>
+  <div class="dot" data-c="4" title="Helm"></div><div class="link"></div>
+  <div class="dot" data-c="5" title="Stern · Mercury &amp; Power-Pole"></div><div class="link"></div>
+  <div class="dot" data-c="6" title="Book Your Trip"></div>
 </nav>
 
 <div id="stage">
@@ -571,6 +582,7 @@ function layout(){
   }
   CALLOUTS.forEach(c=>c._cached=false);
   centerProfilePose();
+  positionSnaps();
 }
 
 /* center the flagship composition: the boat sits exactly midway between the
@@ -629,6 +641,7 @@ function draw(p){
     const o=phaseOpacity(p,ph);
     if(ph._o===undefined||Math.abs(o-ph._o)>0.002||(o===0)!==(ph._o===0)){
       ph.el.style.opacity=o;
+      ph.el.style.setProperty('--ph-o',o.toFixed(3));
       ph.el.style.pointerEvents=o>0.5?'auto':'none';
     }
     if(o>0.4) active=i;
@@ -667,7 +680,6 @@ function frame(now){
   sm+=(target-sm)*(1-Math.exp(-dt/TAU));
   if(Math.abs(target-sm)<EPS) sm=target;
   draw(sm);
-  for(let i=1;i<PHASES.length;i++) if(PHASES[i]._o>0.5){seenAcc[i]+=dt; if(seenAcc[i]>800) seen.add(i-1);}
   if(sm===target){
     running=false;
     boat.style.willChange='auto';
@@ -695,65 +707,59 @@ if(window.visualViewport)
 if(document.fonts && document.fonts.ready)
   document.fonts.ready.then(relayout);
 
-/* ============ scene magnet ============
-   Two behaviors, both cancelled instantly by any user input:
-   1. SETTLE — when scrolling stops within about half a screen of a scene's
-      peak, the page glides the rest of the way on its own, so getting close
-      to a scene is enough to land on it.
-   2. CATCH — if one fast fling blows straight past a scene that hasn't been
-      read yet, the page pulls back to that scene instead of leaving it
-      unseen. Once a scene has been on screen for a beat it's marked seen and
-      never trapped again, so repeat passes scroll freely. */
-const seen=new Set(), seenAcc=new Float32Array(PHASES.length);
-const sceneP=PHASES.slice(1).map(ph=>(ph.a+ph.b)/2);
+/* ============ scene snap — the speed bumps ============
+   Native CSS scroll snap does the enforcement: each scene's peak is a
+   mandatory snap position flagged scroll-snap-stop:always, so a single swipe
+   is always arrested right on a scene's perfect middle — the browser's own
+   deceleration physics, both directions, mouse wheel and touch alike. The
+   markers live in raw scroll space (through the dwell map's forward CDF) and
+   are re-positioned on every layout. The chapter dots double as jump links. */
 const sceneY=p=>Math.round(rawFor(p)*(stageH-vh));
-let magRaf=0, idleT=0, touching=false, lastY=scrollY, lastDir=0, burstFrom=scrollY;
-function cancelMag(){ if(magRaf){cancelAnimationFrame(magRaf); magRaf=0;} }
-function glideTo(y,idx){
-  cancelMag();
-  const from=scrollY, d=y-from; if(Math.abs(d)<2) return;
-  const t0=performance.now(), dur=Math.min(750, 340+Math.abs(d)*0.4);
-  const ease=x=>1-Math.pow(1-x,3);
-  const step=now=>{
-    const k=Math.min(1,(now-t0)/dur);
-    scrollTo(0, Math.round(from+d*ease(k)));
-    if(k<1){ magRaf=requestAnimationFrame(step); }
-    else { magRaf=0; if(idx!==undefined) seen.add(idx); }
-  };
-  magRaf=requestAnimationFrame(step);
-}
-function settle(){
-  if(touching || reduced || magRaf) return;
-  if(scrollY>stageH-vh-2) return;                    // past the stage — free scrolling
-  let ni=-1, ny=0, nd=1e9;
-  sceneP.forEach((p,i)=>{ const y=sceneY(p), d=Math.abs(scrollY-y);
-    if(d<nd){ nd=d; ni=i; ny=y; } });
-  if(nd<=vh*0.08) seen.add(ni);                      // already parked on it
-  if(nd>1 && nd<vh*0.55){ glideTo(ny,ni); return; }  // magnetic settle
-  const dir=Math.sign(scrollY-burstFrom);            // fling-past catch
-  if(!dir) return;
-  let cy=0, ci=-1, cd=1e9;
-  sceneP.forEach((p,i)=>{
-    if(seen.has(i)) return;
-    const y=sceneY(p);
-    const passed=dir>0 ? (burstFrom<y-vh*0.3 && scrollY>y) : (burstFrom>y+vh*0.3 && scrollY<y);
-    const over=Math.abs(scrollY-y);
-    if(passed && over<vh*1.2 && over<cd){ cd=over; cy=y; ci=i; }
+const SNAP_PS=[0].concat(PHASES.slice(1).map(ph=>(ph.a+ph.b)/2));
+let snapEls=null;
+function positionSnaps(){
+  if(reduced) return;                    // static mode scrolls free, no markers
+  if(!snapEls) snapEls=SNAP_PS.map(()=>{
+    const d=document.createElement('div'); d.className='snap'; stage.appendChild(d); return d;
   });
-  if(ci>=0) glideTo(cy,ci);
+  snapEls.forEach((el,i)=>{ el.style.top=(SNAP_PS[i]?sceneY(SNAP_PS[i]):0)+'px'; });
 }
-addEventListener('scroll', ()=>{
-  const dir=Math.sign(scrollY-lastY);
-  if(dir && dir!==lastDir){ burstFrom=lastY; lastDir=dir; }
-  lastY=scrollY;
-  clearTimeout(idleT);
-  if(!magRaf && !reduced) idleT=setTimeout(settle,150);
+dots.forEach((d,i)=>d.addEventListener('click',()=>{
+  gHold=performance.now()+1400;
+  scrollTo({top:i?sceneY((PHASES[i].a+PHASES[i].b)/2):0, behavior:'smooth'});
+}));
+
+/* the gate — deterministic backup for the CSS bumps. One scroll burst
+   (a swipe's momentum, a wheel flurry) can never travel past the first scene
+   peak in its path: the moment it crosses, the scroll is clamped onto the
+   peak and held there until the gesture dies. A finger actively dragging is
+   left alone (a deliberate drag isn't a swipe — momentum after release is
+   gated), and single instant jumps bigger than 1.5 screens are treated as
+   programmatic navigation and let through. */
+let gTouch=false, gLast=scrollY, gDir=0, gLastT=0, gLimit=null, gHold=0;
+addEventListener('touchstart',()=>{gTouch=true;},{passive:true});
+addEventListener('touchcancel',()=>{gTouch=false;},{passive:true});
+addEventListener('touchend',()=>{gTouch=false; gLast=scrollY; gDir=0;},{passive:true});
+function nextPeakBeyond(y,dir){
+  let best=null;
+  for(const p of SNAP_PS){
+    const py=p?sceneY(p):0;
+    if(dir>0 ? py>y+8 : py<y-8){
+      if(best===null || (dir>0 ? py<best : py>best)) best=py;
+    }
+  }
+  return best;
+}
+addEventListener('scroll',function gate(){
+  const now=performance.now(), y=scrollY, d=y-gLast;
+  if(!d) return;
+  const dir=d>0?1:-1, gap=now-gLastT;
+  gLastT=now;
+  if(reduced||gTouch||now<gHold||Math.abs(d)>vh*1.5){ gLast=y; gDir=0; gLimit=null; return; }
+  if(gap>260||dir!==gDir||gLimit===null) gLimit=nextPeakBeyond(y-d,dir);
+  gDir=dir; gLast=y;
+  if(gLimit!==null && (dir>0 ? y>gLimit : y<gLimit)){ scrollTo(0,gLimit); gLast=gLimit; }
 },{passive:true});
-['wheel','keydown','pointerdown'].forEach(ev=>
-  addEventListener(ev, cancelMag, {passive:true}));
-addEventListener('touchstart', ()=>{ touching=true; cancelMag(); }, {passive:true});
-addEventListener('touchend',   ()=>{ touching=false; clearTimeout(idleT); idleT=setTimeout(settle,150); }, {passive:true});
-addEventListener('touchcancel',()=>{ touching=false; }, {passive:true});
 window.__bax={sceneY, phases:()=>PHASES.map(ph=>[ph.a,ph.b])};   // audit/debug hook
 
 /* ============ metal-flake particles — static field ============ */
