@@ -563,7 +563,7 @@ const PHASES=[
   {el:$('#pf'), a:0.398, b:0.470},
   {el:$('#p3'), a:0.536, b:0.600},
   {el:$('#pc'), a:0.648, b:0.716},
-  {el:$('#pl'), a:0.760, b:0.812},
+  {el:$('#pl'), a:0.716, b:0.800},
   {el:$('#p4'), a:0.862, b:0.928},
   {el:$('#p5'), a:0.958, b:1.001}
 ];
@@ -575,8 +575,8 @@ const PHOTO_IDXS=[3,5,6];       // pf, pc, pl — full-frame stills; boat fades 
    pc: pull back off the windshield and settle on the whole cockpit.
    pl: slow push-in onto the Vexus emblem.  x,y are % of viewport; s is scale. */
 const KENS=[
-  {img:$('#pc-img'), a:0.600, b:0.812, s0:1.18, s1:1.045, x0:3.2, x1:-1.2, y0:3.4, y1:-1.0},
-  {img:$('#pl-img'), a:0.716, b:0.862, s0:1.04, s1:1.26,  x0:0,   x1:0,    y0:0,   y1:0}
+  {img:$('#pc-img'), a:0.600, b:0.716, s0:1.18, s1:1.045, x0:3.2, x1:-1.2, y0:3.4, y1:-1.0},
+  {img:$('#pl-img'), a:0.712, b:0.800, s0:1.04, s1:1.26,  x0:0,   x1:0,    y0:0,   y1:0}
 ];
 
 /* anchored callouts: ax,ay in boat-image fractions */
@@ -729,8 +729,11 @@ function draw(p){
   }
 
   /* photo beats: boat fades out under whichever still is up (deck / cockpit /
-     emblem); deck figure also settles 1.04 -> 1 */
-  const photoO=Math.max(PHASES[3]._o||0, PHASES[5]._o||0, PHASES[6]._o||0);
+     emblem); deck figure also settles 1.04 -> 1. The cockpit+emblem span uses
+     one continuous cover (not a per-phase max) so the boat can't flash back in
+     during the hand-off between the two stills. */
+  const cover=(p<=0.600||p>=0.860)?0:(p<0.648?smooth((p-0.600)/0.048):(p>0.800?smooth((0.860-p)/0.060):1));
+  const photoO=Math.max(PHASES[3]._o||0, cover);
   if(photoO!==lastPF){
     boat.style.opacity=(1-photoO).toFixed(3);
     pfEl.style.setProperty('--pfs',(1.04-0.04*(PHASES[PF_IDX]._o||0)).toFixed(4));
