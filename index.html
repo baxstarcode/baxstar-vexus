@@ -99,7 +99,7 @@ img{-webkit-user-drag:none;user-select:none}
 @media(max-width:900px){#chapters{display:none}}
 
 /* ---------- scroll stage ---------- */
-#stage{position:relative;height:1200vh}
+#stage{position:relative;height:1480vh}
 /* speed bumps: 1px markers at each scene's peak — mandatory + snap-stop means
    one swipe can never carry past a scene; the scroll halts on its middle */
 .snap{position:absolute;left:0;width:1px;height:2px;pointer-events:none;
@@ -181,6 +181,40 @@ h1,h2,.h-display{font-family:var(--display);font-weight:700;text-transform:upper
   filter:drop-shadow(0 30px 60px rgba(0,0,0,.55))}
 
 
+/* phases C + L — full-bleed cinematic stills (Brady's cockpit + emblem) that
+   melt into the black stage; the boat fades out under them, like the deck beat */
+.pscene .frame{position:absolute;inset:0;overflow:hidden;z-index:44}
+.pscene .frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  transform-origin:50% 50%;will-change:transform}
+.pscene .frame::after{content:'';position:absolute;inset:0;pointer-events:none;z-index:45;
+  background:
+    radial-gradient(ellipse 84% 80% at 50% 45%,transparent 40%,rgba(10,10,13,.80) 100%),
+    linear-gradient(to bottom,var(--ink),transparent 15%,transparent 58%,rgba(10,10,13,.94))}
+.pscene .cap{position:absolute;left:50%;bottom:12%;transform:translateX(-50%);z-index:46;
+  text-align:center;width:min(820px,90vw)}
+.pscene .cap .kline{display:flex;gap:12px 16px;flex-wrap:wrap;justify-content:center;margin-top:12px}
+.pscene .cap .kline b{font-family:var(--display);font-weight:600;font-size:clamp(16px,2.1vw,25px);
+  letter-spacing:.05em;text-transform:uppercase;color:var(--platinum);white-space:nowrap}
+.pscene .cap .kline i{color:var(--red);font-style:normal;margin-left:16px}
+/* lift caption off bright deck areas — no card on desktop, shadow does the work */
+.pscene .cap .eyebrow{color:var(--pin)}
+.pscene .cap .eyebrow,.pscene .cap .kline b,.pscene .cap h2{text-shadow:0 2px 20px rgba(0,0,0,.72),0 1px 3px rgba(0,0,0,.6)}
+#pl .cap{bottom:15%}
+#pl .cap h2{font-size:clamp(28px,4.6vw,60px);line-height:.98}
+#pl .cap h2 em{color:var(--red);font-style:normal}
+@media(max-width:900px){
+  .pscene .cap{background:rgba(14,14,18,.72);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+    padding:16px 16px;border-radius:12px;border:1px solid rgba(233,233,238,.06);bottom:9%;width:88vw}
+  .pscene .cap .kline{gap:6px}
+  .pscene .cap .kline b{font-size:15px}
+  .pscene .cap .kline i{display:none}
+  .pscene .cap .eyebrow,.pscene .cap .kline b,.pscene .cap h2{text-shadow:none}
+  #pl .cap{bottom:11%}
+}
+body.static .pscene .frame{position:relative;height:56vw;max-height:520px;margin:18px auto;width:min(92vw,1100px);inset:auto}
+body.static .pscene .frame img{transform:none !important}
+body.static .pscene .cap{position:relative;left:auto;bottom:auto;transform:none;margin:16px auto}
+
 /* phase 5 — finale */
 #p5 .inner{position:absolute;left:50%;top:12%;transform:translateX(-50%);text-align:center;width:min(760px,90vw)}
 #p5 h2{font-size:clamp(34px,5vw,66px);margin:16px 0 18px}
@@ -225,7 +259,7 @@ footer .legal{font-family:var(--label);font-size:9px;letter-spacing:.25em;text-t
 
 /* ---------- mobile / tablet ---------- */
 @media(max-width:900px){
-  #stage{height:1000vh}
+  #stage{height:1240vh}
   .phase .inner{background:rgba(14,14,18,.82);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:18px 16px;border-radius:12px;border:1px solid rgba(233,233,238,.06)}
   #p0 .inner{left:7vw;right:7vw;top:12%}
   #p0 h1{font-size:clamp(30px,9.5vw,46px)}
@@ -294,9 +328,11 @@ body.static #p0 h1 .ch{transform:none}
   <div class="dot" data-c="1" title="The Flagship"></div><div class="link"></div>
   <div class="dot" data-c="2" title="Bow · Minn Kota Ultrex"></div><div class="link"></div>
   <div class="dot" data-c="3" title="The Deck"></div><div class="link"></div>
-  <div class="dot" data-c="4" title="Helm"></div><div class="link"></div>
-  <div class="dot" data-c="5" title="Stern · Mercury &amp; Power-Pole"></div><div class="link"></div>
-  <div class="dot" data-c="6" title="Book Your Trip"></div>
+  <div class="dot" data-c="4" title="Helm · Windshield"></div><div class="link"></div>
+  <div class="dot" data-c="5" title="The Cockpit"></div><div class="link"></div>
+  <div class="dot" data-c="6" title="Vexus Emblem"></div><div class="link"></div>
+  <div class="dot" data-c="7" title="Stern · Mercury &amp; Power-Pole"></div><div class="link"></div>
+  <div class="dot" data-c="8" title="Book Your Trip"></div>
 </nav>
 
 <div id="stage">
@@ -373,6 +409,28 @@ body.static #p0 h1 .ch{transform:none}
         <div class="idx">03 · Helm</div>
         <h3>DVX Performance Build</h3>
         <p>Walk-through windshield, deep-V ride. When the wind comes up on big water, this hull keeps the day comfortable — and fishable.</p>
+      </div>
+    </div>
+
+    <!-- PC · cockpit reveal (pull back off the windshield, arc to the stern view) -->
+    <div class="phase pscene" id="pc">
+      <div class="frame"><img id="pc-img" src="assets/cockpit.webp"
+        srcset="assets/cockpit-mobile.webp 1100w, assets/cockpit.webp 1800w" sizes="100vw"
+        alt="Overhead view of the Vexus DVX 20S cockpit — four seats, center helm, and a spacious casting deck" loading="lazy" decoding="async"></div>
+      <div class="cap">
+        <div class="eyebrow">Step <em>·</em> Aboard</div>
+        <div class="kline"><b>Seating for up to 5 <i>·</i></b><b>Spacious cockpit <i>·</i></b><b>Big rear casting deck</b></div>
+      </div>
+    </div>
+
+    <!-- PL · emblem push-in -->
+    <div class="phase pscene" id="pl">
+      <div class="frame"><img id="pl-img" src="assets/logo.webp"
+        srcset="assets/logo-mobile.webp 1080w, assets/logo.webp 1800w" sizes="100vw"
+        alt="Vexus emblem embossed into the DVX 20S deck" loading="lazy" decoding="async"></div>
+      <div class="cap">
+        <div class="eyebrow">Every inch, intentional</div>
+        <h2>Experience the most premium <em>boat ever made.</em></h2>
       </div>
     </div>
 
@@ -462,56 +520,72 @@ const isMobile=()=>innerWidth<900;
    wf:    boat display width as multiple of viewport width          */
 const POSES_D=[
   {p:0.000, fx:0.00, fy:0.50, cx:1.10, cy:0.62, wf:0.92},  // off-screen right while hero reads
-  {p:0.048, fx:0.00, fy:0.50, cx:1.10, cy:0.62, wf:0.92},  // hold off until hero has faded
-  {p:0.100, fx:0.50, fy:0.50, cx:0.50, cy:0.50, wf:0.88},  // arrive full profile — cy/wf set by centerProfilePose()
-  {p:0.205, fx:0.50, fy:0.50, cx:0.50, cy:0.50, wf:0.88},  // HOLD — flagship text
-  {p:0.255, fx:0.12, fy:0.30, cx:0.63, cy:0.42, wf:2.05},  // bow / Ultrex
-  {p:0.415, fx:0.12, fy:0.30, cx:0.63, cy:0.42, wf:2.05},  // HOLD
-  {p:0.555, fx:0.30, fy:0.40, cx:0.50, cy:0.72, wf:1.55},  // deck view backdrop (boat fades)
-  {p:0.655, fx:0.30, fy:0.40, cx:0.50, cy:0.72, wf:1.55},  // HOLD under photo
-  {p:0.700, fx:0.53, fy:0.36, cx:0.50, cy:0.44, wf:2.25},  // helm
-  {p:0.790, fx:0.53, fy:0.36, cx:0.50, cy:0.44, wf:2.25},  // HOLD
-  {p:0.832, fx:0.90, fy:0.38, cx:0.42, cy:0.46, wf:1.95},  // stern
-  {p:0.930, fx:0.90, fy:0.38, cx:0.42, cy:0.46, wf:1.95},  // HOLD — stern cards get real reading time
-  {p:0.950, fx:0.50, fy:0.54, cx:0.50, cy:0.74, wf:0.80},  // wide pull lands BEFORE the text
+  {p:0.040, fx:0.00, fy:0.50, cx:1.10, cy:0.62, wf:0.92},  // hold off until hero has faded
+  {p:0.088, fx:0.50, fy:0.50, cx:0.50, cy:0.50, wf:0.88},  // arrive full profile — cy/wf set by centerProfilePose()
+  {p:0.156, fx:0.50, fy:0.50, cx:0.50, cy:0.50, wf:0.88},  // HOLD — flagship text
+  {p:0.206, fx:0.12, fy:0.30, cx:0.63, cy:0.42, wf:2.05},  // bow / Ultrex
+  {p:0.312, fx:0.12, fy:0.30, cx:0.63, cy:0.42, wf:2.05},  // HOLD
+  {p:0.398, fx:0.30, fy:0.40, cx:0.50, cy:0.72, wf:1.55},  // deck view backdrop (boat fades)
+  {p:0.470, fx:0.30, fy:0.40, cx:0.50, cy:0.72, wf:1.55},  // HOLD under photo
+  {p:0.536, fx:0.53, fy:0.36, cx:0.50, cy:0.44, wf:2.25},  // helm / windshield
+  {p:0.600, fx:0.53, fy:0.36, cx:0.50, cy:0.44, wf:2.25},  // HOLD
+  {p:0.716, fx:0.70, fy:0.38, cx:0.46, cy:0.46, wf:2.05},  // drift toward stern (hidden under cockpit still)
+  {p:0.812, fx:0.86, fy:0.38, cx:0.44, cy:0.46, wf:1.98},  // near stern (hidden under emblem still)
+  {p:0.862, fx:0.90, fy:0.38, cx:0.42, cy:0.46, wf:1.95},  // stern
+  {p:0.928, fx:0.90, fy:0.38, cx:0.42, cy:0.46, wf:1.95},  // HOLD — stern cards get real reading time
+  {p:0.958, fx:0.50, fy:0.54, cx:0.50, cy:0.74, wf:0.80},  // wide pull lands BEFORE the text
   {p:1.000, fx:0.50, fy:0.54, cx:0.50, cy:0.74, wf:0.80}   // frozen finale — text reads over a still scene
 ];
 const POSES_M=[
   {p:0.000, fx:0.00, fy:0.50, cx:1.15, cy:0.60, wf:1.00},
-  {p:0.048, fx:0.00, fy:0.50, cx:1.15, cy:0.60, wf:1.00},  // hold off until hero has faded
-  {p:0.100, fx:0.50, fy:0.50, cx:0.50, cy:0.50, wf:0.94},  // full profile — cy/wf set by centerProfilePose()
-  {p:0.205, fx:0.50, fy:0.50, cx:0.50, cy:0.50, wf:0.94},  // HOLD
-  {p:0.255, fx:0.12, fy:0.30, cx:0.55, cy:0.36, wf:2.60},
-  {p:0.415, fx:0.12, fy:0.30, cx:0.55, cy:0.36, wf:2.60},  // HOLD
-  {p:0.555, fx:0.30, fy:0.40, cx:0.50, cy:0.90, wf:1.60},
-  {p:0.655, fx:0.30, fy:0.40, cx:0.50, cy:0.90, wf:1.60},  // HOLD
-  {p:0.700, fx:0.53, fy:0.34, cx:0.50, cy:0.36, wf:2.80},
-  {p:0.790, fx:0.53, fy:0.34, cx:0.50, cy:0.36, wf:2.80},  // HOLD
-  {p:0.832, fx:0.90, fy:0.36, cx:0.46, cy:0.36, wf:2.50},
-  {p:0.930, fx:0.90, fy:0.36, cx:0.46, cy:0.36, wf:2.50},  // HOLD — stern cards get real reading time
-  {p:0.950, fx:0.50, fy:0.52, cx:0.50, cy:0.78, wf:0.90},  // wide pull lands BEFORE the text
+  {p:0.040, fx:0.00, fy:0.50, cx:1.15, cy:0.60, wf:1.00},  // hold off until hero has faded
+  {p:0.088, fx:0.50, fy:0.50, cx:0.50, cy:0.50, wf:0.94},  // full profile — cy/wf set by centerProfilePose()
+  {p:0.156, fx:0.50, fy:0.50, cx:0.50, cy:0.50, wf:0.94},  // HOLD
+  {p:0.206, fx:0.12, fy:0.30, cx:0.55, cy:0.36, wf:2.60},
+  {p:0.312, fx:0.12, fy:0.30, cx:0.55, cy:0.36, wf:2.60},  // HOLD
+  {p:0.398, fx:0.30, fy:0.40, cx:0.50, cy:0.90, wf:1.60},
+  {p:0.470, fx:0.30, fy:0.40, cx:0.50, cy:0.90, wf:1.60},  // HOLD
+  {p:0.536, fx:0.53, fy:0.34, cx:0.50, cy:0.36, wf:2.80},  // helm / windshield
+  {p:0.600, fx:0.53, fy:0.34, cx:0.50, cy:0.36, wf:2.80},  // HOLD
+  {p:0.716, fx:0.70, fy:0.36, cx:0.48, cy:0.36, wf:2.60},  // drift toward stern (hidden under cockpit still)
+  {p:0.812, fx:0.86, fy:0.36, cx:0.46, cy:0.36, wf:2.52},  // near stern (hidden under emblem still)
+  {p:0.862, fx:0.90, fy:0.36, cx:0.46, cy:0.36, wf:2.50},  // stern
+  {p:0.928, fx:0.90, fy:0.36, cx:0.46, cy:0.36, wf:2.50},  // HOLD — stern cards get real reading time
+  {p:0.958, fx:0.50, fy:0.52, cx:0.50, cy:0.78, wf:0.90},  // wide pull lands BEFORE the text
   {p:1.000, fx:0.50, fy:0.52, cx:0.50, cy:0.78, wf:0.90}   // frozen finale: boat LOW, clear of card + buttons
 ];
 
 /* phase text windows */
 const PHASES=[
-  {el:$('#p0'), a:0.000, b:0.048, first:true},
-  {el:$('#p1'), a:0.108, b:0.200},
-  {el:$('#p2'), a:0.262, b:0.405},
-  {el:$('#pf'), a:0.552, b:0.658},
-  {el:$('#p3'), a:0.706, b:0.788},
-  {el:$('#p4'), a:0.840, b:0.926},
+  {el:$('#p0'), a:0.000, b:0.040, first:true},
+  {el:$('#p1'), a:0.088, b:0.156},
+  {el:$('#p2'), a:0.206, b:0.312},
+  {el:$('#pf'), a:0.398, b:0.470},
+  {el:$('#p3'), a:0.536, b:0.600},
+  {el:$('#pc'), a:0.648, b:0.716},
+  {el:$('#pl'), a:0.760, b:0.812},
+  {el:$('#p4'), a:0.862, b:0.928},
   {el:$('#p5'), a:0.958, b:1.001}
 ];
-const PF_IDX=3;
+const PF_IDX=3;                 // deck-view figure (settles 1.04 -> 1)
+const PHOTO_IDXS=[3,5,6];       // pf, pc, pl — full-frame stills; boat fades out under each
+
+/* scroll-driven Ken Burns for the two new stills. Windows run a touch wider than
+   the text windows so the move is already alive as the still fades in/out.
+   pc: pull back off the windshield and settle on the whole cockpit.
+   pl: slow push-in onto the Vexus emblem.  x,y are % of viewport; s is scale. */
+const KENS=[
+  {img:$('#pc-img'), a:0.600, b:0.812, s0:1.18, s1:1.045, x0:3.2, x1:-1.2, y0:3.4, y1:-1.0},
+  {img:$('#pl-img'), a:0.716, b:0.862, s0:1.04, s1:1.26,  x0:0,   x1:0,    y0:0,   y1:0}
+];
 
 /* anchored callouts: ax,ay in boat-image fractions */
 const CALLOUTS=[
   {ph:2, ax:0.030, ay:0.385, dot:$('#dot-ultrex'), ln:$('#ln-ultrex'), label:$('#co-ultrex'), side:'right'},
   {ph:3, ax:0.390, ay:0.41, dot:$('#dot-sonar'),  ln:$('#ln-sonar'),  label:$('#co-sonar'),  side:'right', ref:'pf'},
   {ph:4, ax:0.520, ay:0.32, dot:$('#dot-hull'),   ln:$('#ln-hull'),   label:$('#co-hull'),   side:'right'},
-  {ph:5, ax:0.885, ay:0.40, dot:$('#dot-merc'),   ln:$('#ln-merc'),   label:$('#co-merc'),   side:'left'},
-  {ph:5, ax:0.955, ay:0.22, dot:$('#dot-poles'),  ln:$('#ln-poles'),  label:$('#co-poles'),  side:'left'}
+  {ph:7, ax:0.885, ay:0.40, dot:$('#dot-merc'),   ln:$('#ln-merc'),   label:$('#co-merc'),   side:'left'},
+  {ph:7, ax:0.955, ay:0.22, dot:$('#dot-poles'),  ln:$('#ln-poles'),  label:$('#co-poles'),  side:'left'}
 ];
 
 /* ============ scroll mapping with magnetic scene detents ============
@@ -520,9 +594,11 @@ const CALLOUTS=[
    monotonic + reversible, never a scroll hijack. Now runs on BOTH desktop and
    mobile (mobile slightly lighter), and the forward map feeds the scene
    magnet below so glides land exactly on a scene's peak. */
-const DWELL_D={A:2.1,W:0.62}, DWELL_M={A:1.7,W:0.62};
+/* dwell amplitude dialed back ~20% from the first speed-bump build (2.1/1.7)
+   per Brady — scenes still hold, just release a touch sooner */
+const DWELL_D={A:1.68,W:0.62}, DWELL_M={A:1.36,W:0.62};
 function buildLUT(cfg){
-  const wins=[PHASES[1],PHASES[2],PHASES[3],PHASES[4],PHASES[5]]
+  const wins=[PHASES[1],PHASES[2],PHASES[3],PHASES[4],PHASES[5],PHASES[6],PHASES[7]]
     .map(ph=>({c:(ph.a+ph.b)/2, hw:(ph.b-ph.a)*cfg.W/2}));
   const dens=t=>{let d=1;for(const w of wins){const u=Math.abs(t-w.c);
     if(u<w.hw)d+=cfg.A*0.5*(1+Math.cos(Math.PI*u/w.hw));}return d;};
@@ -652,12 +728,21 @@ function draw(p){
     lastActive=active;
   }
 
-  /* photo beat: boat fades fully out; panel settles 1.04 -> 1 */
-  const pfO=PHASES[PF_IDX]._o;
-  if(pfO!==lastPF){
-    boat.style.opacity=(1-pfO).toFixed(3);
-    pfEl.style.setProperty('--pfs',(1.04-0.04*pfO).toFixed(4));
-    lastPF=pfO;
+  /* photo beats: boat fades out under whichever still is up (deck / cockpit /
+     emblem); deck figure also settles 1.04 -> 1 */
+  const photoO=Math.max(PHASES[3]._o||0, PHASES[5]._o||0, PHASES[6]._o||0);
+  if(photoO!==lastPF){
+    boat.style.opacity=(1-photoO).toFixed(3);
+    pfEl.style.setProperty('--pfs',(1.04-0.04*(PHASES[PF_IDX]._o||0)).toFixed(4));
+    lastPF=photoO;
+  }
+
+  /* scroll-driven Ken Burns on the two new stills */
+  for(const k of KENS){
+    const t=smooth(Math.min(1,Math.max(0,(p-k.a)/(k.b-k.a))));
+    const s=lerp(k.s0,k.s1,t), x=lerp(k.x0,k.x1,t), y=lerp(k.y0,k.y1,t);
+    const tf=`translate3d(${x.toFixed(2)}%,${y.toFixed(2)}%,0) scale(${s.toFixed(4)})`;
+    if(k._tf!==tf){ k.img.style.transform=tf; k._tf=tf; }
   }
 
   for(const c of CALLOUTS){
