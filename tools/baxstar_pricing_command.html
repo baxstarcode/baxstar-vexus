@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Baxstar Pricing Command</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0a0c0f;
+  --hull:#12151a;
+  --hull-2:#171b21;
+  --hull-3:#1d222a;
+  --line:rgba(200,197,189,.10);
+  --line-strong:rgba(200,197,189,.22);
+  --red:#c2273a;
+  --red-hi:#e04256;
+  --red-deep:#7d1622;
+  --green:#3f9b6c;
+  --amber:#d9a441;
+  --bone:#c8c5bd;
+  --pearl:#e8e6e0;
+  --dim:#8b897f;
+  --dimmer:#5f5e57;
+  --radius:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:auto;overflow-x:hidden;overflow-y:visible}
+body{
+  background:var(--ink);
+  color:var(--bone);
+  font-family:'Archivo',system-ui,-apple-system,sans-serif;
+  font-size:clamp(15px,1.3vw,17px);
+  line-height:1.65;
+  font-weight:400;
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+  padding-bottom:60px;
+}
+.wrap{max-width:1060px;margin:0 auto;padding:0 clamp(16px,4vw,32px)}
+
+/* ---------- header ---------- */
+header{padding:clamp(22px,4vw,36px) 0 clamp(14px,2.5vw,22px);display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.brand .eyebrow{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--dim);font-weight:600;margin-bottom:4px}
+.brand h1{font-size:clamp(24px,3.4vw,32px);font-weight:800;letter-spacing:.06em;color:var(--pearl);line-height:1.1}
+.brand h1 .bx{color:var(--red-hi)}
+.head-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border:1px solid var(--line-strong);border-radius:999px;font-size:12.5px;font-weight:600;letter-spacing:.02em;color:var(--bone);background:var(--hull);white-space:nowrap}
+.pill .dot{width:8px;height:8px;border-radius:50%;flex:none}
+.dot.ok{background:var(--green);box-shadow:0 0 8px rgba(63,155,108,.55)}
+.dot.warn{background:var(--amber);box-shadow:0 0 8px rgba(217,164,65,.55)}
+.dot.bad{background:var(--red-hi);box-shadow:0 0 8px rgba(224,66,86,.55)}
+.iconbtn{appearance:none;border:1px solid var(--line-strong);background:var(--hull);color:var(--bone);width:38px;height:38px;border-radius:11px;cursor:pointer;font-size:16px;line-height:1;display:grid;place-items:center;transition:border-color .18s,color .18s}
+.iconbtn:hover{border-color:var(--bone);color:var(--pearl)}
+.iconbtn:focus-visible{outline:2px solid var(--red-hi);outline-offset:2px}
+
+/* ---------- demo strip ---------- */
+.demo-strip{display:flex;align-items:center;gap:10px;background:rgba(217,164,65,.09);border:1px solid rgba(217,164,65,.35);border-radius:12px;padding:10px 14px;font-size:13px;color:var(--amber);margin-bottom:18px}
+.demo-strip strong{color:var(--amber);font-weight:700}
+.demo-strip button{margin-left:auto;appearance:none;background:none;border:1px solid rgba(217,164,65,.4);color:var(--amber);border-radius:8px;padding:4px 12px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit}
+.demo-strip.hidden{display:none}
+
+/* ---------- command deck ---------- */
+.deck{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px}
+@media(max-width:760px){.deck{grid-template-columns:1fr}}
+.cmd{
+  position:relative;appearance:none;text-align:left;font-family:inherit;cursor:pointer;
+  background:linear-gradient(180deg,var(--hull-2),var(--hull));
+  border:1px solid var(--line-strong);border-radius:var(--radius);
+  padding:20px 20px 18px;color:var(--bone);
+  transition:transform .18s ease,border-color .18s ease,background .18s ease;
+  min-height:132px;display:flex;flex-direction:column;gap:5px;
+}
+.cmd:hover{transform:translateY(-2px);border-color:var(--bone)}
+.cmd:active{transform:translateY(0)}
+.cmd:focus-visible{outline:2px solid var(--red-hi);outline-offset:3px}
+.cmd .lamp{position:absolute;top:16px;right:16px;width:9px;height:9px;border-radius:50%}
+.cmd.pull .lamp{background:var(--green);box-shadow:0 0 10px rgba(63,155,108,.6)}
+.cmd.push .lamp{background:var(--red-hi);box-shadow:0 0 10px rgba(224,66,86,.6)}
+.cmd.audit .lamp{background:var(--pearl);box-shadow:0 0 10px rgba(232,230,224,.5)}
+.cmd .cta{font-size:19px;font-weight:800;letter-spacing:.10em;color:var(--pearl)}
+.cmd .sub{font-size:12.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--dim)}
+.cmd .desc{font-size:12.5px;font-weight:400;color:var(--bone);opacity:.72;line-height:1.5;margin-top:auto}
+.cmd:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.cmd .spin{display:none;position:absolute;top:14px;right:14px;width:14px;height:14px;border:2px solid var(--line-strong);border-top-color:var(--pearl);border-radius:50%}
+.cmd.busy .spin{display:block;animation:rot 0.8s linear infinite}
+.cmd.busy .lamp{display:none}
+@keyframes rot{to{transform:rotate(360deg)}}
+
+/* ---------- stat row ---------- */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:26px}
+@media(max-width:760px){.stats{grid-template-columns:repeat(2,1fr)}}
+.stat{background:var(--hull);border:1px solid var(--line);border-radius:12px;padding:13px 16px}
+.stat .k{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dimmer);font-weight:600;margin-bottom:3px}
+.stat .v{font-size:21px;font-weight:700;color:var(--pearl);font-variant-numeric:tabular-nums;line-height:1.2}
+.stat .v.small{font-size:15px;font-weight:600}
+.stat .v .unit{font-size:12px;color:var(--dim);font-weight:500;margin-left:4px}
+.stat.hot .v{color:var(--amber)}
+
+/* ---------- tabs ---------- */
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);margin-bottom:20px}
+.tab{appearance:none;background:none;border:none;border-bottom:2px solid transparent;color:var(--dim);font-family:inherit;font-size:13.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:10px 16px;cursor:pointer;transition:color .15s,border-color .15s;margin-bottom:-1px}
+.tab:hover{color:var(--bone)}
+.tab[aria-selected="true"]{color:var(--pearl);border-bottom-color:var(--red-hi)}
+.tab:focus-visible{outline:2px solid var(--red-hi);outline-offset:-2px}
+.tab .cnt{display:inline-block;min-width:20px;text-align:center;background:var(--hull-3);border-radius:999px;font-size:11px;padding:1px 6px;margin-left:6px;color:var(--bone)}
+.view{display:none}
+.view.on{display:block}
+
+/* ---------- push session ---------- */
+.session-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+.session-head h2{font-size:16px;font-weight:700;color:var(--pearl);letter-spacing:.02em}
+.session-head .fh-link{font-size:13px;font-weight:600;color:var(--red-hi);text-decoration:none;border:1px solid rgba(224,66,86,.4);border-radius:9px;padding:7px 14px;transition:background .15s}
+.session-head .fh-link:hover{background:rgba(224,66,86,.1)}
+.progress{height:4px;background:var(--hull-3);border-radius:999px;overflow:hidden;margin-bottom:6px}
+.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--red-deep),var(--red-hi));width:0%;transition:width .3s ease;border-radius:999px}
+.progress-label{font-size:12px;color:var(--dim);margin-bottom:16px;font-variant-numeric:tabular-nums}
+
+.qcard{background:var(--hull);border:1px solid var(--line-strong);border-radius:var(--radius);padding:18px 20px;margin-bottom:12px;transition:opacity .25s,border-color .2s}
+.qcard.done{opacity:.42;border-color:var(--line)}
+.qcard .meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.chip{font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;border-radius:6px;padding:3px 8px;white-space:nowrap}
+.chip.item{background:var(--hull-3);color:var(--bone)}
+.chip.auto{background:rgba(63,155,108,.14);color:var(--green)}
+.chip.tax{background:rgba(217,164,65,.14);color:var(--amber)}
+.chip.del{background:rgba(224,66,86,.14);color:var(--red-hi)}
+.chip.notify{background:rgba(200,197,189,.1);color:var(--dim)}
+.chip.pushed{background:rgba(63,155,108,.18);color:var(--green)}
+.chip.noop{background:rgba(139,137,127,.15);color:var(--dim)}
+.qcard .where{font-size:14px;font-weight:600;color:var(--pearl);margin-bottom:2px}
+.qcard .where .sep{color:var(--dimmer);font-weight:400;margin:0 6px}
+.qcard .field{font-size:12px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase;font-weight:600;margin-bottom:10px}
+.delta{display:flex;align-items:center;gap:14px;background:var(--ink);border:1px solid var(--line);border-radius:11px;padding:12px 16px;margin-bottom:10px;flex-wrap:wrap}
+.delta .val{font-size:19px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--bone)}
+.delta .val.to{color:var(--pearl)}
+.delta .arrow{color:var(--red-hi);font-size:17px;font-weight:700}
+.delta .vk{display:block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--dimmer);font-weight:600;margin-bottom:1px}
+.qcard .note{font-size:13px;color:var(--dim);line-height:1.55;margin-bottom:14px}
+.qcard .acts{display:flex;gap:10px;flex-wrap:wrap}
+.btn{appearance:none;font-family:inherit;font-size:13.5px;font-weight:700;letter-spacing:.03em;border-radius:10px;padding:10px 20px;cursor:pointer;transition:transform .14s,background .14s,border-color .14s;border:1px solid transparent}
+.btn:active{transform:scale(.97)}
+.btn:focus-visible{outline:2px solid var(--red-hi);outline-offset:2px}
+.btn.solid{background:var(--red);color:#fff}
+.btn.solid:hover{background:var(--red-hi)}
+.btn.ghost{background:none;border-color:var(--line-strong);color:var(--bone)}
+.btn.ghost:hover{border-color:var(--bone);color:var(--pearl)}
+.btn.green{background:rgba(63,155,108,.14);border-color:rgba(63,155,108,.45);color:var(--green)}
+.btn.green:hover{background:rgba(63,155,108,.24)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.empty{border:1px dashed var(--line-strong);border-radius:var(--radius);padding:34px 24px;text-align:center;color:var(--dim);font-size:14px}
+.empty strong{color:var(--pearl);display:block;font-size:16px;margin-bottom:4px}
+
+/* ---------- prices ---------- */
+.pgroup{margin-bottom:26px}
+.pgroup h3{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:10px}
+.pgroup h3 .mult{font-size:11px;letter-spacing:.02em;text-transform:none;font-weight:500;color:var(--dimmer)}
+.prow{display:grid;grid-template-columns:1fr auto auto;gap:14px;align-items:center;background:var(--hull);border:1px solid var(--line);border-radius:11px;padding:12px 16px;margin-bottom:8px}
+@media(max-width:560px){.prow{grid-template-columns:1fr auto}.prow .facing{grid-column:1 / -1;text-align:left;padding-top:2px}}
+.prow .name{font-size:14.5px;font-weight:600;color:var(--pearl)}
+.prow .tagnote{font-size:11.5px;color:var(--dim);font-weight:400;display:block}
+.prow .net{display:flex;align-items:center;gap:6px}
+.prow .net input{width:96px;background:var(--ink);border:1px solid var(--line-strong);color:var(--pearl);border-radius:8px;padding:7px 10px;font-family:inherit;font-size:15px;font-weight:700;text-align:right;font-variant-numeric:tabular-nums}
+.prow .net input:focus{outline:none;border-color:var(--red-hi)}
+.prow .net .cur{color:var(--dimmer);font-size:13px}
+.prow .facing{font-size:13px;color:var(--dim);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.prow .facing b{color:var(--bone);font-weight:600}
+.prow.flag{border-color:rgba(217,164,65,.5)}
+.prow.flag .facing b{color:var(--amber)}
+.prow .savemark{width:8px;height:8px;border-radius:50%;background:var(--amber);flex:none;display:none}
+.prow.dirty .savemark{display:block}
+.pricebar{position:sticky;bottom:12px;display:none;align-items:center;gap:12px;background:var(--hull-3);border:1px solid var(--line-strong);border-radius:12px;padding:12px 18px;margin-top:8px;box-shadow:0 8px 30px rgba(0,0,0,.5)}
+.pricebar.on{display:flex}
+.pricebar span{font-size:13px;color:var(--bone)}
+.pricebar .btn{margin-left:auto}
+
+/* ---------- audit ---------- */
+.verdict{border-radius:var(--radius);padding:24px;margin-bottom:16px;border:1px solid}
+.verdict.sync{background:rgba(63,155,108,.08);border-color:rgba(63,155,108,.4)}
+.verdict.nosync{background:rgba(217,164,65,.07);border-color:rgba(217,164,65,.4)}
+.verdict .vh{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.verdict .vh .dot{width:11px;height:11px;border-radius:50%}
+.verdict h2{font-size:20px;font-weight:800;letter-spacing:.04em;color:var(--pearl)}
+.verdict p{font-size:14px;color:var(--bone);opacity:.85;line-height:1.6}
+.audit-list{list-style:none}
+.audit-list li{display:flex;gap:12px;align-items:baseline;padding:11px 4px;border-bottom:1px solid var(--line);font-size:14px}
+.audit-list li:last-child{border-bottom:none}
+.audit-list .al-k{color:var(--dim);min-width:170px;font-size:13px}
+.audit-list .al-v{color:var(--pearl);font-weight:600;font-variant-numeric:tabular-nums}
+.audit-list .al-v.warn{color:var(--amber)}
+.audit-list .al-v.good{color:var(--green)}
+
+/* ---------- rulings ---------- */
+.rule-note{font-size:13px;color:var(--dim);margin-bottom:16px;line-height:1.6}
+
+/* ---------- settings dialog ---------- */
+dialog{background:var(--hull-2);color:var(--bone);border:1px solid var(--line-strong);border-radius:16px;padding:26px;max-width:480px;width:calc(100vw - 40px);font-family:inherit}
+dialog::backdrop{background:rgba(4,5,7,.7)}
+dialog h2{font-size:17px;font-weight:700;color:var(--pearl);margin-bottom:4px}
+dialog .dsub{font-size:13px;color:var(--dim);margin-bottom:18px;line-height:1.55}
+dialog label{display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);font-weight:700;margin:14px 0 5px}
+dialog input{width:100%;background:var(--ink);border:1px solid var(--line-strong);color:var(--pearl);border-radius:9px;padding:10px 12px;font-family:inherit;font-size:14px}
+dialog input:focus{outline:none;border-color:var(--red-hi)}
+dialog .dacts{display:flex;gap:10px;margin-top:22px;justify-content:flex-end}
+.conn-msg{font-size:12.5px;margin-top:12px;min-height:18px}
+.conn-msg.ok{color:var(--green)}
+.conn-msg.err{color:var(--red-hi)}
+
+/* ---------- toast ---------- */
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:var(--hull-3);border:1px solid var(--line-strong);color:var(--pearl);border-radius:11px;padding:11px 20px;font-size:13.5px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:60;max-width:calc(100vw - 40px);text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);font-size:11.5px;color:var(--dimmer);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="brand">
+    <div class="eyebrow">Pricing command</div>
+    <h1>BAXSTAR<span class="bx">.</span></h1>
+  </div>
+  <div class="head-right">
+    <span class="pill" id="statusPill"><span class="dot warn" id="statusDot"></span><span id="statusText">Loading…</span></span>
+    <button class="iconbtn" id="gearBtn" aria-label="Open settings" title="Settings">⚙</button>
+  </div>
+</header>
+
+<div class="demo-strip" id="demoStrip">
+  <span><strong>Demo mode.</strong> Showing the engine's last known state — nothing is connected yet. Open Settings to wire the backend.</span>
+  <button id="demoSetup">Set up</button>
+</div>
+
+<section class="deck" aria-label="Commands">
+  <button class="cmd pull" id="cmdPull">
+    <span class="lamp" aria-hidden="true"></span><span class="spin" aria-hidden="true"></span>
+    <span class="cta">PULL</span>
+    <span class="sub">Refresh from engine</span>
+    <span class="desc">Reads current prices and the change queue from the pricing engine sheet. Read-only — never writes anything.</span>
+  </button>
+  <button class="cmd push" id="cmdPush">
+    <span class="lamp" aria-hidden="true"></span><span class="spin" aria-hidden="true"></span>
+    <span class="cta">PUSH</span>
+    <span class="sub">Guided FareHarbor session</span>
+    <span class="desc">Walks the queue one card at a time. You apply each change in FareHarbor; the panel records it back to the engine.</span>
+  </button>
+  <button class="cmd audit" id="cmdAudit">
+    <span class="lamp" aria-hidden="true"></span><span class="spin" aria-hidden="true"></span>
+    <span class="cta">AUDIT</span>
+    <span class="sub">Sync check</span>
+    <span class="desc">Compares engine, queue, and the last FareHarbor export. Verdict: in sync, or exactly what's still pending.</span>
+  </button>
+</section>
+
+<section class="stats" aria-label="Status">
+  <div class="stat" id="statQueued"><div class="k">Queued</div><div class="v">—</div></div>
+  <div class="stat hot" id="statRulings"><div class="k">Needs your ruling</div><div class="v">—</div></div>
+  <div class="stat" id="statLastPush"><div class="k">Last push</div><div class="v small">—</div></div>
+  <div class="stat" id="statBaseline"><div class="k">FH baseline</div><div class="v small">—</div></div>
+</section>
+
+<nav class="tabs" role="tablist" aria-label="Views">
+  <button class="tab" role="tab" aria-selected="true" data-view="queue">Queue<span class="cnt" id="cntQueue">0</span></button>
+  <button class="tab" role="tab" aria-selected="false" data-view="rulings">Rulings<span class="cnt" id="cntRulings">0</span></button>
+  <button class="tab" role="tab" aria-selected="false" data-view="prices">Prices</button>
+  <button class="tab" role="tab" aria-selected="false" data-view="audit">Audit</button>
+</nav>
+
+<section class="view on" id="view-queue" role="tabpanel">
+  <div class="session-head">
+    <h2>FareHarbor push session</h2>
+    <a class="fh-link" href="https://fareharbor.com/baxstarfishing/dashboard/" target="_blank" rel="noopener">Open FareHarbor ↗</a>
+  </div>
+  <div class="progress"><i id="progFill"></i></div>
+  <div class="progress-label" id="progLabel"></div>
+  <div id="queueList"></div>
+</section>
+
+<section class="view" id="view-rulings" role="tabpanel">
+  <p class="rule-note">These changes are held until you decide. <b style="color:var(--pearl)">Approve</b> moves a card into the push queue. <b style="color:var(--pearl)">Dismiss</b> closes it — FareHarbor stays as it is. The two tax rows may already be redundant: the sheet-level fix landed 7/28, so verify in FareHarbor before approving.</p>
+  <div id="rulingList"></div>
+</section>
+
+<section class="view" id="view-prices" role="tabpanel">
+  <p class="rule-note">Net prices, straight from the engine. Change a number and save — the engine sheet updates, and the site feed follows on its own. FareHarbor changes still queue for a push session.</p>
+  <div id="priceList"></div>
+  <div class="pricebar" id="priceBar">
+    <span id="priceBarText">1 unsaved change</span>
+    <button class="btn ghost" id="priceRevert">Revert</button>
+    <button class="btn solid" id="priceSave">Save to engine</button>
+  </div>
+</section>
+
+<section class="view" id="view-audit" role="tabpanel">
+  <div id="auditBox"></div>
+</section>
+
+<footer>
+  <span>Baxstar pricing command · engine is the single source of truth</span>
+  <span id="footStamp"></span>
+</footer>
+</div>
+
+<dialog id="settingsDlg">
+  <h2>Backend connection</h2>
+  <p class="dsub">Paste the Apps Script web-app URL (the <code>/exec</code> one) and the shared token. Until then, the panel runs on demo data and writes nothing.</p>
+  <label for="cfgUrl">Web app URL</label>
+  <input id="cfgUrl" type="url" placeholder="https://script.google.com/macros/s/…/exec" autocomplete="off">
+  <label for="cfgToken">Token</label>
+  <input id="cfgToken" type="password" placeholder="Shared token" autocomplete="off">
+  <div class="conn-msg" id="connMsg"></div>
+  <div class="dacts">
+    <button class="btn ghost" id="cfgTest">Test connection</button>
+    <button class="btn solid" id="cfgSave">Save</button>
+  </div>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* =============================================================
+   Baxstar Pricing Command
+   Engine sheet = single source of truth.
+   FareHarbor has no API: PUSH runs a guided session — you apply
+   each change in FH, the panel records the result to the engine.
+   ============================================================= */
+
+const FISH_MULT = 1.06;          // fishing + tours + single day: net × FH fee
+const PONTOON_MULT = 1.138175;   // multi-day pontoon: net × 1.06 × 1.07375
+
+/* ---- seed = engine state as of last verified read (2026-08-05) ---- */
+const SEED = {
+  meta: {
+    statusLine: "Engine ahead of FareHarbor since 2026-07-24",
+    lastPush: "Never",
+    baseline: "Exported 2026-07-24",
+    pulled: null
+  },
+  queue: [
+    {id:1,item:"315912 Multi-Day",sheet:"Item pricing (all sheets)",row:"Four Day Rental",field:"Base $",cur:"$1,475",target:"$1,475",note:"No-op — FareHarbor already matches the engine (the +$25 note was superseded 7/28). Confirm and mark done.",bucket:"AUTO",status:"QUEUED",noop:true},
+    {id:2,item:"315912 Multi-Day",sheet:"Online – High Weekend (Fri–Sun)",row:"Item price line",field:"Adjustment",cur:"+5%",target:"0%",note:"Engine High (Fri–Sun) is 0%.",bucket:"AUTO",status:"QUEUED"},
+    {id:3,item:"315912 Multi-Day",sheet:"Direct – High Weekends (Fri–Sat)",row:"Item price line",field:"Adjustment",cur:"+5%",target:"0%",note:"Same tier, staff-side sheet.",bucket:"AUTO",status:"QUEUED"},
+    {id:4,item:"315912 Multi-Day",sheet:"Online – High",row:"Item price line",field:"Adjustment",cur:"0%",target:"−5%",note:"Match engine High; Direct is already −5%.",bucket:"AUTO",status:"QUEUED"},
+    {id:5,item:"315912 Multi-Day",sheet:"Direct – Off Peak",row:"Item price line",field:"Adjustment",cur:"0%",target:"−15%",note:"Match engine and the Online channel.",bucket:"AUTO",status:"QUEUED"},
+    {id:6,item:"315912 Multi-Day",sheet:"On + Dir High Weekend pair",row:"Two Day Rental",field:"Row adjustment",cur:"inherits +5%",target:"0% (flat $950)",note:"2-Day protection — tiers never discount it; increases are allowed.",bucket:"AUTO",status:"QUEUED"},
+    {id:7,item:"315912 Multi-Day",sheet:"On + Dir High pair",row:"Two Day Rental",field:"Row adjustment",cur:"inherits 0% / −5%",target:"0%",note:"2-Day protection.",bucket:"AUTO",status:"QUEUED"},
+    {id:8,item:"315912 Multi-Day",sheet:"On + Dir Shoulder Weekends pair",row:"Two Day Rental",field:"Row adjustment",cur:"inherits −5%",target:"0%",note:"2-Day protection — closes a live leak.",bucket:"AUTO",status:"QUEUED"},
+    {id:9,item:"315912 Multi-Day",sheet:"On + Dir Shoulder pair",row:"Two Day Rental",field:"Row adjustment",cur:"inherits −10%",target:"0%",note:"2-Day protection.",bucket:"AUTO",status:"QUEUED"},
+    {id:10,item:"315912 Multi-Day",sheet:"On + Dir Off Peak pair",row:"Two Day Rental",field:"Row adjustment",cur:"inherits −15% / 0%",target:"0%",note:"2-Day protection.",bucket:"AUTO",status:"QUEUED"},
+    {id:11,item:"315912 Multi-Day",sheet:"Online · Off-Peak · Mon–Thur",row:"Two Day Rental",field:"Row adjustment",cur:"inherits −7.5%",target:"0%",note:"2-Day protection.",bucket:"AUTO",status:"QUEUED"},
+    {id:12,item:"309836 Fishing",sheet:"On + Dir – Peak Sat",row:"Item price line",field:"Adjustment",cur:"+10%",target:"+8%",note:"Engine Peak Sat is 8%.",bucket:"AUTO",status:"QUEUED"},
+    {id:13,item:"309836 Fishing",sheet:"On + Dir High Weekend pair",row:"Three Hour row",field:"Row adjustment",cur:"+10%",target:"Inherit (+5%)",note:"Align the row to item and engine.",bucket:"AUTO",status:"QUEUED"},
+    {id:14,item:"309836 Fishing",sheet:"On + Dir – High",row:"Three Hour row",field:"Row adjustment",cur:"+5%",target:"Inherit (+2%)",note:"Align the row to item and engine.",bucket:"AUTO",status:"QUEUED"},
+    {id:15,item:"309836 Fishing",sheet:"On + Dir – Off Peak",row:"Three Hour row",field:"Row adjustment",cur:"−2%",target:"Inherit (−5%)",note:"Align the row to item and engine.",bucket:"AUTO",status:"QUEUED"},
+    {id:16,item:"309836 Fishing",sheet:"Online–Holiday + Direct–High Weekends",row:"Rod upgrade $39.95 (4-hr)",field:"$ override",cur:"$35.00",target:"Inherit ($39.95)",note:"Clear stray override — add-ons are static.",bucket:"AUTO",status:"QUEUED"},
+    {id:17,item:"309836 Fishing",sheet:"Direct – Holiday",row:"Rod upgrade $50 (5-hr)",field:"$ override",cur:"$40.00",target:"Inherit ($50)",note:"Clear stray override.",bucket:"AUTO",status:"QUEUED"},
+    {id:18,item:"309836 Fishing",sheet:"Online–Peak Fri/Sun + Online–High Weekend",row:"Rod upgrade $60 (6-hr)",field:"$ override",cur:"$50.00",target:"Inherit ($60)",note:"Clear stray override.",bucket:"AUTO",status:"QUEUED"},
+    {id:19,item:"309836 Fishing",sheet:"Direct",row:"Baxstar Hat",field:"$ override",cur:"$40.00",target:"Inherit ($35)",note:"Clear stray override — hat is $35 static.",bucket:"AUTO",status:"QUEUED"},
+    {id:20,item:"309867 Single Day",sheet:"Direct – Shoulder Weekends",row:"Item price line",field:"Adjustment",cur:"0%",target:"+3%",note:"Price increase — engine Shoulder (Fri–Sun) is +3%; Online already has it.",bucket:"AUTO",status:"QUEUED"},
+    {id:21,item:"309867 Single Day",sheet:"Direct – Off Peak",row:"Item price line",field:"Adjustment",cur:"0%",target:"−15%",note:"Match engine and the Online channel.",bucket:"AUTO",status:"QUEUED"},
+    {id:22,item:"315912 Multi-Day",sheet:"Online – Shoulder Weekends (Fri–Sun)",row:"Sheet setting",field:"Tax",cur:"Sheet not taxed",target:"Dashboard rate (7.375%)",note:"Starts taxing a pontoon sheet — needs your explicit yes. Likely redundant after the 7/28 sheet-level fix; check FareHarbor first.",bucket:"TAX",status:"HOLD"},
+    {id:23,item:"309867 Single Day",sheet:"Online – Shoulder Weekends (Fri–Sun)",row:"Sheet setting",field:"Tax",cur:"Sheet not taxed",target:"Dashboard rate (7.375%)",note:"Same bug, same fix — same caveat as above.",bucket:"TAX",status:"HOLD"},
+    {id:24,item:"309836 Fishing",sheet:"Customer types",row:"Three Hour Fishing Trip (exclusive)",field:"Delete customer type",cur:"Inactive · $350 · stale tiers",target:"Deleted",note:"Superseded draft of the live $385 trip. Sheet note says pre-authorized — one last confirm and it goes.",bucket:"DELETE",status:"HOLD"},
+    {id:25,item:"315912 Multi-Day",sheet:"Online – Holiday",row:"3–10 Day rentals",field:"Fixed $ overrides",cur:"$1,225 … $3,100",target:"Inherit +12%",note:"Recommend replacing fixed dollars with +12% so Holiday tracks base-price changes. Today most are below +12%.",bucket:"NOTIFY",status:"AWAITING"},
+    {id:26,item:"309867 Single Day",sheet:"Online – Holiday",row:"Item price line",field:"Adjustment",cur:"+20% (Direct +12%)",target:"Engine says +12%",note:"Recommend keeping the +20% online holiday premium and modeling it in the engine instead.",bucket:"NOTIFY",status:"AWAITING"},
+    {id:27,item:"309865 Lake Tour",sheet:"Online / Direct – Holiday",row:"Item price line",field:"Adjustment",cur:"+10% / +12%",target:"Engine says 0%",note:"Recommend keeping a holiday premium — align both channels to +12% and add it to the engine.",bucket:"NOTIFY",status:"AWAITING"},
+    {id:28,item:"309865 Lake Tour",sheet:"Direct – High",row:"Item price line",field:"Adjustment",cur:"+8% (Online 0%)",target:"0%",note:"Stray staff-side markup — recommend clearing it.",bucket:"NOTIFY",status:"AWAITING"},
+    {id:29,item:"315912 Multi-Day",sheet:"Online · Off-Peak · Mon–Thur",row:"Item price line",field:"Adjustment",cur:"−7.5%",target:"No engine tier",note:"Mid-week yield lever — recommend keeping it and adding a matching engine tier later.",bucket:"NOTIFY",status:"AWAITING"},
+    {id:30,item:"315912 + 309836",sheet:"Online – Last Minute",row:"Item price line",field:"Adjustment",cur:"+8% (both items)",target:"No engine tier",note:"Recommend keeping; model later.",bucket:"NOTIFY",status:"AWAITING"},
+    {id:31,item:"309867 + 315912",sheet:"Customer types",row:"4-hr $275 · 11–14 Day hidden",field:"Products not in engine",cur:"Exist in FH only",target:"—",note:"Recommend leaving as-is; add engine blocks when you want them managed.",bucket:"NOTIFY",status:"AWAITING"},
+    {id:32,item:"309836 + 309865",sheet:"Item level",row:"Tax posture",field:"Item tax",cur:"Not taxed item-wide",target:"—",note:"Looks intentional (MN guide services vs taxable rentals). Confirm with the accountant someday.",bucket:"NOTIFY",status:"AWAITING"}
+  ],
+  prices: [
+    {group:"Fishing trips", mult:FISH_MULT, multLabel:"customer = net × 1.06", rows:[
+      {label:"3 Hour Fishing Trip", net:385},
+      {label:"4 Hour Fishing Trip", net:425, tag:"Most popular"},
+      {label:"5 Hour Fishing Trip", net:550},
+      {label:"6 Hour Fishing Trip", net:675},
+      {label:"8 Hour Fishing Trip", net:900}
+    ]},
+    {group:"Multi-day pontoon", mult:PONTOON_MULT, multLabel:"customer = net × 1.1382 (fee + MN tax)", rows:[
+      {label:"2-Day Rental", net:950, tag:"Protected — tier sales never touch it"},
+      {label:"3-Day Rental", net:1150},
+      {label:"4-Day Rental", net:1475, tag:"Most popular"},
+      {label:"5-Day Rental", net:1750},
+      {label:"6-Day Rental", net:1975},
+      {label:"7-Day Rental", net:2175},
+      {label:"8-Day Rental", net:2375},
+      {label:"9-Day Rental", net:2550},
+      {label:"10-Day Rental", net:null, raw:"−10%", flag:"Cell holds “−10%”, not a dollar amount — the engine math on this row is broken. Type a real price."}
+    ]},
+    {group:"Single day pontoon", mult:FISH_MULT, multLabel:"customer = net × 1.06 · tax added at checkout", rows:[
+      {label:"Single Day (8hr)", net:425}
+    ]},
+    {group:"Lake tours", mult:FISH_MULT, multLabel:"customer = net × 1.06", rows:[
+      {label:"2 Hour Tour", net:375}
+    ]},
+    {group:"Add-ons · static, no seasonal %", mult:FISH_MULT, multLabel:"customer = net × 1.06", rows:[
+      {label:"Rod upgrade — 3-Hour", net:35},
+      {label:"Rod upgrade — 4-Hour", net:39.95},
+      {label:"Rod upgrade — 5-Hour", net:50},
+      {label:"Rod upgrade — 6-Hour", net:60},
+      {label:"Rod upgrade — 8-Hour", net:70},
+      {label:"Baxstar Hat", net:35},
+      {label:"Trip Protection", net:null, raw:"15%", tag:"15% of trip total — scales automatically", locked:true}
+    ]}
+  ]
+};
+
+/* ---------------- state ---------------- */
+const store = (()=>{ try{ localStorage.setItem('_t','1'); localStorage.removeItem('_t'); return localStorage; }catch(e){ const m={}; return {getItem:k=>m[k]??null,setItem:(k,v)=>m[k]=String(v),removeItem:k=>delete m[k]}; }})();
+let cfg = { url: store.getItem('bpc_url') || '', token: store.getItem('bpc_token') || '' };
+let data = JSON.parse(JSON.stringify(SEED));
+let live = false;
+let dirty = {};   // label -> new net value
+
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const money = n => n==null ? '—' : '$' + Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+const esc = s => String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('show'),2600); }
+
+/* ---------------- api ---------------- */
+async function api(action, payload){
+  if(!cfg.url) throw new Error('not-connected');
+  const u = new URL(cfg.url);
+  if(payload){
+    const r = await fetch(cfg.url, {method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify({token:cfg.token, action, ...payload})});
+    const j = await r.json();
+    if(j.error) throw new Error(j.error);
+    return j;
+  } else {
+    u.searchParams.set('token', cfg.token);
+    u.searchParams.set('action', action);
+    const r = await fetch(u.toString());
+    const j = await r.json();
+    if(j.error) throw new Error(j.error);
+    return j;
+  }
+}
+
+/* ---------------- derived counts ---------------- */
+function counts(){
+  const q = data.queue;
+  return {
+    queued: q.filter(r=>r.status==='QUEUED').length,
+    pushed: q.filter(r=>r.status==='PUSHED').length,
+    hold: q.filter(r=>r.status==='HOLD').length,
+    awaiting: q.filter(r=>r.status==='AWAITING').length
+  };
+}
+
+/* ---------------- render: header + stats ---------------- */
+function renderTop(){
+  const c = counts();
+  const pending = c.queued + c.hold + c.awaiting;
+  const dot = $('#statusDot'), txt = $('#statusText');
+  if(pending===0){ dot.className='dot ok'; txt.textContent='In sync'; }
+  else { dot.className='dot warn'; txt.textContent = data.meta.statusLine || (pending+' changes pending'); }
+
+  $('#statQueued .v').textContent = c.queued;
+  $('#statRulings .v').textContent = c.hold + c.awaiting;
+  $('#statLastPush .v').textContent = data.meta.lastPush || '—';
+  $('#statBaseline .v').textContent = (data.meta.baseline||'—').replace('Exported ','');
+  $('#cntQueue').textContent = c.queued;
+  $('#cntRulings').textContent = c.hold + c.awaiting;
+  $('#footStamp').textContent = live ? ('Connected · pulled ' + (data.meta.pulled||'')) : 'Demo data · not connected';
+  $('#demoStrip').classList.toggle('hidden', live);
+}
+
+/* ---------------- render: queue ---------------- */
+function qCard(r, actionsHtml){
+  const bucketCls = {AUTO:'auto',TAX:'tax',DELETE:'del',NOTIFY:'notify'}[r.bucket]||'auto';
+  return `<article class="qcard ${r.status==='PUSHED'?'done':''}" data-id="${r.id}">
+    <div class="meta">
+      <span class="chip item">${esc(r.item)}</span>
+      <span class="chip ${bucketCls}">${esc(r.bucket)}</span>
+      ${r.noop?'<span class="chip noop">No-op</span>':''}
+      ${r.status==='PUSHED'?'<span class="chip pushed">Pushed</span>':''}
+    </div>
+    <div class="where">${esc(r.sheet)}<span class="sep">·</span>${esc(r.row)}</div>
+    <div class="field">${esc(r.field)}</div>
+    <div class="delta">
+      <div><span class="vk">FareHarbor now</span><span class="val">${esc(r.cur)}</span></div>
+      <span class="arrow" aria-hidden="true">→</span>
+      <div><span class="vk">Engine target</span><span class="val to">${esc(r.target)}</span></div>
+    </div>
+    <p class="note">${esc(r.note)}</p>
+    <div class="acts">${actionsHtml}</div>
+  </article>`;
+}
+
+function renderQueue(){
+  const rows = data.queue.filter(r=>r.status==='QUEUED' || (r.status==='PUSHED' && r.bucket!=='NOTIFY'));
+  const open = rows.filter(r=>r.status==='QUEUED');
+  const done = rows.filter(r=>r.status==='PUSHED');
+  const total = open.length + done.length;
+  $('#progFill').style.width = total? Math.round(done.length/total*100)+'%' : '0%';
+  $('#progLabel').textContent = total? `${done.length} of ${total} applied in FareHarbor` : '';
+
+  const list = $('#queueList');
+  if(open.length===0 && done.length===0){
+    list.innerHTML = `<div class="empty"><strong>Queue is clear</strong>Nothing is waiting for FareHarbor. Approve rulings to add changes, or run Audit.</div>`;
+  } else if(open.length===0){
+    list.innerHTML = `<div class="empty"><strong>Session complete</strong>Every queued change is marked pushed. Next: re-export the four FareHarbor CSVs so the baseline is fresh, then run Audit.</div>` +
+      done.map(r=>qCard(r,'')).join('');
+  } else {
+    list.innerHTML = open.map(r=>qCard(r,
+      `<button class="btn solid" data-act="pushed" data-id="${r.id}">Mark pushed</button>
+       <button class="btn ghost" data-act="skip" data-id="${r.id}">Skip for now</button>`)).join('')
+      + done.map(r=>qCard(r,'')).join('');
+  }
+}
+
+/* ---------------- render: rulings ---------------- */
+function renderRulings(){
+  const rows = data.queue.filter(r=>r.status==='HOLD'||r.status==='AWAITING');
+  const list = $('#rulingList');
+  if(rows.length===0){ list.innerHTML = `<div class="empty"><strong>No open rulings</strong>Everything is either queued or settled.</div>`; return; }
+  list.innerHTML = rows.map(r=>qCard(r,
+    `<button class="btn green" data-act="approve" data-id="${r.id}">Approve → queue</button>
+     <button class="btn ghost" data-act="dismiss" data-id="${r.id}">Dismiss</button>`)).join('');
+}
+
+/* ---------------- render: prices ---------------- */
+function renderPrices(){
+  const list = $('#priceList');
+  list.innerHTML = data.prices.map(g=>`
+    <div class="pgroup">
+      <h3>${esc(g.group)} <span class="mult">${esc(g.multLabel)}</span></h3>
+      ${g.rows.map(r=>{
+        const key = r.label;
+        const val = (key in dirty) ? dirty[key] : r.net;
+        const facing = (val!=null && !r.locked) ? money(val*g.mult) : (r.raw||'—');
+        if(r.locked || r.net==null && r.flag==null && r.raw){
+          if(r.locked) return `<div class="prow"><div class="name">${esc(r.label)}${r.tag?`<span class="tagnote">${esc(r.tag)}</span>`:''}</div><div class="net"><span style="font-weight:700;color:var(--pearl)">${esc(r.raw)}</span></div><div class="facing">dynamic</div></div>`;
+        }
+        if(r.net==null && r.flag){
+          return `<div class="prow flag"><div class="name">${esc(r.label)}<span class="tagnote">${esc(r.flag)}</span></div>
+            <div class="net"><span class="cur">$</span><input inputmode="decimal" data-label="${esc(key)}" value="" placeholder="—"><span class="savemark"></span></div>
+            <div class="facing"><b>needs a value</b></div></div>`;
+        }
+        return `<div class="prow ${key in dirty?'dirty':''}"><div class="name">${esc(r.label)}${r.tag?`<span class="tagnote">${esc(r.tag)}</span>`:''}</div>
+          <div class="net"><span class="cur">$</span><input inputmode="decimal" data-label="${esc(key)}" value="${val!=null?val:''}"><span class="savemark"></span></div>
+          <div class="facing">customer sees <b>${facing}</b></div></div>`;
+      }).join('')}
+    </div>`).join('');
+  updatePriceBar();
+}
+function updatePriceBar(){
+  const n = Object.keys(dirty).length;
+  $('#priceBar').classList.toggle('on', n>0);
+  $('#priceBarText').textContent = n===1 ? '1 unsaved change' : n+' unsaved changes';
+}
+
+/* ---------------- render: audit ---------------- */
+function renderAudit(){
+  const c = counts();
+  const pending = c.queued + c.hold + c.awaiting;
+  const sync = pending===0;
+  $('#auditBox').innerHTML = `
+    <div class="verdict ${sync?'sync':'nosync'}">
+      <div class="vh"><span class="dot ${sync?'ok':'warn'}"></span><h2>${sync?'IN SYNC':'NOT IN SYNC'}</h2></div>
+      <p>${sync
+        ? 'The engine, the queue, and the FareHarbor baseline agree. Nothing is pending. This is the completion signal.'
+        : 'The engine is ahead of FareHarbor. Work the queue, settle the rulings, then re-export the baseline — Audit flips green when everything clears.'}</p>
+    </div>
+    <ul class="audit-list">
+      <li><span class="al-k">Queued for FareHarbor</span><span class="al-v ${c.queued? 'warn':'good'}">${c.queued}</span></li>
+      <li><span class="al-k">Marked pushed</span><span class="al-v">${c.pushed}</span></li>
+      <li><span class="al-k">Held for your ruling</span><span class="al-v ${c.hold? 'warn':'good'}">${c.hold}</span></li>
+      <li><span class="al-k">Awaiting your call</span><span class="al-v ${c.awaiting? 'warn':'good'}">${c.awaiting}</span></li>
+      <li><span class="al-k">Last push session</span><span class="al-v">${esc(data.meta.lastPush||'—')}</span></li>
+      <li><span class="al-k">FH baseline export</span><span class="al-v">${esc(data.meta.baseline||'—')}</span></li>
+      <li><span class="al-k">Connection</span><span class="al-v ${live?'good':'warn'}">${live?'Live engine':'Demo data'}</span></li>
+    </ul>`;
+}
+
+/* ---------------- actions ---------------- */
+async function setRowStatus(id, status){
+  const r = data.queue.find(x=>x.id===id);
+  if(!r) return;
+  const prev = r.status;
+  r.status = status;
+  renderAll();
+  if(live){
+    try{ await api('mark',{rowKey:r.rowKey ?? null, id, status, item:r.item, row:r.row, field:r.field}); }
+    catch(e){ r.status = prev; renderAll(); toast('Engine write failed — status reverted'); return; }
+  }
+  const verb = {PUSHED:'Marked pushed',QUEUED:'Moved to queue',DISMISSED:'Dismissed'}[status]||status;
+  toast(verb + (live?'' : ' (demo — not saved)'));
+}
+
+document.addEventListener('click', e=>{
+  const b = e.target.closest('[data-act]');
+  if(!b) return;
+  const id = Number(b.dataset.id);
+  const act = b.dataset.act;
+  if(act==='pushed') setRowStatus(id,'PUSHED');
+  if(act==='skip'){ toast('Skipped — stays queued'); const card=b.closest('.qcard'); card.style.opacity=.55; setTimeout(()=>card.style.opacity='',700); }
+  if(act==='approve') setRowStatus(id,'QUEUED');
+  if(act==='dismiss') setRowStatus(id,'DISMISSED');
+});
+
+/* price edits */
+document.addEventListener('input', e=>{
+  const inp = e.target.closest('.prow input');
+  if(!inp) return;
+  const label = inp.dataset.label;
+  const v = parseFloat(inp.value);
+  const orig = data.prices.flatMap(g=>g.rows).find(r=>r.label===label);
+  if(!isNaN(v) && v>0 && v!==orig.net){ dirty[label]=v; } else { delete dirty[label]; }
+  inp.closest('.prow').classList.toggle('dirty', label in dirty);
+  const g = data.prices.find(g=>g.rows.some(r=>r.label===label));
+  const facing = inp.closest('.prow').querySelector('.facing b');
+  if(facing && !isNaN(v) && v>0) facing.textContent = money(v*g.mult);
+  updatePriceBar();
+});
+$('#priceRevert').addEventListener('click', ()=>{ dirty={}; renderPrices(); toast('Reverted'); });
+$('#priceSave').addEventListener('click', async ()=>{
+  const entries = Object.entries(dirty);
+  if(!entries.length) return;
+  if(!live){ toast('Demo mode — connect the backend to save to the engine'); return; }
+  $('#priceSave').disabled = true;
+  try{
+    for(const [label,value] of entries){ await api('setprice',{label,value}); }
+    entries.forEach(([label,value])=>{ const r=data.prices.flatMap(g=>g.rows).find(r=>r.label===label); if(r) r.net=value; });
+    dirty={}; renderPrices();
+    toast(entries.length+' price'+(entries.length>1?'s':'')+' saved to the engine — the site feed follows automatically');
+  }catch(e){ toast('Save failed: '+e.message); }
+  $('#priceSave').disabled = false;
+});
+
+/* ---------------- commands ---------------- */
+function busy(btn,on){ btn.classList.toggle('busy',on); btn.disabled=on; }
+
+$('#cmdPull').addEventListener('click', async ()=>{
+  const b=$('#cmdPull'); busy(b,true);
+  if(!live){ await new Promise(r=>setTimeout(r,500)); renderAll(); toast('Demo refresh — connect the backend for live engine data'); busy(b,false); return; }
+  try{
+    const j = await api('pull');
+    if(j.queue) data.queue = j.queue;
+    if(j.prices) data.prices = mergePrices(j.prices);
+    if(j.meta) data.meta = {...data.meta, ...j.meta};
+    data.meta.pulled = new Date().toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
+    dirty={}; renderAll(); toast('Pulled from engine');
+  }catch(e){ toast('Pull failed: '+e.message); }
+  busy(b,false);
+});
+function mergePrices(remote){
+  const flat = Object.fromEntries(remote.map(r=>[r.label, r.net]));
+  const next = JSON.parse(JSON.stringify(SEED.prices));
+  next.forEach(g=>g.rows.forEach(r=>{ if(r.label in flat && flat[r.label]!=null) { r.net = flat[r.label]; r.flag = undefined; } }));
+  return next;
+}
+
+$('#cmdPush').addEventListener('click', ()=>{ showView('queue'); const first=$('#queueList .qcard:not(.done)'); if(first) first.scrollIntoView({behavior:'smooth',block:'center'}); toast('Session started — apply each card in FareHarbor, then mark it'); });
+$('#cmdAudit').addEventListener('click', ()=>{ renderAudit(); showView('audit'); });
+
+/* ---------------- tabs ---------------- */
+function showView(name){
+  $$('.tab').forEach(t=>t.setAttribute('aria-selected', String(t.dataset.view===name)));
+  $$('.view').forEach(v=>v.classList.toggle('on', v.id==='view-'+name));
+}
+$$('.tab').forEach(t=>t.addEventListener('click',()=>showView(t.dataset.view)));
+
+/* ---------------- settings ---------------- */
+const dlg = $('#settingsDlg');
+$('#gearBtn').addEventListener('click', ()=>{ $('#cfgUrl').value=cfg.url; $('#cfgToken').value=cfg.token; $('#connMsg').textContent=''; $('#connMsg').className='conn-msg'; dlg.showModal(); });
+$('#demoSetup').addEventListener('click', ()=>$('#gearBtn').click());
+$('#cfgTest').addEventListener('click', async ()=>{
+  const m=$('#connMsg'); m.textContent='Testing…'; m.className='conn-msg';
+  const saved={...cfg}; cfg={url:$('#cfgUrl').value.trim(), token:$('#cfgToken').value.trim()};
+  try{ const j=await api('ping'); m.textContent='Connected — engine: '+(j.sheet||'ok'); m.className='conn-msg ok'; }
+  catch(e){ m.textContent='No response — check the URL, token, and that the deployment is set to “Anyone”.'; m.className='conn-msg err'; }
+  cfg=saved;
+});
+$('#cfgSave').addEventListener('click', async ()=>{
+  cfg={url:$('#cfgUrl').value.trim(), token:$('#cfgToken').value.trim()};
+  store.setItem('bpc_url',cfg.url); store.setItem('bpc_token',cfg.token);
+  dlg.close();
+  if(cfg.url){ live=true; renderAll(); $('#cmdPull').click(); }
+  else { live=false; renderAll(); }
+});
+dlg.addEventListener('click', e=>{ if(e.target===dlg) dlg.close(); });
+
+/* ---------------- boot ---------------- */
+function renderAll(){ renderTop(); renderQueue(); renderRulings(); renderPrices(); renderAudit(); }
+renderAll();
+if(cfg.url){ live=true; renderAll(); $('#cmdPull').click(); }
+</script>
+</body>
+</html>
