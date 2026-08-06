@@ -199,9 +199,12 @@ h1,h2,.h-display{font-family:var(--display);font-weight:700;text-transform:upper
 /* lift caption off bright deck areas — no card on desktop, shadow does the work */
 .pscene .cap .eyebrow{color:var(--pin)}
 .pscene .cap .eyebrow,.pscene .cap .kline b,.pscene .cap h2{text-shadow:0 2px 20px rgba(0,0,0,.72),0 1px 3px rgba(0,0,0,.6)}
-#pl .cap{bottom:15%}
-#pl .cap h2{font-size:clamp(28px,4.6vw,60px);line-height:.98}
-#pl .cap h2 em{color:var(--red);font-style:normal}
+.pscene .cap h2{font-size:clamp(28px,4.6vw,60px);line-height:.98;margin-top:10px}
+.pscene .cap h2 em{color:var(--red);font-style:normal}
+/* pc is a portrait shot: keep the helm + driver in frame when cover-cropped wide */
+#pc-img{object-position:50% 30%}
+#pl-img{object-position:50% 42%}
+#pl .cap{bottom:12%}
 @media(max-width:900px){
   .pscene .cap{background:rgba(14,14,18,.72);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
     padding:16px 16px;border-radius:12px;border:1px solid rgba(233,233,238,.06);bottom:9%;width:88vw}
@@ -329,8 +332,8 @@ body.static #p0 h1 .ch{transform:none}
   <div class="dot" data-c="2" title="Bow · Minn Kota Ultrex"></div><div class="link"></div>
   <div class="dot" data-c="3" title="The Deck"></div><div class="link"></div>
   <div class="dot" data-c="4" title="Helm · Windshield"></div><div class="link"></div>
-  <div class="dot" data-c="5" title="The Cockpit"></div><div class="link"></div>
-  <div class="dot" data-c="6" title="Vexus Emblem"></div><div class="link"></div>
+  <div class="dot" data-c="5" title="At the Helm"></div><div class="link"></div>
+  <div class="dot" data-c="6" title="Room for the Crew"></div><div class="link"></div>
   <div class="dot" data-c="7" title="Stern · Mercury &amp; Power-Pole"></div><div class="link"></div>
   <div class="dot" data-c="8" title="Book Your Trip"></div>
 </nav>
@@ -412,25 +415,26 @@ body.static #p0 h1 .ch{transform:none}
       </div>
     </div>
 
-    <!-- PC · cockpit reveal (pull back off the windshield, arc to the stern view) -->
+    <!-- PC · at the helm (from the windshield beat to a hand on the wheel) -->
     <div class="phase pscene" id="pc">
-      <div class="frame"><img id="pc-img" src="assets/cockpit.webp"
-        srcset="assets/cockpit-mobile.webp 1100w, assets/cockpit.webp 1800w" sizes="100vw"
-        alt="Overhead view of the Vexus DVX 20S cockpit — four seats, center helm, and a spacious casting deck" loading="lazy" decoding="async"></div>
+      <div class="frame"><img id="pc-img" src="assets/helm-drive.webp"
+        srcset="assets/helm-drive-mobile.webp 720w, assets/helm-drive.webp 1024w" sizes="100vw"
+        alt="At the helm of the Vexus DVX 20S, seen from the stern deck" loading="lazy" decoding="async"></div>
       <div class="cap">
         <div class="eyebrow">Step <em>·</em> Aboard</div>
-        <div class="kline"><b>Seating for up to 5 <i>·</i></b><b>Spacious cockpit <i>·</i></b><b>Big rear casting deck</b></div>
+        <h2>Experience the most premium <em>boat ever made.</em></h2>
       </div>
     </div>
 
-    <!-- PL · emblem push-in -->
+    <!-- PL · the crew shot — pull back to show how much boat there is -->
     <div class="phase pscene" id="pl">
-      <div class="frame"><img id="pl-img" src="assets/logo.webp"
-        srcset="assets/logo-mobile.webp 1080w, assets/logo.webp 1800w" sizes="100vw"
-        alt="Vexus emblem embossed into the DVX 20S deck" loading="lazy" decoding="async"></div>
+      <div class="frame"><img id="pl-img" src="assets/crew.webp"
+        srcset="assets/crew-mobile.webp 1000w, assets/crew.webp 1536w" sizes="100vw"
+        alt="A crew of guests celebrating a catch on the bow of the Vexus DVX 20S" loading="lazy" decoding="async"></div>
       <div class="cap">
-        <div class="eyebrow">Every inch, intentional</div>
-        <h2>Experience the most premium <em>boat ever made.</em></h2>
+        <div class="eyebrow">Your group <em>·</em> Your day</div>
+        <h2>Plenty of room for <em>you and your crew.</em></h2>
+        <div class="kline"><b>Seating for up to 5 <i>·</i></b><b>Spacious cockpit <i>·</i></b><b>Big rear casting deck</b></div>
       </div>
     </div>
 
@@ -575,8 +579,8 @@ const PHOTO_IDXS=[3,5,6];       // pf, pc, pl — full-frame stills; boat fades 
    pc: pull back off the windshield and settle on the whole cockpit.
    pl: slow push-in onto the Vexus emblem.  x,y are % of viewport; s is scale. */
 const KENS=[
-  {img:$('#pc-img'), a:0.600, b:0.716, s0:1.18, s1:1.045, x0:3.2, x1:-1.2, y0:3.4, y1:-1.0},
-  {img:$('#pl-img'), a:0.712, b:0.800, s0:1.04, s1:1.26,  x0:0,   x1:0,    y0:0,   y1:0}
+  {img:$('#pc-img'), a:0.600, b:0.716, s0:1.02, s1:1.15, x0:0, x1:0, y0:1.6, y1:-1.6},  // push in toward the helm
+  {img:$('#pl-img'), a:0.712, b:0.800, s0:1.17, s1:1.03, x0:0, x1:0, y0:-1.2, y1:0.8}   // pull back — reveal the room
 ];
 
 /* anchored callouts: ax,ay in boat-image fractions */
