@@ -793,9 +793,20 @@ function wake(){
 
 addEventListener('scroll', wake, {passive:true});
 const relayout=()=>{layout(); lastTf=''; draw(sm); wake();};
-addEventListener('resize', ()=>{seedFlakes(); relayout();});
+/* iOS: scrolling up re-expands Safari's chrome, firing visualViewport resizes
+   mid-scroll. Relayout moves every snap marker, so mandatory snap re-targets
+   under the user's finger — an upward-only twitch. Defer relayout until the
+   scroll has been idle for a beat; the interim frame error is subpixel-level. */
+let rlT=0;
+const relayoutIdle=()=>{
+  clearTimeout(rlT);
+  rlT=setTimeout(()=>{
+    if(performance.now()-gLastT<160) relayoutIdle(); else relayout();
+  },200);
+};
+addEventListener('resize', ()=>{seedFlakes(); relayoutIdle();});
 if(window.visualViewport)
-  visualViewport.addEventListener('resize', relayout, {passive:true});
+  visualViewport.addEventListener('resize', relayoutIdle, {passive:true});
 if(document.fonts && document.fonts.ready)
   document.fonts.ready.then(relayout);
 
@@ -828,7 +839,7 @@ dots.forEach((d,i)=>d.addEventListener('click',()=>{
    left alone (a deliberate drag isn't a swipe — momentum after release is
    gated), and single instant jumps bigger than 1.5 screens are treated as
    programmatic navigation and let through. */
-let gTouch=false, gLast=scrollY, gDir=0, gLastT=0, gLimit=null, gHold=0;
+let gTouch=false, gLast=scrollY, gDir=0, gLastT=0, gLimit=null, gHold=0, gLatched=false;
 addEventListener('touchstart',()=>{gTouch=true;},{passive:true});
 addEventListener('touchcancel',()=>{gTouch=false;},{passive:true});
 addEventListener('touchend',()=>{gTouch=false; gLast=scrollY; gDir=0;},{passive:true});
@@ -847,10 +858,17 @@ addEventListener('scroll',function gate(){
   if(!d) return;
   const dir=d>0?1:-1, gap=now-gLastT;
   gLastT=now;
-  if(reduced||gTouch||now<gHold||Math.abs(d)>vh*1.5){ gLast=y; gDir=0; gLimit=null; return; }
-  if(gap>260||dir!==gDir||gLimit===null) gLimit=nextPeakBeyond(y-d,dir);
+  if(reduced||gTouch||now<gHold||Math.abs(d)>vh*1.5){ gLast=y; gDir=0; gLimit=null; gLatched=false; return; }
+  if(gap>260||dir!==gDir||gLimit===null){ gLimit=nextPeakBeyond(y-d,dir); gLatched=false; }
   gDir=dir; gLast=y;
-  if(gLimit!==null && (dir>0 ? y>gLimit : y<gLimit)){ scrollTo(0,gLimit); gLast=gLimit; }
+  /* Arrest a burst at the first peak it crosses — ONCE. Re-clamping every event
+     fought the compositor and the native snap-settle (visible jump-back twitch,
+     worst on upward scrolls); after the single arrest, scroll-snap-stop:always
+     owns the physics. 3px tolerance so a snap-settle landing a subpixel shy of
+     the marker can never re-trigger the clamp. */
+  if(gLimit!==null && !gLatched && (dir>0 ? y>gLimit+3 : y<gLimit-3)){
+    scrollTo(0,gLimit); gLast=gLimit; gLatched=true;
+  }
 },{passive:true});
 window.__bax={sceneY, phases:()=>PHASES.map(ph=>[ph.a,ph.b])};   // audit/debug hook
 
