@@ -18,10 +18,12 @@
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%}
-body{background:var(--ink);color:var(--platinum);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-weight:300;overflow:hidden}
+/* position:fixed pins the document to the iframe viewport so iOS can never
+   scroll it internally — touch gestures fall through to the parent page */
+body{background:var(--ink);color:var(--platinum);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-weight:300;overflow:hidden;position:fixed;inset:0;width:100%;overscroll-behavior:none}
 a{-webkit-tap-highlight-color:transparent}
 
-#teaser{height:100dvh;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:clamp(8px,2vh,20px);padding:clamp(14px,3vh,28px) 4vw;position:relative}
+#teaser{height:100%;overflow:hidden;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:clamp(8px,2vh,20px);padding:clamp(14px,3vh,28px) 4vw;position:relative}
 
 /* ---------- copy ---------- */
 .copy{flex-shrink:0;text-align:center;opacity:0;transform:translateY(10px);transition:opacity .7s ease,transform .7s ease}
@@ -140,6 +142,41 @@ h2{font-family:'Saira Condensed',sans-serif;font-weight:700;text-transform:upper
     boat.addEventListener('error', arm, {once:true});
     setTimeout(arm, 3500); /* image stalls: arm anyway */
   }
+})();
+</script>
+
+<!-- IFRAME HEIGHT REPORTER — multi-signal (Wix Custom Embed auto-resize) -->
+<script>
+(function(){
+  if (window.parent === window) return;
+  var lastH = 0;
+  function report(){
+    var h = Math.max(
+      document.documentElement.scrollHeight,
+      document.body ? document.body.scrollHeight : 0,
+      document.documentElement.offsetHeight,
+      document.body ? document.body.offsetHeight : 0
+    );
+    if (h && Math.abs(h - lastH) >= 2) {
+      lastH = h;
+      try { window.parent.postMessage({ type: 'setHeight', height: h }, '*'); } catch(e){}
+      try { window.parent.postMessage({ type: 'embed-size', height: h }, '*'); } catch(e){}
+      try { window.parent.postMessage('height:' + h, '*'); } catch(e){}
+    }
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', report);
+  else report();
+  window.addEventListener('load', report);
+  window.addEventListener('resize', report);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(report);
+  if (window.ResizeObserver) {
+    try { var ro = new ResizeObserver(report); ro.observe(document.documentElement); if (document.body) ro.observe(document.body); } catch(e){}
+  }
+  var ticks = 0;
+  var early = setInterval(function(){
+    report(); ticks++;
+    if (ticks >= 30) { clearInterval(early); setInterval(report, 1500); }
+  }, 200);
 })();
 </script>
 </body>
