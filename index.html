@@ -44,7 +44,11 @@
   --body:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
 }
 *{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:auto;overscroll-behavior-y:none;scroll-snap-type:y mandatory}
+html{scroll-behavior:auto;overscroll-behavior-y:none}
+/* snap is armed by JS only after positionSnaps() has built the scene markers;
+   arming it in static CSS let mandatory snap fire before the markers existed,
+   so first paint snapped to the first tail section (#trips) instead of the top */
+html.snapon{scroll-snap-type:y mandatory}
 body{background:var(--ink);color:var(--platinum);font-family:var(--body);font-weight:300;overflow-x:hidden}
 ::selection{background:var(--red);color:#fff}
 a{color:inherit}
@@ -292,7 +296,7 @@ footer .legal{font-family:var(--label);font-size:9px;letter-spacing:.25em;text-t
 
 /* ---------- reduced motion ---------- */
 @media(prefers-reduced-motion:reduce){
-  html{scroll-snap-type:none}
+  html.snapon{scroll-snap-type:none}
   #scroll-cue .stem{animation:none}
   #pf .shot{transform:translate(-50%,-50%)}
   .callout{transform:none}
@@ -826,6 +830,7 @@ function positionSnaps(){
     const d=document.createElement('div'); d.className='snap'; stage.appendChild(d); return d;
   });
   snapEls.forEach((el,i)=>{ el.style.top=(SNAP_PS[i]?sceneY(SNAP_PS[i]):0)+'px'; });
+  document.documentElement.classList.add('snapon');   // markers exist — now arm snap
 }
 dots.forEach((d,i)=>d.addEventListener('click',()=>{
   gHold=performance.now()+1400;
