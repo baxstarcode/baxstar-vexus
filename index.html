@@ -182,7 +182,12 @@ h1,h2,.h-display{font-family:var(--display);font-weight:700;text-transform:upper
 #pf .shot img{display:block;width:100%;height:auto;
   -webkit-mask-image:linear-gradient(to bottom,#000 74%,transparent 99%);
   mask-image:linear-gradient(to bottom,#000 74%,transparent 99%);
-  filter:drop-shadow(0 30px 60px rgba(0,0,0,.55))}
+  /* silhouette glow: the POV cutout gets a platinum halo with a faint red
+     bloom under the deck (same "melting into black" feel as the crew still) */
+  filter:drop-shadow(0 30px 60px rgba(0,0,0,.55)) drop-shadow(0 0 34px rgba(233,233,238,.32)) drop-shadow(0 0 110px rgba(213,24,32,.22))}
+@media(max-width:900px){
+  #pf .shot img{filter:drop-shadow(0 20px 40px rgba(0,0,0,.5)) drop-shadow(0 0 30px rgba(233,233,238,.26))}
+}
 
 
 /* phases C + L — full-bleed cinematic stills (Brady's cockpit + emblem) that
@@ -533,7 +538,7 @@ const POSES_D=[
   {p:0.156, fx:0.50, fy:0.50, cx:0.50, cy:0.50, wf:0.88},  // HOLD — flagship text
   {p:0.206, fx:0.12, fy:0.30, cx:0.63, cy:0.42, wf:2.05},  // bow / Ultrex
   {p:0.312, fx:0.12, fy:0.30, cx:0.63, cy:0.42, wf:2.05},  // HOLD
-  {p:0.398, fx:0.30, fy:0.40, cx:0.50, cy:0.72, wf:1.55},  // deck view backdrop (boat fades)
+  {p:0.412, fx:0.30, fy:0.40, cx:0.50, cy:0.72, wf:1.55},  // deck view backdrop — still gliding as the photo dissolves in
   {p:0.470, fx:0.30, fy:0.40, cx:0.50, cy:0.72, wf:1.55},  // HOLD under photo
   {p:0.536, fx:0.53, fy:0.36, cx:0.50, cy:0.44, wf:2.25},  // helm / windshield
   {p:0.600, fx:0.53, fy:0.36, cx:0.50, cy:0.44, wf:2.25},  // HOLD
@@ -551,7 +556,7 @@ const POSES_M=[
   {p:0.156, fx:0.50, fy:0.50, cx:0.50, cy:0.50, wf:0.94},  // HOLD
   {p:0.206, fx:0.12, fy:0.30, cx:0.55, cy:0.36, wf:2.60},
   {p:0.312, fx:0.12, fy:0.30, cx:0.55, cy:0.36, wf:2.60},  // HOLD
-  {p:0.398, fx:0.30, fy:0.40, cx:0.50, cy:0.90, wf:1.60},
+  {p:0.412, fx:0.30, fy:0.40, cx:0.50, cy:0.90, wf:1.60},  // still gliding as the deck photo dissolves in
   {p:0.470, fx:0.30, fy:0.40, cx:0.50, cy:0.90, wf:1.60},  // HOLD
   {p:0.536, fx:0.53, fy:0.34, cx:0.50, cy:0.36, wf:2.80},  // helm / windshield
   {p:0.600, fx:0.53, fy:0.34, cx:0.50, cy:0.36, wf:2.80},  // HOLD
@@ -568,7 +573,7 @@ const PHASES=[
   {el:$('#p0'), a:0.000, b:0.040, first:true},
   {el:$('#p1'), a:0.088, b:0.156},
   {el:$('#p2'), a:0.206, b:0.312},
-  {el:$('#pf'), a:0.398, b:0.470},
+  {el:$('#pf'), a:0.372, b:0.470, ein:0.55},   // long dissolve in from the bow beat
   {el:$('#p3'), a:0.536, b:0.600},
   {el:$('#pc'), a:0.648, b:0.716},
   {el:$('#pl'), a:0.716, b:0.800},
@@ -607,9 +612,14 @@ const CALLOUTS=[
 const DWELL_D={A:1.68,W:0.62}, DWELL_M={A:1.36,W:0.62};
 function buildLUT(cfg){
   const wins=[PHASES[1],PHASES[2],PHASES[3],PHASES[4],PHASES[5],PHASES[6],PHASES[7]]
-    .map(ph=>({c:(ph.a+ph.b)/2, hw:(ph.b-ph.a)*cfg.W/2}));
+    .map(ph=>({c:(ph.a+ph.b)/2, hw:(ph.b-ph.a)*cfg.W/2, k:1}));
+  /* travel detent: the bow -> deck camera move (p 0.312-0.412) used to sit in a
+     density-1 gap, so one swipe whipped through it and the deck photo popped.
+     A half-strength bump over the move gives it real scroll room — the glide
+     and the dissolve now play out instead of snapping. */
+  wins.push({c:0.352, hw:0.062, k:0.55});
   const dens=t=>{let d=1;for(const w of wins){const u=Math.abs(t-w.c);
-    if(u<w.hw)d+=cfg.A*0.5*(1+Math.cos(Math.PI*u/w.hw));}return d;};
+    if(u<w.hw)d+=cfg.A*w.k*0.5*(1+Math.cos(Math.PI*u/w.hw));}return d;};
   const N=1024, F=new Float64Array(N+1); let acc=0;
   for(let i=1;i<=N;i++){acc+=dens((i-0.5)/N)/N;F[i]=acc;}
   for(let i=0;i<=N;i++)F[i]/=acc;
@@ -704,8 +714,8 @@ function applyPose(p){
 
 function phaseOpacity(p,ph){
   if(p<ph.a||p>ph.b) return 0;
-  const span=ph.b-ph.a, edge=span*0.34;
-  const inn=ph.first?1:Math.min(1,(p-ph.a)/edge), out=Math.min(1,(ph.b-p)/edge);
+  const span=ph.b-ph.a, edge=span*0.34, ein=span*(ph.ein||0.34);   // ein: per-scene fade-in length
+  const inn=ph.first?1:Math.min(1,(p-ph.a)/ein), out=Math.min(1,(ph.b-p)/edge);
   return smooth(Math.min(inn,out));
 }
 
