@@ -210,8 +210,9 @@ h1,h2,.h-display{font-family:var(--display);font-weight:700;text-transform:upper
 .pscene .cap .eyebrow,.pscene .cap .kline b,.pscene .cap h2{text-shadow:0 2px 20px rgba(0,0,0,.72),0 1px 3px rgba(0,0,0,.6)}
 .pscene .cap h2{font-size:clamp(28px,4.6vw,60px);line-height:.98;margin-top:10px}
 .pscene .cap h2 em{color:var(--red);font-style:normal}
-/* pc is a portrait shot: keep the helm + driver in frame when cover-cropped wide */
-#pc-img{object-position:50% 30%}
+/* pc is the landscape cockpit-from-the-stern cutout on black: center the helm.
+   (Portrait phones height-fit it, so only the x focal point matters there.) */
+#pc-img{object-position:52% 45%}
 #pl-img{object-position:50% 35%}
 #pl .cap{bottom:12%}
 @media(max-width:900px){
@@ -427,8 +428,8 @@ body.static #p0 h1 .ch{transform:none}
     <!-- PC · at the helm (from the windshield beat to a hand on the wheel) -->
     <div class="phase pscene" id="pc">
       <div class="frame"><img id="pc-img" src="assets/helm-drive.webp"
-        srcset="assets/helm-drive-mobile.webp 720w, assets/helm-drive.webp 1024w" sizes="100vw"
-        alt="At the helm of the Vexus DVX 20S, seen from the stern deck" loading="lazy" decoding="async"></div>
+        srcset="assets/helm-drive-mobile.webp 900w, assets/helm-drive.webp 1920w" sizes="100vw"
+        alt="Inside the Vexus DVX 20S cockpit from the stern — four gray VEXUS seats, the walk-through windshield, and twin Garmin screens at the helm" loading="lazy" decoding="async"></div>
       <div class="cap">
         <div class="eyebrow">Step <em>·</em> Aboard</div>
         <h2>Experience the most premium <em>boat ever made.</em></h2>
