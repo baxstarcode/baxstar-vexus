@@ -427,9 +427,11 @@ body.static #p0 h1 .ch{transform:none}
 
     <!-- PC · at the helm (from the windshield beat to a hand on the wheel) -->
     <div class="phase pscene" id="pc">
-      <div class="frame"><img id="pc-img" src="assets/helm-drive.webp"
-        srcset="assets/helm-drive-mobile.webp 900w, assets/helm-drive.webp 1920w" sizes="100vw"
-        alt="Inside the Vexus DVX 20S cockpit from the stern — four gray VEXUS seats, the walk-through windshield, and twin Garmin screens at the helm" loading="lazy" decoding="async"></div>
+      <div class="frame"><picture>
+        <source media="(orientation: portrait)" srcset="assets/cockpit-stern-portrait.webp">
+        <img id="pc-img" src="assets/cockpit-stern.webp"
+        alt="Inside the Vexus DVX 20S cockpit from the stern — four gray VEXUS seats, the walk-through windshield, and the helm station" loading="lazy" decoding="async">
+      </picture></div>
       <div class="cap">
         <div class="eyebrow">Step <em>·</em> Aboard</div>
         <h2>Experience the most premium <em>boat ever made.</em></h2>
