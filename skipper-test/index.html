@@ -517,6 +517,7 @@ stage.addEventListener('wheel', function(ev){
   var d = Math.abs(ev.deltaX) > Math.abs(ev.deltaY) ? ev.deltaX : ev.deltaY;
   if (ev.deltaMode === 1) d *= 30;
   dialTo(dial.target + d / 90);
+  clearTimeout(dial.snap); dial.snap = setTimeout(function(){ if (dial.live && !S.busy && !dial.drag) dialTo(Math.round(dial.target)); }, 170);
 }, { passive: false });
 stage.addEventListener('pointerdown', function(ev){
   if (!dial.live || S.busy) return;
