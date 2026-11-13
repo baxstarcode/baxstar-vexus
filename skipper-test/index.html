@@ -80,6 +80,7 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(-
 .orb.primary{background:var(--red);border-color:var(--red);color:#fff}
 .orb b{font-family:'Barlow Condensed','Arial Narrow',sans-serif;font-weight:700;font-size:1em;line-height:1;letter-spacing:.04em;text-transform:uppercase;text-align:center}
 .orb small{font-family:'Barlow Condensed','Arial Narrow',sans-serif;font-weight:600;font-size:.8em;line-height:1;letter-spacing:.04em}
+.orb.tight b{font-size:calc(var(--c) * .125);letter-spacing:.01em}
 .orb.reel{animation:orbReel .3s cubic-bezier(.5,0,.9,.4) forwards}
 @keyframes orbOut{from{transform:translate(var(--fx),var(--fy)) scale(.15);opacity:0}}
 @keyframes orbReel{to{transform:translate(var(--fx),var(--fy)) scale(.15);opacity:0}}
@@ -127,27 +128,35 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(-
 /* ---------- desktop: Skipper in the corner, quarter-arc fan, date dial ---------- */
 #stage.desk{width:100vw;height:100vh;min-height:560px;border-radius:0;box-shadow:none}
 .desk .host-body{max-width:760px}
-.desk #scrim{left:auto;right:70px;bottom:70px;margin:0 -1200px -1200px 0}
+.desk #scrim{left:auto;right:110px;bottom:110px;margin:0 -1200px -1200px 0}
 .desk.open #scrim{transform:scale(.82)}
-.desk .ripple{left:auto;right:70px;bottom:70px}
+.desk .ripple{left:auto;right:110px;bottom:110px}
 .desk .r1{margin:0 -118px -118px 0}.desk .r2{margin:0 -214px -214px 0}.desk .r3{margin:0 -320px -320px 0}
-.desk #fan{left:auto;right:70px;bottom:70px}
+.desk #fan{left:auto;right:110px;bottom:110px}
 .desk #mascot{left:calc(100% - 268px);bottom:34px}
-.desk.open #mascot{left:calc(100% - 112px);bottom:28px}
+.desk.open #mascot{left:calc(100% - 152px);bottom:68px}
 .desk #nudge{right:28px;bottom:122px}
-.desk #back{left:auto;right:124px;bottom:46px}
-.desk #keys{left:auto;right:182px;bottom:46px}
-.desk #line{left:auto;top:auto;right:10px;bottom:136px;width:60px;height:auto}
-.desk #line::before{left:29px;right:auto;top:0;bottom:0;width:2px;height:auto}
+.desk #back{left:auto;right:86px;bottom:164px}
+.desk #keys{left:auto;right:164px;bottom:86px}
+.desk #line{left:auto;top:auto;right:110px;bottom:110px;width:0;height:0}
+.desk #line::before{display:none}
 .desk #line .hint{display:none}
-.desk #picks{flex-direction:column-reverse}
+.desk #picks{position:static;display:block}
+.desk .pick{position:absolute;width:58px;height:58px;border-radius:50%;background:var(--panel);border:2px solid var(--red);justify-content:center;gap:0}
+.desk .pick i{display:none}
+.desk .pick span{font-size:11px;padding:0 4px}
 .desk.typing #line{visibility:visible}
-.desk #typebar{left:auto;top:auto;right:250px;bottom:24px;width:360px;height:44px}
+.desk #typebar{left:auto;top:auto;right:224px;bottom:88px;width:var(--bw,220px);height:44px;transition:width .18s ease;z-index:6}
+.desk.open #typebar{display:flex}
+.desk.typing #typebar{width:340px}
+.desk #send{display:none}
+.desk.typing #send{display:flex}
+.desk.typing #dial .darrow.lo{opacity:0;pointer-events:none}
 .desk #ask,.desk #send{height:44px}.desk #send{width:44px}
 .desk #cap,.desk #cap.compact{left:auto;top:auto;width:440px;text-align:right;align-items:flex-end}
 .desk #medal{left:auto;top:auto;margin:0}
 .desk #rail{display:none}
-#dial{position:absolute;right:70px;bottom:70px;width:0;height:0;display:none}
+#dial{position:absolute;right:110px;bottom:110px;width:0;height:0;display:none}
 .desk #dial.on{display:block}
 .dd{position:absolute;width:var(--c);height:var(--c);font-size:calc(var(--c) * .2);border-radius:50%;border:0;padding:0;background:var(--pearl);color:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;cursor:pointer;box-shadow:0 10px 24px rgba(0,0,0,.45);user-select:none;-webkit-user-select:none;touch-action:none}
 .dd .dw{font-family:'Barlow Condensed','Arial Narrow',sans-serif;font-weight:700;font-size:.72em;letter-spacing:.1em;line-height:1}
@@ -155,7 +164,7 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(-
 .dd .pr{font-family:'Barlow Condensed','Arial Narrow',sans-serif;font-weight:700;font-size:.86em;line-height:1}
 .dd[disabled]{background:#26262c;color:#8b8890;cursor:default;box-shadow:none}
 .dd.reel{animation:orbReel .3s cubic-bezier(.5,0,.9,.4) forwards}
-.darrow{position:absolute;width:44px;height:44px;border-radius:50%;padding:0;background:var(--panel);border:1.5px solid #4a4a52;color:var(--pearl);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.darrow{transition:opacity .15s ease;position:absolute;width:44px;height:44px;border-radius:50%;padding:0;background:var(--panel);border:1.5px solid #4a4a52;color:var(--pearl);display:flex;align-items:center;justify-content:center;cursor:pointer}
 
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:1ms !important;animation-delay:0ms !important;transition-duration:1ms !important}}
 </style>
@@ -170,7 +179,7 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(-
       <ul>
         <li><b>Prices are live.</b> They come from the Baxstar price feed each time you pick a day.</li>
         <li><b>Booking is real.</b> The last circle opens the FareHarbor calendar, where the open times and final price are.</li>
-        <li><b>Guided fishing only.</b> This page is a test and is not linked from the website.</li>
+        <li><b>Test page.</b> It is not linked from the website. Ice and pontoon prices show at checkout.</li>
       </ul>
     </div>
   </div>
@@ -222,7 +231,7 @@ var CFG = {
   fh: { base: 'https://fareharbor.com/embeds/book/', shortname: 'baxstarfishing', item: '309836', flow: '576827' },
   feeLine: '6% Provider Fee added at checkout',
   hours: [3, 4, 5, 6, 8],
-  groups: [ { id: 2, label: '1 to 2', say: '1 to 2 people' }, { id: 3, label: '3', say: '3 people' }, { id: 4, label: '4', say: '4 people' }, { id: 5, label: '5', say: '5 people' } ],
+  sizes: [ { id: 2, label: '1 to 2', say: '1 to 2 people' }, { id: 3, label: '3', say: '3 people' }, { id: 4, label: '4', say: '4 people' }, { id: 5, label: '5', say: '5 people' } ],
   /* Trip rules that the feed does not carry. Mirrors TRIPS[3] in bax1 baxstar_pricing.html (site figures read 2026-08-16). */
   tripRules: {
     3: { allowedSeasons: ['off_peak', 'shoulder'],
@@ -230,6 +239,31 @@ var CFG = {
          note: 'Limited availability. 5 to 6 PM evening windows only.' }
   },
   seasonOrder: ['holiday', 'peak', 'high', 'shoulder', 'off_peak'],
+  cacheKey: 'skipper-feed-v1',
+  /* Only used when the feed has never answered in this browser: open-water window as [MMDD, MMDD]. Dates only, no prices. */
+  fallbackSeason: [401, 1031],
+  consultUrl: 'https://www.baxstarfishing.com/fishing-consultations',
+  cats: [
+    { id: 'ice', label: 'Ice fishing', short: 'Ice', react: 'Hard water it is.' },
+    { id: 'open', label: 'Open water fishing', short: 'Open water', react: 'Open water. Good call.' },
+    { id: 'pontoon', label: 'Pontoon rental', short: 'Pontoon', react: 'Sun and open water.' },
+    { id: 'consult', label: 'Consultations', tight: true }
+  ],
+  /* FareHarbor item names and ids as read from the account on 2026-11-12. ASSUMPTION: the month lists below (0 = Jan). */
+  months: { ice: [11, 0, 1, 2], pontoon: [4, 5, 6, 7, 8] },
+  groups: {
+    ice: [
+      { label: 'Guided trip', items: [{ short: 'Guided ice trip', id: '353022' }] },
+      { label: 'Day house', items: [{ short: 'Wooden house', id: '420574' }, { short: 'Aluminum house', id: '346191' }] },
+      { label: 'Overnight house', items: [{ short: "21' RV Extreme", id: '593973' }, { short: "17' Range Runner", id: '422226' }, { short: "17' Hybrid II", id: '681248' }, { short: "17' Luxury", id: '681247' }, { short: "24' Pop Out", id: '690580' }, { short: "24' RV Extreme", id: '690777' }] },
+      { label: 'Date night', items: [{ short: 'Date night on the ice', id: '517727' }] }
+    ],
+    pontoon: [
+      { label: 'Single day', items: [{ short: 'Single-day pontoon', id: '309867' }] },
+      { label: 'Multi-day', items: [{ short: 'Multi-day pontoon', id: '315912' }] },
+      { label: 'Lake cruise', items: [{ short: 'Group lake cruise', id: '309865' }] }
+    ]
+  },
   react: {
     h3: 'After-work bite.', h4: 'Half day on the water.', h5: 'The sweet spot.', h6: 'Built for serious anglers.', h8: 'Not for the meek.',
     g2: 'Plenty of elbow room.', g3: 'Solid crew.', g4: 'Four it is.', g5: 'Five is the boat max.'
@@ -242,7 +276,7 @@ var stage = $('stage'), fan = $('fan'), rail = $('rail'), cap = $('cap'), medal 
 var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 var DOW = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 var reduce = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
-var S = { open: false, step: 0, hours: null, guests: null, month: null, date: null, busy: false, typing: false, said: null, feed: null, feedState: 'loading' };
+var S = { open: false, step: 0, picks: [], cat: null, group: null, item: null, hours: null, guests: null, month: null, date: null, kick: null, busy: false, typing: false, said: null, feed: null, feedState: 'loading', feedAt: 0 };
 window.__skipper = S; /* test hook, read-only use */
 
 /* ---------- price feed ---------- */
@@ -254,14 +288,26 @@ function validFeed(d){
   }
   return true;
 }
-function loadFeed(){
+function readCache(){
+  try { var c = JSON.parse(localStorage.getItem(CFG.cacheKey) || 'null'); return (c && c.v === 1 && validFeed(c.feed)) ? c : null; } catch (e) { return null; }
+}
+function fetchFeedOnce(){
   var ctrl = ('AbortController' in window) ? new AbortController() : null;
   var timer = setTimeout(function(){ if (ctrl) ctrl.abort(); }, CFG.feedTimeoutMs);
   return fetch(CFG.feedUrl, { cache: 'no-store', signal: ctrl ? ctrl.signal : undefined })
     .then(function(r){ if (!r.ok) throw new Error('feed ' + r.status); return r.json(); })
-    .then(function(d){ if (!validFeed(d)) throw new Error('feed shape'); S.feed = d; S.feedState = 'ok'; return d; })
-    .catch(function(){ if (!S.feed) S.feedState = 'fail'; return null; })
-    .then(function(v){ clearTimeout(timer); return v; });
+    .then(function(d){ clearTimeout(timer); if (!validFeed(d)) throw new Error('feed shape'); return d; }, function(e){ clearTimeout(timer); throw e; });
+}
+/* One retry, then fall back to the last good copy this browser saw. A slow feed never blocks the flow. */
+function loadFeed(){
+  return fetchFeedOnce()
+    .catch(function(){ return new Promise(function(res){ setTimeout(res, 700); }).then(fetchFeedOnce); })
+    .then(function(d){
+      S.feed = d; S.feedState = 'ok'; S.feedAt = Date.now();
+      try { localStorage.setItem(CFG.cacheKey, JSON.stringify({ v: 1, at: S.feedAt, feed: d })); } catch (e) {}
+      return d;
+    })
+    .catch(function(){ if (S.feedState !== 'cached') S.feedState = S.feed ? 'cached' : 'fail'; return null; });
 }
 function seasonFor(date){
   if (!S.feed) return null;
@@ -305,37 +351,43 @@ function money(n){ return '$' + Math.round(n).toLocaleString('en-US'); }
 function moneyExact(n){ var r = Math.round(n * 100) / 100; return r % 1 === 0 ? money(r) : '$' + r.toFixed(2); }
 function today0(){ var d = new Date(); d.setHours(0, 0, 0, 0); return d; }
 function daysIn(y, m){ return new Date(y, m + 1, 0).getDate(); }
-function bookable(hours, date){
+function bookable(date){
   if (date < today0()) return false;
+  if (S.cat !== 'open') return true;
+  if (!S.feed) { var md = (date.getMonth() + 1) * 100 + date.getDate(); return md >= CFG.fallbackSeason[0] && md <= CFG.fallbackSeason[1]; }
   var s = seasonFor(date);
-  return !!s && allowed(hours, s);
+  return !!s && allowed(S.hours, s);
 }
-function monthsFor(hours){
-  var out = [], t = today0();
+function dayPrice(date){ return (S.cat === 'open' && S.feed) ? priceFor(S.hours, S.guests, date) : null; }
+function monthsFor(){
+  var out = [], t = today0(), allow = S.cat === 'open' ? null : (CFG.months[S.cat] || null);
   for (var k = 0; k < 12 && out.length < 7; k++) {
     var y = t.getFullYear() + Math.floor((t.getMonth() + k) / 12), m = (t.getMonth() + k) % 12, any = false;
-    for (var d = 1; d <= daysIn(y, m); d++) if (bookable(hours, new Date(y, m, d))) { any = true; break; }
+    if (allow && allow.indexOf(m) === -1) continue;
+    for (var d = 1; d <= daysIn(y, m); d++) if (bookable(new Date(y, m, d))) { any = true; break; }
     if (any) out.push({ y: y, m: m });
   }
   return out;
 }
+/* FareHarbor opens on the month. A day-level link was tested 2026-11-13 and still lands on the month view. */
 function fhUrl(){
-  var u = CFG.fh.base + CFG.fh.shortname + '/items/' + CFG.fh.item + '/';
+  var id = (S.cat !== 'open' && S.item) ? S.item.id : CFG.fh.item;
+  var u = CFG.fh.base + CFG.fh.shortname + '/items/' + id + '/';
   if (S.month) u += 'calendar/' + S.month.y + '/' + ('0' + (S.month.m + 1)).slice(-2) + '/';
-  return u + '?flow=' + CFG.fh.flow + '&full-items=yes&back=' + encodeURIComponent(location.href.split('#')[0]);
+  return u + '?' + (id === CFG.fh.item ? 'flow=' + CFG.fh.flow + '&' : '') + 'full-items=yes&back=' + encodeURIComponent(location.href.split('#')[0]);
 }
 
 /* ---------- layout ---------- */
 function isDesk(){ return window.innerWidth >= 900; }
-var AX = 70; /* desktop: Skipper's center sits this far from the right and bottom edges */
+var AX = 110, PR = 237; /* desktop: Skipper's center sits this far from the right and bottom edges */
 function geom(n){
   var W = stage.clientWidth, C, spread;
   if (isDesk()) {
     var Hh = stage.clientHeight; C = n >= 6 ? 72 : 84;
-    var stepD = n > 1 ? 70 / (n - 1) : 0;
-    var Rd = n > 1 ? (C + 12) / (2 * Math.sin(stepD / 2 * Math.PI / 180)) : 250;
-    Rd = Math.max(250, Math.min(Rd, Math.min(W, Hh) - AX - C / 2 - 16));
-    return { C: C, R: Rd, a0: -80, a1: -10, home: -45, fr: C >= 80 ? 0.18 : 0.21 };
+    var stepD = n > 1 ? 62 / (n - 1) : 0;
+    var Rd = n > 1 ? (C + 12) / (2 * Math.sin(stepD / 2 * Math.PI / 180)) : 320;
+    Rd = Math.max(320, Math.min(Rd, Math.max(320, Math.min(W, Hh) - AX - C / 2 - 16)));
+    return { C: C, R: Rd, a0: -76, a1: -14, home: -45, fr: C >= 80 ? 0.18 : 0.21 };
   }
   if (n >= 7) { C = W < 380 ? 56 : 64; spread = 78; }
   else if (n === 6) { C = W < 380 ? 62 : 70; spread = 76; }
@@ -407,7 +459,7 @@ function drawFan(items){
   items.forEach(function(it, i){
     var a = n === 1 ? g.home : (g.a0 + i * (g.a1 - g.a0) / (n - 1));
     var rad = a * Math.PI / 180, x = g.R * Math.sin(rad), y = -g.R * Math.cos(rad);
-    var orb = el('button', 'orb' + (it.primary ? ' primary' : ''));
+    var orb = el('button', 'orb' + (it.primary ? ' primary' : '') + (it.tight ? ' tight' : ''));
     orb.type = 'button';
     orb.style.setProperty('--c', g.C + 'px');
     orb.style.setProperty('--fr', String(g.fr));
@@ -442,7 +494,7 @@ function place(g, withMedal){
 
 /* ---------- desktop date dial: days ride the same arc around Skipper and the arc turns ---------- */
 var dial = { el: $('dial'), items: [], off: 0, target: 0, raf: 0, g: null, drag: null, moved: false, live: false };
-function dialOff(){ dial.live = false; dial.items = []; if (dial.raf) cancelAnimationFrame(dial.raf); dial.raf = 0; dial.drag = null; clear(dial.el); dial.el.classList.remove('on'); }
+function dialOff(){ stage.style.removeProperty('--bw'); dial.live = false; dial.items = []; if (dial.raf) cancelAnimationFrame(dial.raf); dial.raf = 0; dial.drag = null; clear(dial.el); dial.el.classList.remove('on'); }
 function dialLayout(){
   var g = dial.g;
   for (var i = 0; i < dial.items.length; i++) {
@@ -468,17 +520,19 @@ function dialTo(t){
 }
 function drawDial(){
   dialOff();
-  var H = stage.clientHeight, R = Math.max(300, Math.min(400, H - 330)), C = 72;
+  var H = stage.clientHeight, R = Math.max(330, Math.min(400, H - 330)), C = 72;
   var dl = 2 * Math.asin((C + 12) / (2 * R)) * 180 / Math.PI;
   var g = dial.g = { R: R, C: C, delta: dl, home: -45, half: Math.floor(37 / dl) * dl + dl * 0.05 };
   var arrowAt = Math.min(g.half + dl * 1.05, 46);
+  /* the resting text bar stops short of the lower dial arrow */
+  stage.style.setProperty('--bw', Math.max(150, Math.min(220, Math.floor(AX + g.R * Math.sin((45 + arrowAt) * Math.PI / 180) - 22 - 12 - 224))) + 'px');
   var y = S.month.y, m = S.month.m, first = -1;
   for (var d = 1; d <= daysIn(y, m); d++) (function(d){
-    var date = new Date(y, m, d), ok = bookable(S.hours, date), price = ok ? priceFor(S.hours, S.guests, date) : null;
+    var date = new Date(y, m, d), ok = bookable(date), price = ok ? dayPrice(date) : null;
     var b = el('button', 'dd'); b.type = 'button';
     b.appendChild(el('span', 'dw', DOW[date.getDay()].toUpperCase()));
     b.appendChild(el('span', 'dn', String(d)));
-    b.appendChild(el('span', 'pr', ok ? (price != null ? money(price) : 'Open') : '\u2013'));
+    b.appendChild(el('span', 'pr', ok ? (price != null ? money(price) : '') : '\u2013'));
     b.insertAdjacentHTML('beforeend', ringSvg());
     b.setAttribute('aria-label', DOW[date.getDay()] + ' ' + MONTHS[m] + ' ' + d + (ok ? (price != null ? ', ' + money(price) : '') : ', not offered'));
     var it = { el: b, x: 0, y: 0 }, idx = d - 1;
@@ -490,13 +544,13 @@ function drawDial(){
         S.busy = true;
         dial.items.forEach(function(o){ if (o !== it && o.el.style.display !== 'none') { o.el.style.setProperty('--fx', (-o.x) + 'px'); o.el.style.setProperty('--fy', (-o.y) + 'px'); o.el.classList.add('reel'); } });
         dialTo(idx); glance(g.home);
-        runRing(b, loadFeed()).then(function(){ S.busy = false; glance(null); S.date = date; S.step = 4; S.said = null; render(); });
+        runRing(b, loadFeed()).then(function(){ S.busy = false; glance(null); commit('day', DOW[date.getDay()] + ' ' + date.getDate(), { date: date, kick: null }); });
       });
     }
     dial.items.push(it); dial.el.appendChild(b);
   })(d);
   var mk = function(ang, label, path, by){
-    var a = el('button', 'darrow'); a.type = 'button'; a.setAttribute('aria-label', label);
+    var a = el('button', 'darrow' + (by < 0 ? ' lo' : '')); a.type = 'button'; a.setAttribute('aria-label', label);
     a.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="' + path + '"/></svg>';
     var rad = ang * Math.PI / 180;
     a.style.left = (g.R * Math.sin(rad) - 22) + 'px'; a.style.top = (-g.R * Math.cos(rad) - 22) + 'px';
@@ -540,7 +594,7 @@ function drawRail(){
   clear(rail);
   var y = S.month.y, m = S.month.m, firstOpen = null;
   for (var d = 1; d <= daysIn(y, m); d++) (function(d){
-    var date = new Date(y, m, d), ok = bookable(S.hours, date), price = ok ? priceFor(S.hours, S.guests, date) : null;
+    var date = new Date(y, m, d), ok = bookable(date), price = ok ? dayPrice(date) : null;
     var b = el('button', 'day'); b.type = 'button';
     b.style.animationDelay = Math.min(d * 18, 400) + 'ms';
     var dot = el('span', 'dot');
@@ -548,7 +602,7 @@ function drawRail(){
     dot.appendChild(el('span', 'dn', String(d)));
     dot.insertAdjacentHTML('beforeend', ringSvg());
     b.appendChild(dot);
-    b.appendChild(el('span', 'pr', ok ? (price != null ? money(price) : 'Open') : '–'));
+    b.appendChild(el('span', 'pr', ok ? (price != null ? money(price) : '') : '–'));
     b.setAttribute('aria-label', DOW[date.getDay()] + ' ' + MONTHS[m] + ' ' + d + (ok ? (price != null ? ', ' + money(price) : '') : ', not offered'));
     if (!ok) b.disabled = true;
     else {
@@ -558,7 +612,7 @@ function drawRail(){
         S.busy = true; rail.classList.add('busy'); b.classList.add('picked');
         runRing(dot, loadFeed()).then(function(){
           S.busy = false; rail.classList.remove('busy');
-          S.date = date; S.step = 4; S.said = null; render();
+          commit('day', DOW[date.getDay()] + ' ' + date.getDate(), { date: date, kick: null });
         });
       });
     }
@@ -566,110 +620,127 @@ function drawRail(){
   })(d);
   if (firstOpen) setTimeout(function(){ rail.scrollLeft = Math.max(0, firstOpen.offsetLeft - 22); }, 0);
 }
+function flow(){
+  if (!S.cat || S.cat === 'consult') return ['cat'];
+  if (S.cat === 'open') return ['cat', 'hours', 'guests', 'month', 'day', 'sum'];
+  var f = ['cat', 'item'];
+  if (S.group && S.group.items.length > 1) f.push('house');
+  return f.concat(['month', 'day', 'sum']);
+}
+function commit(key, label, patch){
+  for (var k in patch) S[k] = patch[k];
+  S.picks.push({ key: key, label: label }); S.step++; S.said = null; S.typing = false; render();
+}
+var CLEAR = { cat: ['cat', 'group', 'item', 'hours', 'guests', 'month', 'date'], item: ['group', 'item', 'month', 'date'], house: ['item', 'month', 'date'],
+  hours: ['hours', 'guests', 'month', 'date'], guests: ['guests', 'month', 'date'], month: ['month', 'date'], day: ['date'] };
+function goStep(i){
+  if (i < 0) i = 0;
+  var key = flow()[i];
+  (CLEAR[key] || []).forEach(function(k){ S[k] = null; });
+  S.picks = S.picks.slice(0, i); S.step = i; S.said = null; S.kick = null; S.typing = false; render();
+}
 function drawPicks(){
   var box = $('picks'); clear(box);
-  var list = [];
-  if (S.hours != null) list.push({ step: 0, n: '1', label: S.hours + ' hr' });
-  if (S.guests != null) list.push({ step: 1, n: '2', label: groupOf(S.guests).label + (S.guests === 2 ? '' : ' people') });
-  if (S.month) list.push({ step: 2, n: '3', label: MONTHS[S.month.m] + ' ' + S.month.y });
-  if (S.date) list.push({ step: 3, n: '4', label: DOW[S.date.getDay()] + ' ' + S.date.getDate() });
-  list.forEach(function(p){
+  var desk = isDesk();
+  S.picks.forEach(function(p, i){
     var b = el('button', 'pick'); b.type = 'button';
     b.setAttribute('aria-label', 'Change ' + p.label);
-    b.appendChild(el('i', null, p.n)); b.appendChild(el('span', null, p.label));
-    b.addEventListener('click', function(){ if (!S.busy) goStep(p.step); });
+    b.appendChild(el('i', null, String(i + 1))); b.appendChild(el('span', null, p.label));
+    if (desk) { var a = (-76 + i * 15.5) * Math.PI / 180; b.style.left = (PR * Math.sin(a) - 29) + 'px'; b.style.top = (-PR * Math.cos(a) - 29) + 'px'; }
+    b.addEventListener('click', function(){ if (!S.busy) goStep(i); });
     box.appendChild(b);
   });
-  $('lineHint').style.display = list.length ? 'none' : '';
+  $('lineHint').style.display = S.picks.length ? 'none' : '';
 }
-function groupOf(id){ for (var i = 0; i < CFG.groups.length; i++) if (CFG.groups[i].id === id) return CFG.groups[i]; return CFG.groups[0]; }
-function goStep(step){
-  if (step <= 0) S.hours = null;
-  if (step <= 1) S.guests = null;
-  if (step <= 2) S.month = null;
-  if (step <= 3) S.date = null;
-  S.step = step; S.said = null; S.typing = false; render();
-}
+function groupOf(id){ for (var i = 0; i < CFG.sizes.length; i++) if (CFG.sizes[i].id === id) return CFG.sizes[i]; return CFG.sizes[0]; }
 function caption(kicker, say, sub, compact){
   $('kicker').textContent = kicker; $('say').textContent = say; $('sub').textContent = sub || '';
   cap.classList.toggle('compact', !!compact);
   cap.classList.remove('in'); void cap.offsetWidth; cap.classList.add('in');
 }
 function longDate(d){ return DOW[d.getDay()] + ', ' + MONTHS[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear(); }
+function tripTitle(){ return S.cat === 'open' ? S.hours + '-hour trip' : ((S.item && S.item.short) || (S.group && S.group.label) || 'Your trip'); }
 
 function render(){
   stage.classList.toggle('desk', isDesk());
   stage.classList.toggle('open', S.open);
-  stage.classList.toggle('typing', S.open && S.typing);
+  stage.classList.toggle('typing', S.open && S.typing); askHint();
   $('mascot').setAttribute('aria-label', S.open ? 'Close Skipper' : 'Open Skipper');
   $('mascot').setAttribute('aria-expanded', String(S.open));
   if (!S.open) return;
   setMedalSize();
   drawPicks();
   medal.classList.remove('on'); rail.classList.remove('on'); clear(rail); clear(fan); dialOff();
-  var live = S.feedState === 'ok';
+  var f = flow(); if (S.step >= f.length) S.step = f.length - 1;
+  var key = f[S.step], live = !!S.feed, kick = S.kick || 'Skipper';
+  var pick = function(k, label, patch){ return function(orb, g, a){ pickOrb(orb, g, a).then(function(){ commit(k, label, patch); }); }; };
 
-  if (S.step === 0) {
-    caption('Skipper', 'How long do you want to fish?',
-      live ? 'Prices are live from the Baxstar price feed.' : (S.feedState === 'loading' ? 'Getting live prices.' : 'The price feed did not answer. Prices show at checkout.'));
+  if (key === 'cat') {
+    caption('Skipper', 'What are we booking?', isDesk() ? 'Pick a circle. No typing needed.' : 'Thumb a circle. No typing needed.');
+    place(drawFan(CFG.cats.map(function(c){
+      if (c.id === 'consult') return { label: c.label, tight: true, go: function(orb, g, a){ pickOrb(orb, g, a).then(function(){ location.href = CFG.consultUrl; }); } };
+      return { label: c.label, go: pick('cat', c.short, { cat: c.id, kick: c.react }) };
+    })));
+  } else if (key === 'hours') {
+    caption(kick, 'How long do you want to fish?',
+      live ? (S.feedState === 'ok' ? 'Prices are live from the Baxstar price feed.' : 'Showing the last prices I read. I check again when you pick a day.')
+           : (S.feedState === 'loading' ? 'Getting live prices.' : 'The price feed did not answer. Prices show at checkout.'));
     place(drawFan(CFG.hours.map(function(h){
-      return { label: h + ' hours', sub: live ? 'from ' + money(S.feed.base[h]) : '', go: function(orb, g, a){
-        pickOrb(orb, g, a).then(function(){ S.hours = h; S.step = 1; render(); });
-      } };
+      return { label: h + ' hours', sub: live ? 'from ' + money(S.feed.base[h]) : '', go: pick('hours', h + ' hr', { hours: h, kick: CFG.react['h' + h] }) };
     })));
-  } else if (S.step === 1) {
-    caption(CFG.react['h' + S.hours] || 'Skipper', 'How many people are in your group total?', 'Include everyone, including children of all ages.');
-    place(drawFan(CFG.groups.map(function(gp){
+  } else if (key === 'guests') {
+    caption(kick, 'How many people are in your group total?', 'Include everyone, including children of all ages.');
+    place(drawFan(CFG.sizes.map(function(gp){
       var extra = live ? addOnTotal(S.hours, gp.id) : 0;
-      return { label: gp.label, sub: live ? (extra > 0 ? '+' + moneyExact(extra) : 'base price') : '', go: function(orb, g, a){
-        pickOrb(orb, g, a).then(function(){ S.guests = gp.id; S.step = 2; render(); });
-      } };
+      return { label: gp.label, sub: live ? (extra > 0 ? '+' + moneyExact(extra) : 'base price') : '', go: pick('guests', gp.label + (gp.id === 2 ? '' : ' people'), { guests: gp.id, kick: CFG.react['g' + gp.id] }) };
     })));
-  } else if (S.step === 2) {
-    var rule = CFG.tripRules[S.hours], months = live ? monthsFor(S.hours) : [];
-    if (!months.length) {
-      caption(CFG.react['g' + S.guests] || 'Skipper', 'Pick your date on FareHarbor.', 'I could not load the season calendar, so the booking page takes it from here.');
-      place(drawFan([{ label: 'Open calendar', primary: true, go: function(orb, g, a){ pickOrb(orb, g, a).then(function(){ location.href = fhUrl(); }); } }]));
-    } else {
-      caption(CFG.react['g' + S.guests] || 'Skipper', 'Which month?', rule && rule.note ? rule.note : 'Open-water trips run April through October.');
-      place(drawFan(months.map(function(mo){
-        return { label: MONTHS[mo.m], sub: String(mo.y), go: function(orb, g, a){
-          pickOrb(orb, g, a).then(function(){ S.month = mo; S.step = 3; render(); });
-        } };
-      })));
-    }
-  } else if (S.step === 3) {
+  } else if (key === 'item') {
+    caption(kick, S.cat === 'ice' ? 'What kind of ice trip?' : 'Which pontoon option?', 'Prices for these show at checkout.');
+    place(drawFan(CFG.groups[S.cat].map(function(gr){
+      return { label: gr.label, go: pick('item', gr.label, gr.items.length > 1 ? { group: gr, kick: 'Noted.' } : { group: gr, item: gr.items[0], kick: 'Noted.' }) };
+    })));
+  } else if (key === 'house') {
+    caption(kick, 'Which house?', 'Sizes and prices are on the booking page.');
+    place(drawFan(S.group.items.map(function(it){ return { label: it.short, go: pick('house', it.short, { item: it, kick: 'Good pick.' }) }; })));
+  } else if (key === 'month') {
+    var rule = S.cat === 'open' ? CFG.tripRules[S.hours] : null, months = monthsFor();
+    caption(kick, 'Which month?', S.cat === 'open' ? (rule && rule.note ? rule.note : 'Open-water trips run April through October.') : '');
+    place(drawFan(months.map(function(mo){
+      return { label: MONTHS[mo.m], sub: String(mo.y), go: pick('month', MONTHS[mo.m] + ' ' + mo.y, { month: mo, kick: MONTHS[mo.m] + '. Good month.' }) };
+    })));
+  } else if (key === 'day') {
+    var priced = S.cat === 'open' && live;
     if (isDesk()) {
-      caption(MONTHS[S.month.m] + '. Good month.', 'Pick your day.', 'Each day shows the price for your group. Scroll, drag or use the arrows to turn the dial.');
+      caption(kick, 'Pick your day.', (priced ? 'Each day shows the price for your group. ' : '') + 'Scroll, drag or use the arrows to turn the dial.');
       place(drawDial());
     } else {
-      caption(MONTHS[S.month.m] + '. Good month.', 'Pick your day.', 'Each day shows the price for your group. Swipe sideways for more days.');
+      caption(kick, 'Pick your day.', (priced ? 'Each day shows the price for your group. ' : '') + 'Swipe sideways for more days.');
       place(null); rail.classList.add('on'); drawRail();
     }
   } else {
-    var price = priceFor(S.hours, S.guests, S.date);
-    caption('Skipper', S.said || 'Here is your trip.', '', true);
-    $('mStatus').textContent = price != null ? 'LIVE PRICE' : 'PRICE AT CHECKOUT';
-    $('mTitle').textContent = S.hours + '-hour trip';
-    $('mLine').textContent = groupOf(S.guests).say + ' · ' + DOW[S.date.getDay()] + ', ' + MONTHS[S.date.getMonth()] + ' ' + S.date.getDate();
+    var price = dayPrice(S.date), dayTxt = MONTHS[S.date.getMonth()] + ' ' + S.date.getDate();
+    caption('Skipper', S.said || ('Here is your trip. Book it, then tap ' + dayTxt + ' on the calendar.'), '', true);
+    $('mStatus').textContent = price != null ? (S.feedState === 'ok' ? 'LIVE PRICE' : 'LAST PRICE READ') : 'PRICE AT CHECKOUT';
+    $('mTitle').textContent = tripTitle();
+    $('mLine').textContent = (S.cat === 'open' ? groupOf(S.guests).say + ' · ' : '') + DOW[S.date.getDay()] + ', ' + dayTxt;
     $('mPrice').textContent = price != null ? money(price) : 'See checkout';
     $('mPrice').classList.toggle('words', price == null);
-    $('mFee').textContent = CFG.feeLine;
+    $('mFee').textContent = price != null ? CFG.feeLine : '';
     var stamp = '';
-    if (S.feed && S.feed.generated) { var gdt = new Date(S.feed.generated); if (!isNaN(gdt)) stamp = 'Price feed read ' + gdt.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }); }
-    if (S.feed && S.feed.sale && Object.keys(S.feed.sale).length) stamp = 'A sale is running. Checkout shows the final price.';
+    if (price != null && S.feedAt) stamp = 'Price feed read ' + new Date(S.feedAt).toLocaleString([], S.feedState === 'ok' ? { hour: 'numeric', minute: '2-digit' } : { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+    if (price != null && S.feed && S.feed.sale && Object.keys(S.feed.sale).length) stamp = 'A sale is running. Checkout shows the final price.';
     $('mStamp').textContent = stamp;
     medal.classList.add('on');
     place(drawFan([
-      { label: 'Change it', go: function(){ S.said = 'Tap any pick up top and I deal that question again.'; caption('Skipper', S.said, '', true); } },
+      { label: 'Change it', go: function(){ S.said = 'Tap any pick and I deal that question again.'; caption('Skipper', S.said, '', true); } },
       { label: 'Book it', primary: true, go: function(orb, g, a){ pickOrb(orb, g, a).then(function(){ location.href = fhUrl(); }); } },
       { label: 'Text my crew', go: function(){ shareTrip(price); } },
-      { label: 'Ask Skipper', go: function(){ S.typing = true; stage.classList.add('typing'); S.said = 'Typed questions are not wired up on this test page yet.'; caption('Skipper', S.said, '', true); try { $('ask').focus(); } catch (e) {} } }
+      { label: 'Ask Skipper', go: function(){ S.typing = true; stage.classList.add('typing'); S.said = 'Typed questions are not wired up yet. That is the next version.'; caption('Skipper', S.said, '', true); try { $('ask').focus(); } catch (e) {} } }
     ]), true);
   }
 }
 function shareTrip(price){
-  var text = 'Fishing trip idea: ' + S.hours + '-hour private guided trip with Baxstar Fishing, ' + groupOf(S.guests).say + ', ' + longDate(S.date) + '. ' +
+  var text = 'Trip idea with Baxstar Fishing: ' + tripTitle() + (S.cat === 'open' ? ', ' + groupOf(S.guests).say : '') + ', ' + longDate(S.date) + '. ' +
     (price != null ? money(price) + ' plus a 6% provider fee. ' : '') + 'Book here: ' + fhUrl();
   var done = function(msg){ S.said = msg; caption('Skipper', msg, '', true); };
   if (navigator.share) navigator.share({ text: text }).then(function(){ done('Crew text is ready. You hit send.'); }).catch(function(){});
@@ -711,8 +782,19 @@ else {
 /* ---------- controls ---------- */
 $('mascot').addEventListener('click', function(){ if (S.busy) return; S.open = !S.open; S.typing = false; render(); });
 $('back').addEventListener('click', function(){ if (S.busy || S.step === 0) return; goStep(S.step - 1); });
-$('keys').addEventListener('click', function(){ if (S.busy) return; S.typing = !S.typing; stage.classList.toggle('typing', S.typing); if (S.typing) { try { $('ask').focus(); } catch (e) {} } });
-function sendAsk(){ S.typing = false; stage.classList.remove('typing'); $('ask').value = ''; caption('Skipper', 'Typed questions are not wired up on this test page yet. The circles are live.', '', S.step === 4); }
+var keysWas = false;
+$('keys').addEventListener('pointerdown', function(){ keysWas = S.typing; });
+$('keys').addEventListener('click', function(){
+  if (S.busy) return;
+  if (isDesk()) { if (keysWas) { try { $('ask').blur(); } catch (e) {} } else { try { $('ask').focus(); } catch (e) {} } keysWas = false; return; }
+  S.typing = !S.typing; stage.classList.toggle('typing', S.typing); if (S.typing) { try { $('ask').focus(); } catch (e) {} }
+});
+/* desktop: the text bar is always on screen; it widens while the cursor is in it */
+function askHint(){ $('ask').placeholder = isDesk() && !S.typing ? 'Ask Skipper' : 'Ask Skipper anything'; }
+$('ask').addEventListener('focus', function(){ if (isDesk() && S.open) { S.typing = true; stage.classList.add('typing'); askHint(); } });
+$('send').addEventListener('mousedown', function(ev){ if (isDesk()) ev.preventDefault(); }); /* keep the cursor in the bar so the click lands */
+$('ask').addEventListener('blur', function(){ if (isDesk()) { S.typing = false; stage.classList.remove('typing'); askHint(); } });
+function sendAsk(){ S.typing = false; stage.classList.remove('typing'); $('ask').value = ''; if (isDesk()) { try { $('ask').blur(); } catch (e) {} } caption('Skipper', 'Typed questions are not wired up yet. That is the next version. The circles work now.', '', flow()[S.step] === 'sum'); }
 $('send').addEventListener('click', sendAsk);
 $('ask').addEventListener('keydown', function(ev){ if (ev.key === 'Enter') sendAsk(); });
 document.addEventListener('keydown', function(ev){
@@ -721,7 +803,8 @@ document.addEventListener('keydown', function(ev){
 });
 var rz; window.addEventListener('resize', function(){ clearTimeout(rz); rz = setTimeout(function(){ if (S.open && !S.busy) render(); }, 150); });
 
-loadFeed().then(function(){ if (S.open && !S.busy) render(); });
+(function(){ var c = readCache(); if (c) { S.feed = c.feed; S.feedAt = c.at; S.feedState = 'cached'; } })();
+loadFeed().then(function(){ if (S.open && !S.busy && flow()[S.step] !== 'day') render(); });
 render();
 })();
 </script>
