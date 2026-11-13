@@ -124,6 +124,39 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(-
 #mcopy b em{font-style:normal;color:var(--red)}
 #mcopy small{font-family:'Barlow Condensed','Arial Narrow',sans-serif;font-weight:600;font-size:12px;line-height:1;letter-spacing:.08em;color:#c8c5bd}
 
+/* ---------- desktop: Skipper in the corner, quarter-arc fan, date dial ---------- */
+#stage.desk{width:100vw;height:100vh;min-height:560px;border-radius:0;box-shadow:none}
+.desk .host-body{max-width:760px}
+.desk #scrim{left:auto;right:70px;bottom:70px;margin:0 -1200px -1200px 0}
+.desk.open #scrim{transform:scale(.82)}
+.desk .ripple{left:auto;right:70px;bottom:70px}
+.desk .r1{margin:0 -118px -118px 0}.desk .r2{margin:0 -214px -214px 0}.desk .r3{margin:0 -320px -320px 0}
+.desk #fan{left:auto;right:70px;bottom:70px}
+.desk #mascot{left:calc(100% - 268px);bottom:34px}
+.desk.open #mascot{left:calc(100% - 112px);bottom:28px}
+.desk #nudge{right:28px;bottom:122px}
+.desk #back{left:auto;right:124px;bottom:46px}
+.desk #keys{left:auto;right:182px;bottom:46px}
+.desk #line{left:auto;top:auto;right:10px;bottom:136px;width:60px;height:auto}
+.desk #line::before{left:29px;right:auto;top:0;bottom:0;width:2px;height:auto}
+.desk #line .hint{display:none}
+.desk #picks{flex-direction:column-reverse}
+.desk.typing #line{visibility:visible}
+.desk #typebar{left:auto;top:auto;right:250px;bottom:24px;width:360px;height:44px}
+.desk #ask,.desk #send{height:44px}.desk #send{width:44px}
+.desk #cap,.desk #cap.compact{left:auto;top:auto;width:440px;text-align:right;align-items:flex-end}
+.desk #medal{left:auto;top:auto;margin:0}
+.desk #rail{display:none}
+#dial{position:absolute;right:70px;bottom:70px;width:0;height:0;display:none}
+.desk #dial.on{display:block}
+.dd{position:absolute;width:var(--c);height:var(--c);font-size:calc(var(--c) * .2);border-radius:50%;border:0;padding:0;background:var(--pearl);color:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;cursor:pointer;box-shadow:0 10px 24px rgba(0,0,0,.45);user-select:none;-webkit-user-select:none;touch-action:none}
+.dd .dw{font-family:'Barlow Condensed','Arial Narrow',sans-serif;font-weight:700;font-size:.72em;letter-spacing:.1em;line-height:1}
+.dd .dn{font-family:'Bebas Neue','Arial Narrow',sans-serif;font-size:1.55em;line-height:.9}
+.dd .pr{font-family:'Barlow Condensed','Arial Narrow',sans-serif;font-weight:700;font-size:.86em;line-height:1}
+.dd[disabled]{background:#26262c;color:#8b8890;cursor:default;box-shadow:none}
+.dd.reel{animation:orbReel .3s cubic-bezier(.5,0,.9,.4) forwards}
+.darrow{position:absolute;width:44px;height:44px;border-radius:50%;padding:0;background:var(--panel);border:1.5px solid #4a4a52;color:var(--pearl);display:flex;align-items:center;justify-content:center;cursor:pointer}
+
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:1ms !important;animation-delay:0ms !important;transition-duration:1ms !important}}
 </style>
 </head>
@@ -162,6 +195,7 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(-
     </div>
 
     <div id="rail" role="group" aria-label="Pick a day"></div>
+    <div id="dial" role="group" aria-label="Pick a day. Scroll, drag or use the arrow keys to turn the dial."></div>
     <div id="fan"></div>
 
     <button type="button" class="side" id="back" aria-label="Undo last pick"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5L4 10l5 5"/><path d="M4 10h10a5.5 5.5 0 0 1 0 11h-3"/></svg></button>
@@ -292,17 +326,27 @@ function fhUrl(){
 }
 
 /* ---------- layout ---------- */
+function isDesk(){ return window.innerWidth >= 900; }
+var AX = 70; /* desktop: Skipper's center sits this far from the right and bottom edges */
 function geom(n){
   var W = stage.clientWidth, C, spread;
+  if (isDesk()) {
+    var Hh = stage.clientHeight; C = n >= 6 ? 72 : 84;
+    var stepD = n > 1 ? 70 / (n - 1) : 0;
+    var Rd = n > 1 ? (C + 12) / (2 * Math.sin(stepD / 2 * Math.PI / 180)) : 250;
+    Rd = Math.max(250, Math.min(Rd, Math.min(W, Hh) - AX - C / 2 - 16));
+    return { C: C, R: Rd, a0: -80, a1: -10, home: -45, fr: C >= 80 ? 0.18 : 0.21 };
+  }
   if (n >= 7) { C = W < 380 ? 56 : 64; spread = 78; }
   else if (n === 6) { C = W < 380 ? 62 : 70; spread = 76; }
   else { C = W < 350 ? 72 : 84; spread = [0, 0, 28, 48, 62, 75][n] || 0; }
   var Rmax = n >= 6 ? 164 : 152;
   var R = spread ? Math.min(Rmax, (W / 2 - C / 2 - 6) / Math.sin(spread * Math.PI / 180)) : Rmax;
-  return { C: C, R: R, spread: spread, fr: C >= 80 ? 0.18 : 0.235 };
+  return { C: C, R: R, a0: -spread, a1: spread, home: 0, fr: C >= 80 ? 0.18 : 0.235 };
 }
 function setMedalSize(){
   var H = stage.clientHeight, safeT = 0;
+  if (isDesk()) { stage.style.setProperty('--S', (H < 640 ? 220 : 260) + 'px'); medal.classList.remove('small'); return; }
   var fanTop = H - 62 - 196;
   var s = Math.max(184, Math.min(270, fanTop - 218 - safeT));
   stage.style.setProperty('--S', s + 'px');
@@ -333,7 +377,7 @@ function swing(orb, g, a0){
   orb.style.animation = 'none';
   (function frame(now){
     var p = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - p, 3);
-    var a = a0 * (1 - e) * Math.PI / 180, c = g.C * (1 + 0.2 * e);
+    var a = (g.home + (a0 - g.home) * (1 - e)) * Math.PI / 180, c = g.C * (1 + 0.2 * e);
     orb.style.setProperty('--c', c + 'px');
     orb.style.left = (g.R * Math.sin(a) - c / 2) + 'px';
     orb.style.top = (-g.R * Math.cos(a) - c / 2) + 'px';
@@ -361,7 +405,7 @@ function drawFan(items){
   clear(fan);
   var n = items.length, g = geom(n);
   items.forEach(function(it, i){
-    var a = n === 1 ? 0 : (-g.spread + i * (2 * g.spread / (n - 1)));
+    var a = n === 1 ? g.home : (g.a0 + i * (g.a1 - g.a0) / (n - 1));
     var rad = a * Math.PI / 180, x = g.R * Math.sin(rad), y = -g.R * Math.cos(rad);
     var orb = el('button', 'orb' + (it.primary ? ' primary' : ''));
     orb.type = 'button';
@@ -379,7 +423,118 @@ function drawFan(items){
     orb.addEventListener('click', function(){ if (!S.busy) it.go(orb, g, a); });
     fan.appendChild(orb);
   });
+  return g;
 }
+/* desktop only: the question sits just outside the arc on Skipper's diagonal; the summary circle sits there on the last step */
+function place(g, withMedal){
+  if (!isDesk()) { cap.style.right = cap.style.bottom = cap.style.width = ''; medal.style.right = medal.style.bottom = ''; return; }
+  var W = stage.clientWidth, k = Math.SQRT1_2;
+  if (withMedal) {
+    var Sz = parseFloat(stage.style.getPropertyValue('--S')) || 260, c = (g.R + g.C / 2 + 24 + Sz / 2) * k, r = AX + c + Sz / 2 + 28;
+    medal.style.right = (AX + c - Sz / 2) + 'px'; medal.style.bottom = (AX + c - Sz / 2) + 'px';
+    cap.style.right = r + 'px'; cap.style.bottom = (AX + c - 34) + 'px'; cap.style.width = Math.max(200, Math.min(440, W - r - 24)) + 'px';
+  } else {
+    var d = (g.R + g.C / 2 + 30) * k;
+    medal.style.right = medal.style.bottom = '';
+    cap.style.right = (AX + d) + 'px'; cap.style.bottom = (AX + d) + 'px'; cap.style.width = Math.max(240, Math.min(440, W - AX - d - 24)) + 'px';
+  }
+}
+
+/* ---------- desktop date dial: days ride the same arc around Skipper and the arc turns ---------- */
+var dial = { el: $('dial'), items: [], off: 0, target: 0, raf: 0, g: null, drag: null, moved: false, live: false };
+function dialOff(){ dial.live = false; dial.items = []; if (dial.raf) cancelAnimationFrame(dial.raf); dial.raf = 0; dial.drag = null; clear(dial.el); dial.el.classList.remove('on'); }
+function dialLayout(){
+  var g = dial.g;
+  for (var i = 0; i < dial.items.length; i++) {
+    var it = dial.items[i], a = g.home + (i - dial.off) * g.delta, dist = Math.abs(a - g.home);
+    var vis = dist <= g.half + g.delta * 0.3, s = it.el.style;
+    s.display = vis ? '' : 'none';
+    if (!vis) continue;
+    var c = g.C + 14 * Math.max(0, 1 - dist / g.delta), rad = a * Math.PI / 180;
+    it.x = g.R * Math.sin(rad); it.y = -g.R * Math.cos(rad);
+    s.setProperty('--c', c + 'px'); s.left = (it.x - c / 2) + 'px'; s.top = (it.y - c / 2) + 'px';
+    s.opacity = dist <= g.half ? '1' : String(Math.max(0, 1 - (dist - g.half) / (g.delta * 0.3)));
+    s.zIndex = String(100 - Math.round(dist));
+  }
+}
+function dialTick(){
+  var d = dial.target - dial.off;
+  if (Math.abs(d) < 0.003 || reduce) { dial.off = dial.target; dialLayout(); dial.raf = 0; return; }
+  dial.off += d * 0.2; dialLayout(); dial.raf = requestAnimationFrame(dialTick);
+}
+function dialTo(t){
+  dial.target = Math.max(0, Math.min(dial.items.length - 1, t));
+  if (!dial.raf) dial.raf = requestAnimationFrame(dialTick);
+}
+function drawDial(){
+  dialOff();
+  var H = stage.clientHeight, R = Math.max(300, Math.min(400, H - 330)), C = 72;
+  var dl = 2 * Math.asin((C + 12) / (2 * R)) * 180 / Math.PI;
+  var g = dial.g = { R: R, C: C, delta: dl, home: -45, half: Math.floor(37 / dl) * dl + dl * 0.05 };
+  var arrowAt = Math.min(g.half + dl * 1.05, 46);
+  var y = S.month.y, m = S.month.m, first = -1;
+  for (var d = 1; d <= daysIn(y, m); d++) (function(d){
+    var date = new Date(y, m, d), ok = bookable(S.hours, date), price = ok ? priceFor(S.hours, S.guests, date) : null;
+    var b = el('button', 'dd'); b.type = 'button';
+    b.appendChild(el('span', 'dw', DOW[date.getDay()].toUpperCase()));
+    b.appendChild(el('span', 'dn', String(d)));
+    b.appendChild(el('span', 'pr', ok ? (price != null ? money(price) : 'Open') : '\u2013'));
+    b.insertAdjacentHTML('beforeend', ringSvg());
+    b.setAttribute('aria-label', DOW[date.getDay()] + ' ' + MONTHS[m] + ' ' + d + (ok ? (price != null ? ', ' + money(price) : '') : ', not offered'));
+    var it = { el: b, x: 0, y: 0 }, idx = d - 1;
+    if (!ok) b.disabled = true;
+    else {
+      if (first < 0) first = idx;
+      b.addEventListener('click', function(){
+        if (S.busy || dial.moved) return;
+        S.busy = true;
+        dial.items.forEach(function(o){ if (o !== it && o.el.style.display !== 'none') { o.el.style.setProperty('--fx', (-o.x) + 'px'); o.el.style.setProperty('--fy', (-o.y) + 'px'); o.el.classList.add('reel'); } });
+        dialTo(idx); glance(g.home);
+        runRing(b, loadFeed()).then(function(){ S.busy = false; glance(null); S.date = date; S.step = 4; S.said = null; render(); });
+      });
+    }
+    dial.items.push(it); dial.el.appendChild(b);
+  })(d);
+  var mk = function(ang, label, path, by){
+    var a = el('button', 'darrow'); a.type = 'button'; a.setAttribute('aria-label', label);
+    a.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="' + path + '"/></svg>';
+    var rad = ang * Math.PI / 180;
+    a.style.left = (g.R * Math.sin(rad) - 22) + 'px'; a.style.top = (-g.R * Math.cos(rad) - 22) + 'px';
+    a.addEventListener('click', function(){ if (!S.busy) dialTo(Math.round(dial.target) + by); });
+    dial.el.appendChild(a);
+  };
+  mk(g.home - arrowAt, 'Earlier days', 'M15 6l-6 6 6 6', -3);
+  mk(g.home + arrowAt, 'Later days', 'M9 6l6 6-6 6', 3);
+  dial.off = dial.target = Math.max(0, Math.min(dial.items.length - 1, (first < 0 ? 0 : first) + 3));
+  dial.el.classList.add('on'); dial.live = true; dialLayout();
+  return g;
+}
+function anchorXY(){ var r = stage.getBoundingClientRect(); return { x: r.right - AX, y: r.bottom - AX }; }
+function ptrAngle(ev){ var a = anchorXY(); return Math.atan2(ev.clientX - a.x, -(ev.clientY - a.y)) * 180 / Math.PI; }
+stage.addEventListener('wheel', function(ev){
+  if (!dial.live || S.busy) return;
+  ev.preventDefault();
+  var d = Math.abs(ev.deltaX) > Math.abs(ev.deltaY) ? ev.deltaX : ev.deltaY;
+  if (ev.deltaMode === 1) d *= 30;
+  dialTo(dial.target + d / 90);
+}, { passive: false });
+stage.addEventListener('pointerdown', function(ev){
+  if (!dial.live || S.busy) return;
+  var a = anchorXY(), dx = ev.clientX - a.x, dy = ev.clientY - a.y;
+  if (Math.abs(Math.sqrt(dx * dx + dy * dy) - dial.g.R) > 64) return;
+  dial.drag = { a: ptrAngle(ev), off: dial.off }; dial.moved = false;
+});
+window.addEventListener('pointermove', function(ev){
+  if (!dial.drag || !dial.live) return;
+  var da = ptrAngle(ev) - dial.drag.a;
+  if (Math.abs(da) * dial.g.R * Math.PI / 180 > 6) dial.moved = true;
+  if (dial.moved) { dial.off = dial.target = Math.max(0, Math.min(dial.items.length - 1, dial.drag.off - da / dial.g.delta)); dialLayout(); }
+});
+window.addEventListener('pointerup', function(){
+  if (!dial.drag) return;
+  dial.drag = null;
+  if (dial.moved) { if (dial.live) dialTo(Math.round(dial.target)); setTimeout(function(){ dial.moved = false; }, 0); }
+});
 function drawRail(){
   clear(rail);
   var y = S.month.y, m = S.month.m, firstOpen = null;
@@ -442,6 +597,7 @@ function caption(kicker, say, sub, compact){
 function longDate(d){ return DOW[d.getDay()] + ', ' + MONTHS[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear(); }
 
 function render(){
+  stage.classList.toggle('desk', isDesk());
   stage.classList.toggle('open', S.open);
   stage.classList.toggle('typing', S.open && S.typing);
   $('mascot').setAttribute('aria-label', S.open ? 'Close Skipper' : 'Open Skipper');
@@ -449,41 +605,46 @@ function render(){
   if (!S.open) return;
   setMedalSize();
   drawPicks();
-  medal.classList.remove('on'); rail.classList.remove('on'); clear(rail); clear(fan);
+  medal.classList.remove('on'); rail.classList.remove('on'); clear(rail); clear(fan); dialOff();
   var live = S.feedState === 'ok';
 
   if (S.step === 0) {
     caption('Skipper', 'How long do you want to fish?',
       live ? 'Prices are live from the Baxstar price feed.' : (S.feedState === 'loading' ? 'Getting live prices.' : 'The price feed did not answer. Prices show at checkout.'));
-    drawFan(CFG.hours.map(function(h){
+    place(drawFan(CFG.hours.map(function(h){
       return { label: h + ' hours', sub: live ? 'from ' + money(S.feed.base[h]) : '', go: function(orb, g, a){
         pickOrb(orb, g, a).then(function(){ S.hours = h; S.step = 1; render(); });
       } };
-    }));
+    })));
   } else if (S.step === 1) {
     caption(CFG.react['h' + S.hours] || 'Skipper', 'How many people are in your group total?', 'Include everyone, including children of all ages.');
-    drawFan(CFG.groups.map(function(gp){
+    place(drawFan(CFG.groups.map(function(gp){
       var extra = live ? addOnTotal(S.hours, gp.id) : 0;
       return { label: gp.label, sub: live ? (extra > 0 ? '+' + moneyExact(extra) : 'base price') : '', go: function(orb, g, a){
         pickOrb(orb, g, a).then(function(){ S.guests = gp.id; S.step = 2; render(); });
       } };
-    }));
+    })));
   } else if (S.step === 2) {
     var rule = CFG.tripRules[S.hours], months = live ? monthsFor(S.hours) : [];
     if (!months.length) {
       caption(CFG.react['g' + S.guests] || 'Skipper', 'Pick your date on FareHarbor.', 'I could not load the season calendar, so the booking page takes it from here.');
-      drawFan([{ label: 'Open calendar', primary: true, go: function(orb, g, a){ pickOrb(orb, g, a).then(function(){ location.href = fhUrl(); }); } }]);
+      place(drawFan([{ label: 'Open calendar', primary: true, go: function(orb, g, a){ pickOrb(orb, g, a).then(function(){ location.href = fhUrl(); }); } }]));
     } else {
       caption(CFG.react['g' + S.guests] || 'Skipper', 'Which month?', rule && rule.note ? rule.note : 'Open-water trips run April through October.');
-      drawFan(months.map(function(mo){
+      place(drawFan(months.map(function(mo){
         return { label: MONTHS[mo.m], sub: String(mo.y), go: function(orb, g, a){
           pickOrb(orb, g, a).then(function(){ S.month = mo; S.step = 3; render(); });
         } };
-      }));
+      })));
     }
   } else if (S.step === 3) {
-    caption(MONTHS[S.month.m] + '. Good month.', 'Pick your day.', 'Each day shows the price for your group. Swipe sideways for more days.');
-    rail.classList.add('on'); drawRail();
+    if (isDesk()) {
+      caption(MONTHS[S.month.m] + '. Good month.', 'Pick your day.', 'Each day shows the price for your group. Scroll, drag or use the arrows to turn the dial.');
+      place(drawDial());
+    } else {
+      caption(MONTHS[S.month.m] + '. Good month.', 'Pick your day.', 'Each day shows the price for your group. Swipe sideways for more days.');
+      place(null); rail.classList.add('on'); drawRail();
+    }
   } else {
     var price = priceFor(S.hours, S.guests, S.date);
     caption('Skipper', S.said || 'Here is your trip.', '', true);
@@ -498,12 +659,12 @@ function render(){
     if (S.feed && S.feed.sale && Object.keys(S.feed.sale).length) stamp = 'A sale is running. Checkout shows the final price.';
     $('mStamp').textContent = stamp;
     medal.classList.add('on');
-    drawFan([
+    place(drawFan([
       { label: 'Change it', go: function(){ S.said = 'Tap any pick up top and I deal that question again.'; caption('Skipper', S.said, '', true); } },
       { label: 'Book it', primary: true, go: function(orb, g, a){ pickOrb(orb, g, a).then(function(){ location.href = fhUrl(); }); } },
       { label: 'Text my crew', go: function(){ shareTrip(price); } },
       { label: 'Ask Skipper', go: function(){ S.typing = true; stage.classList.add('typing'); S.said = 'Typed questions are not wired up on this test page yet.'; caption('Skipper', S.said, '', true); try { $('ask').focus(); } catch (e) {} } }
-    ]);
+    ]), true);
   }
 }
 function shareTrip(price){
@@ -553,7 +714,10 @@ $('keys').addEventListener('click', function(){ if (S.busy) return; S.typing = !
 function sendAsk(){ S.typing = false; stage.classList.remove('typing'); $('ask').value = ''; caption('Skipper', 'Typed questions are not wired up on this test page yet. The circles are live.', '', S.step === 4); }
 $('send').addEventListener('click', sendAsk);
 $('ask').addEventListener('keydown', function(ev){ if (ev.key === 'Enter') sendAsk(); });
-document.addEventListener('keydown', function(ev){ if (ev.key === 'Escape' && S.open && !S.busy) { S.open = false; render(); } });
+document.addEventListener('keydown', function(ev){
+  if (ev.key === 'Escape' && S.open && !S.busy) { S.open = false; render(); }
+  if (dial.live && !S.busy && (ev.key === 'ArrowLeft' || ev.key === 'ArrowRight') && document.activeElement !== $('ask')) { ev.preventDefault(); dialTo(Math.round(dial.target) + (ev.key === 'ArrowRight' ? 1 : -1)); }
+});
 var rz; window.addEventListener('resize', function(){ clearTimeout(rz); rz = setTimeout(function(){ if (S.open && !S.busy) render(); }, 150); });
 
 loadFeed().then(function(){ if (S.open && !S.busy) render(); });
