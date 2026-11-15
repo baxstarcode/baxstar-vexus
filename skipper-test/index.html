@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<title>Skipper test page | Baxstar Fishing</title>
+<title>Skipper + year-round homepage preview | Baxstar Fishing</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
 <style>
@@ -30,6 +30,30 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(-
 .host-body li{font-size:16px;line-height:1.35;color:var(--bone);padding-left:16px;border-left:0;position:relative}
 .host-body li::before{content:"";position:absolute;left:0;top:9px;width:6px;height:6px;border-radius:50%;background:var(--red)}
 .host-body li b{color:var(--pearl);font-weight:600}
+.host{overflow-y:auto;overscroll-behavior:contain;transition:opacity .3s}
+.open .host{opacity:.12;pointer-events:none}
+.host-bar{flex:0 0 64px}
+.host-body{width:100%;max-width:1180px!important;margin:auto;padding:56px 40px 170px;gap:40px}
+.home-hero{display:grid;grid-template-columns:1.1fr 1fr;gap:48px;align-items:center}
+.home-eyebrow{margin:0 0 14px;color:var(--redt);font:700 14px 'Barlow Condensed',sans-serif;letter-spacing:.12em;text-transform:uppercase}
+.host-body h1{font-size:clamp(38px,5.3vw,74px);line-height:1.02;text-wrap:balance}
+.home-intro{color:var(--bone);font-size:20px;line-height:1.5;max-width:560px}
+.home-hero img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:16px}
+.home-services,.home-houses{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.home-service{padding:28px;border:1px solid var(--rule);border-radius:12px;background:#141417}
+.home-service h2,.home-extras h2,.home-fleet h2{margin:0 0 12px;font:600 32px/1.05 'Barlow Condensed',sans-serif}
+.home-service p,.home-extras p,.home-fleet>p{color:var(--bone);font-size:17px;line-height:1.5;margin:0 0 18px}
+.host a{color:var(--pearl);text-underline-offset:5px}
+.home-service a{display:inline-block;font-weight:600}
+.home-fleet{padding-top:16px}.home-houses{grid-template-columns:repeat(4,minmax(0,1fr));margin-top:24px}
+.home-house{display:block;text-decoration:none;border:1px solid var(--rule);border-radius:12px;overflow:hidden}
+.home-house img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover}
+.home-house strong{display:block;padding:16px 16px 5px;font:600 23px/1.05 'Barlow Condensed',sans-serif}
+.home-house span{display:block;padding:0 16px 18px;color:var(--bone);font-size:14px}
+.home-extras{border-top:1px solid var(--rule);padding-top:30px}
+.home-extras nav{display:flex;flex-wrap:wrap;gap:16px 26px;font-size:17px}
+.home-note{color:var(--bone);font-size:12px;line-height:1.5}
+@media(max-width:899px){.host-body{padding:32px 24px 160px;gap:28px}.home-hero{grid-template-columns:1fr;gap:16px}.home-hero img{aspect-ratio:16/9}.home-intro{font-size:17px}.home-services{grid-template-columns:1fr}.home-service{padding:24px}.home-houses{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.home-house strong{font-size:20px;padding:12px 12px 5px}.home-house span{padding:0 12px 14px;font-size:12px}.home-service h2{font-size:28px}}
 
 #scrim{position:absolute;left:50%;bottom:calc(62px + var(--safe));width:2400px;height:2400px;margin:0 0 -1200px -1200px;border-radius:50%;background:rgba(8,8,10,.985);transform:scale(0);transition:transform .56s cubic-bezier(.3,.9,.3,1);pointer-events:none}
 .open #scrim{transform:scale(1)}
@@ -166,23 +190,108 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(-
 .dd.reel{animation:orbReel .3s cubic-bezier(.5,0,.9,.4) forwards}
 .darrow{transition:opacity .15s ease;position:absolute;width:44px;height:44px;border-radius:50%;padding:0;background:var(--panel);border:1.5px solid #4a4a52;color:var(--pearl);display:flex;align-items:center;justify-content:center;cursor:pointer}
 
+/* House choices keep the fan. Real photos lead to a closer look before dates. */
+.orb.house-orb{padding:0;background:#1d252a;border-color:#777b7d;box-shadow:0 12px 32px #0008;overflow:visible}
+.house-orb .house-photo{width:100%;height:100%;border-radius:50%;overflow:hidden;display:grid;place-items:center;background:#1d252a}
+.house-photo img{display:block;width:100%;height:100%;object-fit:cover}
+.house-photo span{padding:12px;color:var(--pearl);font-size:13px}
+.house-orb .house-label{position:absolute;top:calc(100% + 9px);left:50%;transform:translateX(-50%);width:calc(var(--c) + 26px);display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--pearl)}
+.house-orb .house-label b{font-size:17px;letter-spacing:.02em;line-height:1.05}
+.house-orb .house-label small{font:500 12px/1.15 'Barlow',sans-serif;color:var(--bone);letter-spacing:0}
+.house-orb:hover,.house-orb:focus-visible{border-color:var(--redt)}
+.house-orb:hover .house-label b{color:var(--redt)}
+.house-orb .ring{z-index:1}
+#house-peek{display:none;position:absolute;right:28px;top:24px;max-width:230px;padding:9px 13px;background:var(--panel);border:1px solid var(--rule);border-radius:24px;color:var(--pearl);cursor:pointer;font-size:13px;align-items:center;gap:10px}
+#house-peek img{width:34px;height:34px;object-fit:cover;border-radius:50%}
+#house-peek.on{display:flex}
+#house-view{padding:0;border:1px solid #414148;border-radius:22px;background:#111114;color:var(--pearl);width:min(760px,calc(100vw - 32px));max-height:calc(100dvh - 40px);box-shadow:0 32px 120px #000b;overflow:auto;overscroll-behavior:contain}
+#house-view::backdrop{background:#050507c9;backdrop-filter:blur(7px)}
+.hv-heading{padding:24px 72px 18px 28px}
+.hv-eyebrow{margin:0 0 5px;color:var(--redt);font:700 12px/1.2 'Barlow Condensed',sans-serif;letter-spacing:.16em;text-transform:uppercase}
+#hv-title{margin:0;font:700 38px/1.03 'Barlow Condensed',sans-serif}
+#hv-subtitle{margin:8px 0 0;color:var(--bone);font-size:16px;line-height:1.35}
+#hv-close{position:absolute;right:20px;top:20px;width:40px;height:40px;background:var(--panel);border:1px solid #55555e;border-radius:50%;color:var(--pearl);font-size:26px;cursor:pointer}
+.hv-gallery{position:relative;margin:0 28px;background:#08080a;border-radius:12px;overflow:hidden;aspect-ratio:2/1}
+#hv-photo{display:block;width:100%;height:100%;object-fit:contain}
+.hv-arrow{position:absolute;top:50%;transform:translateY(-50%);width:42px;height:42px;border:1px solid #ffffff60;border-radius:50%;color:#fff;background:#08080ac9;font-size:26px;cursor:pointer}
+#hv-prev{left:12px}#hv-next{right:12px}
+.hv-gallery [hidden]{display:none}
+#hv-error{position:absolute;inset:30% 18%;text-align:center;line-height:1.4;color:var(--bone)}
+.hv-gallery-caption{display:flex;justify-content:space-between;gap:12px;padding:9px 28px 0;font-size:12px;color:var(--bone)}
+#hv-count{white-space:nowrap}
+#hv-dots{display:flex;justify-content:center;gap:2px;padding:2px 0 0}
+.hv-dot{display:grid;place-items:center;width:32px;height:30px;background:none;border:0;cursor:pointer}
+.hv-dot::after{content:'';width:7px;height:7px;border-radius:50%;background:#77777f}
+.hv-dot[aria-current=true]::after{width:19px;border-radius:4px;background:var(--pearl)}
+.hv-details{padding:0 28px 20px}
+#hv-description{margin:10px 0 14px;font-size:17px;line-height:1.45;color:#d8d3ca}
+#hv-facts{display:flex;flex-wrap:wrap;gap:8px;list-style:none;margin:0;padding:0}
+#hv-facts li{padding:7px 10px;border:1px solid #414148;border-radius:6px;font-size:13px;color:var(--pearl)}
+.hv-footer{position:sticky;bottom:0;padding:18px 28px 22px;background:#111114;border-top:1px solid #34343a;display:grid;grid-template-columns:1fr auto;gap:10px 24px;align-items:center}
+#hv-full{color:var(--pearl);text-underline-offset:4px;font-weight:500;font-size:15px}
+#hv-book{border:0;border-radius:8px;background:var(--red);color:#fff;min-height:48px;padding:12px 24px;font-weight:600;cursor:pointer}
+#hv-next-step{grid-column:1/-1;margin:0;color:var(--bone);font-size:12px;line-height:1.35;text-align:right}
+/* Brady's desktop concept: text chat above a horizontal row of past picks. */
+#chat-copy{display:none}
+.desk #line{right:40px;bottom:174px;width:auto;height:52px}
+.desk #picks{display:flex;gap:10px;justify-content:flex-end}
+.desk .pick{position:relative;inset:auto;width:52px;height:52px;flex:0 0 52px}
+.desk .pick span{font-size:10px}
+.desk #typebar,.desk.typing #typebar{right:32px;bottom:250px;width:230px;height:120px;padding:10px;display:none;flex-wrap:wrap;gap:6px;border:1px solid #44444c;border-radius:12px;background:#16161beF;z-index:6}
+.desk.open #typebar{display:flex}
+.desk #chat-copy{display:block;flex:0 0 100%;height:56px;overflow:auto;color:var(--bone);font-size:12px;line-height:1.35;overscroll-behavior:contain}
+.desk #chat-copy p{margin:0 0 6px}.desk #chat-copy .chat-you{color:var(--pearl)}
+.desk #ask{width:0;height:34px;min-width:0;padding:0 10px;font-size:13px}
+.desk #send,.desk.typing #send{display:flex;flex:0 0 34px;width:34px;height:34px}
+.desk #back{right:164px;bottom:86px}.desk #keys{right:224px;bottom:86px}
+@media(max-width:899px){
+ #picks{gap:8px}.pick{flex:1 1 0;min-width:0;max-width:60px;width:auto}
+ .house-orb .house-label{width:calc(var(--c) + 8px)}.house-orb .house-label b{font-size:14px}.house-orb .house-label small{font-size:11px}
+ #house-peek{right:20px;top:115px;padding:5px 10px;font-size:12px}
+ #house-peek img{width:26px;height:26px}
+ #house-view{border-radius:18px;max-height:calc(100dvh - 24px);width:calc(100vw - 24px)}
+ .hv-heading{padding:22px 60px 16px 20px}#hv-title{font-size:31px}#hv-subtitle{font-size:14px}
+ #hv-close{right:14px;top:16px}.hv-gallery{margin:0 16px;aspect-ratio:4/3}
+ .hv-gallery-caption{padding:9px 20px 0}.hv-details{padding:0 20px 18px}#hv-description{font-size:15px}
+ .hv-footer{padding:14px 20px 18px;grid-template-columns:1fr;gap:12px;text-align:center}
+ #hv-book{grid-row:1}#hv-next-step{text-align:center}#hv-full{font-size:14px}
+}
+
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:1ms !important;animation-delay:0ms !important;transition-duration:1ms !important}}
 </style>
 </head>
 <body>
 <div id="stage">
 
-  <div class="host">
-    <div class="host-bar"><b>BAXSTAR FISHING</b><span>TEST PAGE</span></div>
+  <main class="host" id="home">
+    <div class="host-bar"><b>BAXSTAR FISHING</b><span>DESIGN PREVIEW</span></div>
     <div class="host-body">
-      <h1>Skipper's new booking conversation</h1>
-      <ul>
-        <li><b>Prices are live.</b> They come from the Baxstar price feed each time you pick a day.</li>
-        <li><b>Booking is real.</b> The last circle opens the FareHarbor calendar, where the open times and final price are.</li>
-        <li><b>Test page.</b> It is not linked from the website. Ice and pontoon prices show at checkout.</li>
-      </ul>
+      <section class="home-hero">
+        <div><p class="home-eyebrow">Detroit Lakes, Minnesota · Every season</p>
+          <h1>Good days on the water. All year long.</h1>
+          <p class="home-intro">Guided fishing trips, pontoon rentals and ice house rentals in Detroit Lakes. Pick your kind of lake day. We’ll help with the rest.</p>
+          <a href="#home-services">Explore trips and rentals ↓</a>
+        </div>
+        <img src="../assets/boat.webp" alt="Baxstar Fishing’s Vexus guide boat on the water" width="640" height="480">
+      </section>
+      <section class="home-services" id="home-services" aria-label="Trips and rentals in every season">
+        <article class="home-service"><p class="home-eyebrow">Open water</p><h2>Guided fishing trips</h2><p>Spend a day fishing the Detroit Lakes area with a local guide. Explore the trips, see the boat and find the right amount of time on the water.</p><a href="https://www.baxstarfishing.com/fishing-trips">Explore guided fishing →</a></article>
+        <article class="home-service"><p class="home-eyebrow">Summer lake days</p><h2>Pontoon rentals &amp; lake cruises</h2><p>A day with the family, a longer lake getaway or a group cruise. Explore pontoon options with Baxstar Outdoors.</p><a href="https://www.baxstaroutdoors.com/">Explore pontoons &amp; cruises →</a></article>
+        <article class="home-service"><p class="home-eyebrow">Days on the ice</p><h2>Guided ice fishing &amp; day houses</h2><p>Go with a guide or settle into a heated day house. See the wooden and aluminum house layouts before choosing your winter fishing day.</p><a href="https://www.baxstarfishing.com/icefishing">Explore ice fishing →</a></article>
+        <article class="home-service"><p class="home-eyebrow">Stay on the lake</p><h2>Overnight Ice Castle rentals</h2><p>Fish, cook and unwind on the ice. Compare the actual houses, browse inside photos and find the space that fits your trip.</p><a href="https://www.baxstarfishing.com/ice-castle-rentals">Compare overnight houses →</a></article>
+      </section>
+      <section class="home-fleet" aria-labelledby="home-house-title"><p class="home-eyebrow">A closer look</p><h2 id="home-house-title">Meet your house before you book it.</h2><p>Four overnight houses. Real photos. A full description for each.</p>
+        <div class="home-houses">
+          <a class="home-house" href="https://www.baxstarfishing.com/21-ice-castle-rental"><img loading="lazy" src="https://static.wixstatic.com/media/a30e59_996cc7b9ca37406283c66b48df6efb8c~mv2.jpg/v1/fit/w_600,h_450,q_85,enc_avif,quality_auto/a30e59_996cc7b9ca37406283c66b48df6efb8c~mv2.jpg" alt="The Lodge exterior"><strong>The Lodge</strong><span>21′ · Room to settle in</span></a>
+          <a class="home-house" href="https://www.baxstarfishing.com/ice-castle-range-runner"><img loading="lazy" src="https://static.wixstatic.com/media/a30e59_0096926331214ee5bf8f6b032740613a~mv2.jpg/v1/fit/w_600,h_450,q_85,enc_avif,quality_auto/a30e59_0096926331214ee5bf8f6b032740613a~mv2.jpg" alt="The Range Runner exterior"><strong>The Range Runner</strong><span>17′ · A comfortable home base</span></a>
+          <a class="home-house" href="https://www.baxstarfishing.com/17-hybrid-ii-ice-castle-detroit-lakes"><img loading="lazy" src="https://static.wixstatic.com/media/a30e59_6e8c204ce00641af9a271f9e474151e2~mv2.jpeg/v1/fit/w_600,h_450,q_85,enc_avif,quality_auto/a30e59_6e8c204ce00641af9a271f9e474151e2~mv2.jpeg" alt="The Hearth exterior"><strong>The Hearth</strong><span>17′ · Fireplace comfort</span></a>
+          <a class="home-house" href="https://www.baxstarfishing.com/17-ice-castle-luxury-rv-edition-rental"><img loading="lazy" src="https://static.wixstatic.com/media/a30e59_17d89d33745d4fd28654f71b7a15d2d8~mv2.jpg/v1/fit/w_600,h_450,q_85,enc_avif,quality_auto/a30e59_17d89d33745d4fd28654f71b7a15d2d8~mv2.jpg" alt="The blue 17-foot Luxury RV Edition exterior"><strong>17′ Luxury RV Edition</strong><span>17′ · The blue house</span></a>
+        </div>
+      </section>
+      <section class="home-extras"><h2>A little more Baxstar.</h2><p>Plan a date night on the ice, get help with your fish house, or talk fishing with Brady.</p><nav aria-label="More Baxstar services"><a href="https://www.baxstarfishing.com/datenight">Date night on the ice</a><a href="https://www.baxstarfishing.com/ice-house-services">Fish house services</a><a href="https://www.baxstarfishing.com/fishing-consultations">Fishing consultations</a><a href="https://www.baxstarfishing.com/icefishing/ice-house-rentals">Day house details</a></nav></section>
+      <p class="home-note">Design preview. This page is excluded from search. Booking links open the real FareHarbor site; no booking is made until you complete checkout there.</p>
     </div>
-  </div>
+  </main>
 
   <div id="scrim" aria-hidden="true"></div>
 
@@ -192,6 +301,7 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(-
     <div id="line"><div class="hint" id="lineHint">Your picks hang on this line. Tap one to change it.</div><div id="picks"></div></div>
 
     <div id="typebar">
+      <div id="chat-copy" role="log" aria-label="Conversation with Skipper"><p>Chat preview. Answers aren’t connected yet.</p></div>
       <label class="vh" for="ask">Ask Skipper anything</label>
       <input id="ask" type="text" placeholder="Ask Skipper anything" autocomplete="off">
       <button type="button" id="send" aria-label="Send question"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="M6 11l6-6 6 6"/></svg></button>
@@ -206,6 +316,7 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(-
     <div id="rail" role="group" aria-label="Pick a day"></div>
     <div id="dial" role="group" aria-label="Pick a day. Scroll, drag or use the arrow keys to turn the dial."></div>
     <div id="fan"></div>
+    <button type="button" id="house-peek" aria-haspopup="dialog"></button>
 
     <button type="button" class="side" id="back" aria-label="Undo last pick"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5L4 10l5 5"/><path d="M4 10h10a5.5 5.5 0 0 1 0 11h-3"/></svg></button>
     <button type="button" class="side" id="keys" aria-label="Type a question instead"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="6" width="19" height="12" rx="2"/><path d="M6.5 10h.01M10 10h.01M13.5 10h.01M17 10h.01M7.5 14h9"/></svg></button>
@@ -218,6 +329,25 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(-
     <span id="mcopy"><b>ASK <em>SKIPPER</em></b><small>LOCAL FISHING HELP</small></span>
   </button>
 </div>
+
+<dialog id="house-view" aria-labelledby="hv-title" aria-describedby="hv-subtitle">
+  <header class="hv-heading"><p class="hv-eyebrow">Take a look inside</p><h2 id="hv-title"></h2><p id="hv-subtitle"></p></header>
+  <button type="button" id="hv-close" aria-label="Close house preview" autofocus>×</button>
+  <div class="hv-gallery" aria-roledescription="carousel" aria-label="House photographs">
+    <img id="hv-photo" alt="">
+    <p id="hv-error" hidden>This photo didn’t load. You can still read the details or open the full description.</p>
+    <button type="button" id="hv-prev" class="hv-arrow" aria-label="Previous house photo">‹</button>
+    <button type="button" id="hv-next" class="hv-arrow" aria-label="Next house photo">›</button>
+  </div>
+  <div class="hv-gallery-caption" aria-live="polite"><span id="hv-photo-label"></span><span id="hv-count"></span></div>
+  <div id="hv-dots" role="group" aria-label="Choose house photo"></div>
+  <div class="hv-details"><p id="hv-description"></p><ul id="hv-facts"></ul></div>
+  <footer class="hv-footer">
+    <a id="hv-full" target="_blank" rel="noopener">Check out full description <span aria-hidden="true">↗</span><span class="vh"> (opens in a new tab)</span></a>
+    <button type="button" id="hv-book">Book this house</button>
+    <p id="hv-next-step">Choose your dates next. FareHarbor confirms availability and final pricing.</p>
+  </footer>
+</dialog>
 
 <script>
 (function(){
@@ -255,7 +385,7 @@ var CFG = {
     ice: [
       { label: 'Guided trip', items: [{ short: 'Guided ice trip', id: '353022' }] },
       { label: 'Day house', items: [{ short: 'Wooden house', id: '420574' }, { short: 'Aluminum house', id: '346191' }] },
-      { label: 'Overnight house', items: [{ short: "21' RV Extreme", id: '593973' }, { short: "17' Range Runner", id: '422226' }, { short: "17' Hybrid II", id: '681248' }, { short: "17' Luxury", id: '681247' }, { short: "24' Pop Out", id: '690580' }, { short: "24' RV Extreme", id: '690777' }] },
+      { label: 'Overnight house', items: [{ short: 'The Lodge', id: '593973' }, { short: 'The Range Runner', id: '422226' }, { short: 'The Hearth', id: '681248' }, { short: "17′ Luxury RV", id: '681247' }] },
       { label: 'Date night', items: [{ short: 'Date night on the ice', id: '517727' }] }
     ],
     pontoon: [
@@ -263,6 +393,76 @@ var CFG = {
       { label: 'Multi-day', items: [{ short: 'Multi-day pontoon', id: '315912' }] },
       { label: 'Lake cruise', items: [{ short: 'Group lake cruise', id: '309865' }] }
     ]
+  },
+  /* Public house pages + Brady's current FareHarbor naming, verified 2026-11-15.
+     Only the four overnight houses Brady selected. Photos are of the actual houses.
+     No prices, sleep capacities or availability inferred from website copy. */
+  houses: {
+    '593973': {
+      title: 'The Lodge', subtitle: '21′ Ice Castle · Room to settle in', size: '21′ · Overnight',
+      description: 'Bring the crew and make yourself at home on the ice. Our largest featured house pairs an electric fireplace with two convertible couches and a lift bed.',
+      facts: ['7 fishing holes', 'Electric fireplace', 'Kitchenette', 'Private bathroom'],
+      url: 'https://www.baxstarfishing.com/21-ice-castle-rental',
+      photos: [
+        ['a30e59_996cc7b9ca37406283c66b48df6efb8c~mv2.jpg', 'The Lodge exterior on the ice'],
+        ['a30e59_82f9a499cc54450ea95c126c9217cfe6~mv2.jpg', 'The Lodge interior'],
+        ['a30e59_201c504bd7f14255a822d5349d904cf3~mv2.jpeg', 'Another look inside The Lodge'],
+        ['a30e59_21bb013927c74232adda4799f11bdd30~mv2.jpg', 'The Lodge bathroom']
+      ]
+    },
+    '422226': {
+      title: 'The Range Runner', subtitle: '17′ Ice Castle · A comfortable home base', size: '17′ · Overnight',
+      description: 'A comfortable setup for fishing, cooking and winding down. The Range Runner has a motorized top bunk, a kitchenette and a private bathroom.',
+      facts: ['6 fishing holes', 'Motorized top bunk', 'Kitchenette', 'Private bathroom'],
+      url: 'https://www.baxstarfishing.com/ice-castle-range-runner',
+      photos: [
+        ['a30e59_0096926331214ee5bf8f6b032740613a~mv2.jpg', 'The Range Runner exterior on the ice'],
+        ['a30e59_69835cfb03ef4bef88a6b453b4f3548a~mv2.jpeg', 'The Range Runner front interior'],
+        ['a30e59_2d6eaeebd59e4a25baa65b99e316df18~mv2.jpeg', 'The Range Runner rear interior'],
+        ['a30e59_4c0409365c4d45bcba3ac7fe651a7171~mv2.jpeg', 'The Range Runner bathroom']
+      ]
+    },
+    '681248': {
+      title: 'The Hearth', subtitle: '17′ Hybrid RV · Fireplace comfort', size: '17′ · Overnight',
+      description: 'Fish a little. Kick back a little. An electric fireplace and taller ceilings give The Hearth an open, comfortable feel, with a kitchenette and private bathroom close at hand.',
+      facts: ['Electric fireplace', 'Taller ceilings', 'Kitchenette', 'Private bathroom'],
+      url: 'https://www.baxstarfishing.com/17-hybrid-ii-ice-castle-detroit-lakes',
+      photos: [
+        ['a30e59_6e8c204ce00641af9a271f9e474151e2~mv2.jpeg', 'The Hearth exterior on the ice'],
+        ['a30e59_d627ba832e064292a248f264c884966c~mv2.jpg', 'The Hearth interior'],
+        ['a30e59_86d3f4c090dc4b59974cb537783f0852~mv2.jpeg', 'The Hearth rear interior'],
+        ['a30e59_e486dde8a5bf41e799aa64b1a09a14bb~mv2.jpg', 'The Hearth bathroom']
+      ]
+    },
+    '681247': {
+      title: '17′ Luxury RV Edition', subtitle: '17′ Ice Castle · The blue house', size: '17′ · Overnight',
+      description: 'The blue house brings a little extra comfort to the lake: an electric fireplace, a mechanized top bunk and an upgraded kitchenette. Take a look around before choosing your dates.',
+      facts: ['Electric fireplace', 'Mechanized top bunk', 'Upgraded kitchenette', 'Private bathroom'],
+      url: 'https://www.baxstarfishing.com/17-ice-castle-luxury-rv-edition-rental',
+      photos: [
+        ['a30e59_17d89d33745d4fd28654f71b7a15d2d8~mv2.jpg', 'The blue Luxury RV Edition exterior'],
+        ['a30e59_074ccb3374da4d4cbcfa3eb5dc32a40b~mv2.jpeg', 'Luxury RV Edition front interior'],
+        ['a30e59_f9222d25b0ac4c0c82246307f416c75f~mv2.jpeg', 'Luxury RV Edition rear interior'],
+        ['a30e59_59928d11d89945018dfb3cd8dee5a7f2~mv2.jpeg', 'Another look inside the Luxury RV Edition']
+      ]
+    },
+    '420574': {
+      title: 'Wooden Day House', subtitle: '16′ × 8′ · Spread out for the day', size: '16′ × 8′ · Day rental',
+      description: 'Our largest day house has a classic six-hole layout, tabletop space and flexible seating. Get comfortable, organize your gear and spend the day fishing in the warmth.',
+      facts: ['6 fishing holes', 'Heated interior', '12-volt lights', 'Day use'],
+      url: 'https://www.baxstarfishing.com/icefishing/ice-house-rentals',
+      photos: [['a30e59_baf9077115b448f29c20c50798a74ed1~mv2.jpg', 'Wooden Day House interior']]
+    },
+    '346191': {
+      title: 'Aluminum Day House', subtitle: '14′ × 6.5′ · Built for fishing', size: '14′ × 6.5′ · Day rental',
+      description: 'Built right here in Detroit Lakes. This aluminum day house has eight holes, two padded benches and a layout designed with live-imaging setups in mind.',
+      facts: ['8 fishing holes', 'Two padded benches', '43-inch television', 'Day use'],
+      url: 'https://www.baxstarfishing.com/icefishing/ice-house-rentals',
+      photos: [
+        ['a30e59_6a70a57168c04354b80699c9403dd227~mv2.jpeg', 'Aluminum Day House exterior on the ice'],
+        ['a30e59_0b706eed156741ccb4db185ad51436ff~mv2.png', 'Aluminum Day House interior and padded benches']
+      ]
+    }
   },
   react: {
     h3: 'After-work bite.', h4: 'Half day on the water.', h5: 'The sweet spot.', h6: 'Built for serious anglers.', h8: 'Not for the meek.',
@@ -453,9 +653,9 @@ function pickOrb(orb, g, angle, ready){
 function clear(el){ while (el.firstChild) el.removeChild(el.firstChild); }
 function el(tag, cls, text){ var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
 
-function drawFan(items){
+function drawFan(items, layout){
   clear(fan);
-  var n = items.length, g = geom(n);
+  var n = items.length, g = layout || geom(n);
   items.forEach(function(it, i){
     var a = n === 1 ? g.home : (g.a0 + i * (g.a1 - g.a0) / (n - 1));
     var rad = a * Math.PI / 180, x = g.R * Math.sin(rad), y = -g.R * Math.cos(rad);
@@ -468,14 +668,103 @@ function drawFan(items){
     orb.style.setProperty('--fx', (-x) + 'px');
     orb.style.setProperty('--fy', (-y) + 'px');
     orb.style.animationDelay = (60 + i * 55) + 'ms';
-    orb.appendChild(el('b', null, it.label));
-    if (it.sub) orb.appendChild(el('small', null, it.sub));
+    if (it.house) {
+      orb.classList.add('house-orb');
+      orb.setAttribute('aria-label', 'Preview ' + it.house.title + ', ' + it.house.size);
+      orb.setAttribute('aria-haspopup', 'dialog');
+      var photo = el('span', 'house-photo'), img = el('img');
+      img.src = housePhotoUrl(it.house.photos[0], 400); img.alt = ''; img.decoding = 'async';
+      img.addEventListener('error', function(){ photo.replaceChildren(el('span', null, 'View house')); });
+      photo.appendChild(img); orb.appendChild(photo);
+      var label = el('span', 'house-label');
+      label.appendChild(el('b', null, it.label)); label.appendChild(el('small', null, it.house.size));
+      orb.appendChild(label);
+    } else {
+      orb.appendChild(el('b', null, it.label));
+      if (it.sub) orb.appendChild(el('small', null, it.sub));
+    }
     orb.insertAdjacentHTML('beforeend', ringSvg());
     orb.addEventListener('animationend', function(ev){ if (ev.animationName === 'orbOut') orb.style.animation = 'none'; });
     orb.addEventListener('click', function(){ if (!S.busy) it.go(orb, g, a); });
     fan.appendChild(orb);
   });
   return g;
+}
+
+/* Independent from the day dial: choosing a house never skips its photos and details. */
+function houseGeom(n){
+  var W = stage.clientWidth, H = stage.clientHeight;
+  if (isDesk()) {
+    var C = H < 650 ? 88 : 112;
+    return { C: C, R: Math.min(560, H - AX - C / 2 - 34), a0: -76, a1: -14, home: -45, fr: .18 };
+  }
+  var C = n === 2 ? 88 : (W < 350 ? 66 : 76), spread = n === 2 ? 32 : 66;
+  return { C: C, R: Math.min(210, (W / 2 - C / 2 - 10) / Math.sin(spread * Math.PI / 180)), a0: -spread, a1: spread, home: 0, fr: .18 };
+}
+function housePhotoUrl(photo, width){
+  width = width || 1200;
+  return 'https://static.wixstatic.com/media/' + photo[0] + '/v1/fit/w_' + width + ',h_' + Math.round(width * .75) + ',q_85,enc_avif,quality_auto/' + photo[0];
+}
+var houseView = { item: null, index: 0, trigger: null, choosing: false };
+function paintHousePhoto(){
+  var house = CFG.houses[houseView.item.id], photo = house.photos[houseView.index], img = $('hv-photo');
+  $('hv-error').hidden = true; img.hidden = false;
+  img.alt = photo[1]; img.src = housePhotoUrl(photo);
+  $('hv-photo-label').textContent = photo[1];
+  $('hv-count').textContent = (houseView.index + 1) + ' / ' + house.photos.length;
+  $('hv-prev').hidden = $('hv-next').hidden = house.photos.length < 2;
+  clear($('hv-dots'));
+  if (house.photos.length > 1) house.photos.forEach(function(p, i){
+    var b = el('button', 'hv-dot'); b.type = 'button';
+    b.setAttribute('aria-label', 'Show photo ' + (i + 1) + ': ' + p[1]);
+    b.setAttribute('aria-current', String(i === houseView.index));
+    b.addEventListener('click', function(){ houseView.index = i; paintHousePhoto(); });
+    $('hv-dots').appendChild(b);
+  });
+}
+function turnHousePhoto(delta){
+  if (!houseView.item) return;
+  var count = CFG.houses[houseView.item.id].photos.length;
+  houseView.index = (houseView.index + delta + count) % count; paintHousePhoto();
+}
+function openHouse(item, trigger, choosing, geometry, angle){
+  var house = CFG.houses[item.id];
+  if (!house) return;
+  houseView = { item: item, index: 0, trigger: trigger, choosing: choosing, geometry: geometry, angle: angle };
+  $('hv-title').textContent = house.title; $('hv-subtitle').textContent = house.subtitle;
+  $('hv-description').textContent = house.description; $('hv-full').href = house.url;
+  clear($('hv-facts')); house.facts.forEach(function(f){ $('hv-facts').appendChild(el('li', null, f)); });
+  $('hv-book').textContent = choosing ? 'Book this house' : 'Back to my trip';
+  $('hv-next-step').textContent = choosing ? 'Choose your dates next. FareHarbor confirms availability and final pricing.' : 'Your selections are saved while you look around.';
+  paintHousePhoto(); $('house-view').showModal(); $('house-view').scrollTop = 0;
+}
+function closeHouse(){ $('house-view').close(); }
+$('hv-photo').addEventListener('error', function(){ $('hv-photo').hidden = true; $('hv-error').hidden = false; });
+$('hv-close').addEventListener('click', closeHouse);
+$('hv-prev').addEventListener('click', function(){ turnHousePhoto(-1); });
+$('hv-next').addEventListener('click', function(){ turnHousePhoto(1); });
+$('house-view').addEventListener('close', function(){
+  var target = houseView.trigger;
+  if (target && target.isConnected) target.focus({ preventScroll: true });
+});
+$('house-view').addEventListener('keydown', function(ev){
+  ev.stopPropagation();
+  if (ev.key === 'ArrowLeft' || ev.key === 'ArrowRight') { ev.preventDefault(); turnHousePhoto(ev.key === 'ArrowRight' ? 1 : -1); }
+});
+$('hv-book').addEventListener('click', function(){
+  var view = houseView, item = view.item; closeHouse();
+  if (view.choosing) {
+    var ready = view.geometry && view.trigger.isConnected ? pickOrb(view.trigger, view.geometry, view.angle) : Promise.resolve();
+    ready.then(function(){ commit('house', item.short, { item: item, kick: 'Good pick.' }); $('house-peek').focus({ preventScroll: true }); });
+  }
+});
+$('house-peek').addEventListener('click', function(){ if (S.item) openHouse(S.item, $('house-peek'), false); });
+function drawHousePeek(){
+  var b = $('house-peek'), house = S.item && CFG.houses[S.item.id];
+  b.classList.toggle('on', !!house); clear(b);
+  if (!house) return;
+  var img = el('img'); img.src = housePhotoUrl(house.photos[0], 120); img.alt = '';
+  b.appendChild(img); b.appendChild(el('span', null, 'View ' + S.item.short));
 }
 /* desktop only: the question sits just outside the arc on Skipper's diagonal; the summary circle sits there on the last step */
 function place(g, withMedal){
@@ -646,7 +935,6 @@ function drawPicks(){
     var b = el('button', 'pick'); b.type = 'button';
     b.setAttribute('aria-label', 'Change ' + p.label);
     b.appendChild(el('i', null, String(i + 1))); b.appendChild(el('span', null, p.label));
-    if (desk) { var a = (-76 + i * 15.5) * Math.PI / 180; b.style.left = (PR * Math.sin(a) - 29) + 'px'; b.style.top = (-PR * Math.cos(a) - 29) + 'px'; }
     b.addEventListener('click', function(){ if (!S.busy) goStep(i); });
     box.appendChild(b);
   });
@@ -667,9 +955,11 @@ function render(){
   stage.classList.toggle('typing', S.open && S.typing); askHint();
   $('mascot').setAttribute('aria-label', S.open ? 'Close Skipper' : 'Open Skipper');
   $('mascot').setAttribute('aria-expanded', String(S.open));
+  $('home').inert = S.open;
   if (!S.open) return;
   setMedalSize();
   drawPicks();
+  drawHousePeek();
   medal.classList.remove('on'); rail.classList.remove('on'); clear(rail); clear(fan); dialOff();
   var f = flow(); if (S.step >= f.length) S.step = f.length - 1;
   var key = f[S.step], live = !!S.feed, kick = S.kick || 'Skipper';
@@ -700,8 +990,8 @@ function render(){
       return { label: gr.label, go: pick('item', gr.label, gr.items.length > 1 ? { group: gr, kick: 'Noted.' } : { group: gr, item: gr.items[0], kick: 'Noted.' }) };
     })));
   } else if (key === 'house') {
-    caption(kick, 'Which house?', 'Sizes and prices are on the booking page.');
-    place(drawFan(S.group.items.map(function(it){ return { label: it.short, go: pick('house', it.short, { item: it, kick: 'Good pick.' }) }; })));
+    caption('Make yourself at home', 'Which house feels like you?', 'Tap a house. Take a look inside. Then pick your dates.');
+    place(drawFan(S.group.items.map(function(it){ return { label: it.short, house: CFG.houses[it.id], go: function(orb, g, a){ openHouse(it, orb, true, g, a); } }; }), houseGeom(S.group.items.length)));
   } else if (key === 'month') {
     var rule = S.cat === 'open' ? CFG.tripRules[S.hours] : null, months = monthsFor();
     caption(kick, 'Which month?', S.cat === 'open' ? (rule && rule.note ? rule.note : 'Open-water trips run April through October.') : '');
@@ -718,8 +1008,9 @@ function render(){
       place(null); rail.classList.add('on'); drawRail();
     }
   } else {
+    if (!isDesk()) $('house-peek').classList.remove('on');
     var price = dayPrice(S.date), dayTxt = MONTHS[S.date.getMonth()] + ' ' + S.date.getDate();
-    caption('Skipper', S.said || ('Here is your trip. Book it, then tap ' + dayTxt + ' on the calendar.'), '', true);
+    caption('Skipper', S.said || ('Your plan for ' + dayTxt + '. Check live dates and times in FareHarbor.'), '', true);
     $('mStatus').textContent = price != null ? (S.feedState === 'ok' ? 'LIVE PRICE' : 'LAST PRICE READ') : 'PRICE AT CHECKOUT';
     $('mTitle').textContent = tripTitle();
     $('mLine').textContent = (S.cat === 'open' ? groupOf(S.guests).say + ' · ' : '') + DOW[S.date.getDay()] + ', ' + dayTxt;
@@ -733,7 +1024,7 @@ function render(){
     medal.classList.add('on');
     place(drawFan([
       { label: 'Change it', go: function(){ S.said = 'Tap any pick and I deal that question again.'; caption('Skipper', S.said, '', true); } },
-      { label: 'Book it', primary: true, go: function(orb, g, a){ pickOrb(orb, g, a).then(function(){ location.href = fhUrl(); }); } },
+      { label: 'See live times', primary: true, go: function(orb, g, a){ pickOrb(orb, g, a).then(function(){ location.href = fhUrl(); }); } },
       { label: 'Text my crew', go: function(){ shareTrip(price); } },
       { label: 'Ask Skipper', go: function(){ S.typing = true; stage.classList.add('typing'); S.said = 'Typed questions are not wired up yet. That is the next version.'; caption('Skipper', S.said, '', true); try { $('ask').focus(); } catch (e) {} } }
     ]), true);
@@ -794,10 +1085,23 @@ function askHint(){ $('ask').placeholder = isDesk() && !S.typing ? 'Ask Skipper'
 $('ask').addEventListener('focus', function(){ if (isDesk() && S.open) { S.typing = true; stage.classList.add('typing'); askHint(); } });
 $('send').addEventListener('mousedown', function(ev){ if (isDesk()) ev.preventDefault(); }); /* keep the cursor in the bar so the click lands */
 $('ask').addEventListener('blur', function(){ if (isDesk()) { S.typing = false; stage.classList.remove('typing'); askHint(); } });
-function sendAsk(){ S.typing = false; stage.classList.remove('typing'); $('ask').value = ''; if (isDesk()) { try { $('ask').blur(); } catch (e) {} } caption('Skipper', 'Typed questions are not wired up yet. That is the next version. The circles work now.', '', flow()[S.step] === 'sum'); }
+function sendAsk(){
+  var question = $('ask').value.trim(); if (!question) return;
+  S.typing = false; stage.classList.remove('typing'); $('ask').value = '';
+  if (isDesk()) {
+    var log = $('chat-copy');
+    log.appendChild(el('p', 'chat-you', question));
+    log.appendChild(el('p', null, 'Chat answers are not connected in this preview. Use the circles to plan your trip.'));
+    log.scrollTop = log.scrollHeight;
+    try { $('ask').blur(); } catch (e) {}
+  } else caption('Skipper', 'Typed questions are not wired up yet. The circles work now.', '', flow()[S.step] === 'sum');
+}
+/* Scrolling chat content must not turn the date dial underneath it. */
+$('typebar').addEventListener('wheel', function(ev){ ev.stopPropagation(); }, { passive: true });
 $('send').addEventListener('click', sendAsk);
 $('ask').addEventListener('keydown', function(ev){ if (ev.key === 'Enter') sendAsk(); });
 document.addEventListener('keydown', function(ev){
+  if ($('house-view').open) return;
   if (ev.key === 'Escape' && S.open && !S.busy) { S.open = false; render(); }
   if (dial.live && !S.busy && (ev.key === 'ArrowLeft' || ev.key === 'ArrowRight') && document.activeElement !== $('ask')) { ev.preventDefault(); dialTo(Math.round(dial.target) + (ev.key === 'ArrowRight' ? 1 : -1)); }
 });
