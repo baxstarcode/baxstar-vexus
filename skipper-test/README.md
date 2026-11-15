@@ -12,23 +12,44 @@ Implemented in `index.html` on `codex/skipper-house-quick-view`. This is an unin
 - A selected house can be reopened during date selection without losing the plan. Full description links open in a new tab.
 - Desktop chat sits inside the fan above a horizontal row of previous selections, following Brady's concept. Chat answers remain disconnected and are labeled as a preview. Mobile retains its top selection line.
 - House photos have more space between them. CDN-sized images avoid loading full-resolution originals for thumbnails.
-- Existing pricing functions, feed handling, desktop date wheel, mobile date rail and product flow are preserved. Group choices remain 1–2, 3, 4, 5; larger-group workflow remains a separate existing requirement.
+- Existing pricing functions, feed handling, desktop date wheel and mobile date rail are preserved. A time-selection step is enabled only when the availability bridge is configured. Group choices remain 1–2, 3, 4, 5; larger-group workflow remains a separate existing requirement.
 
-## FareHarbor checkout: PROVISIONAL, not finished
+## FareHarbor checkout: UI implemented; live connection PROVISIONAL
 
-Brady requires the last click to open the final booking form for the selected product, date **and time**. The current prototype has no live availability feed and no time-selection step. Its existing calendar URL carries only an item and month. The final circle therefore says “See live times,” not “Book it.” It must not be represented as an exact-date checkout connection.
-
-Verified against FareHarbor's public documentation and a read-only live form:
+Brady requires the last click to open the final booking form for the selected product, date **and time**. The frontend now supports live time choices and the exact availability route:
 
 `https://fareharbor.com/embeds/book/{company}/items/{item_id}/availability/{availability_id}/book/`
 
-An availability ID identifies the real date and time. A live availability integration must supply it, present the offered times, clear the selection when the item/date changes, and open that exact URL. Do not infer IDs from timestamps, hardcode a sample ID, or treat the pricing feed as availability. No availability backend or credentials were added in this UI change.
+The final “Book it” click fetches availability again and opens that form only when the selected ID and start time still match the selected plan. Changed item/date/duration/group clears the previous time. Failed refreshes and removed/sold-out times return to time selection. Central time is used for day matching and labels; no ID is inferred from a timestamp. A pricing feed cannot unlock checkout.
 
-Read-only check: The Lodge availability 2106632573 displayed January 8, 2027 at 1:00 PM in its booking form. This is evidence of the URL format, **not a production mapping**. A December 2026 calendar link automatically displayed January 2027 because no December availability was offered, demonstrating why month links do not meet Brady's requirement. No quantities, customer information or payments were submitted.
+**Still required:** connect `CFG.availabilityUrl` to an approved server-side FareHarbor availability bridge. It is intentionally blank in the shipped preview. Without that connection the existing flow stays labeled “See live times” and opens the calendar; it does not pretend to preserve an exact date/time. No backend, API keys or live FareHarbor writes were added. The account's AI connection remains with Claude.
+
+### Availability bridge contract
+
+The frontend makes an uncached GET with `itemId`, `date` (`YYYY-MM-DD`, America/Chicago), and, for open-water trips, `hours` and `guests`. The approved bridge must validate the requested product, retrieve current online-bookable FareHarbor availability and resolve the requested duration/group. Return only the minimal public availability data below; credentials and customer booking records stay server-side.
+
+```json
+{
+  "itemId": "593973",
+  "date": "2027-01-08",
+  "hours": null,
+  "guests": null,
+  "availabilities": [
+    { "id": "ACTUAL_FAREHARBOR_ID", "startAt": "2027-01-08T13:00:00-06:00", "bookable": true }
+  ]
+}
+```
+
+Use actual numeric IDs, offset-qualified start times, exact echoed query fields and an empty array when there are no openings. Do not echo a requested duration/group without validating it against FareHarbor. Return an error if the combination cannot be resolved. The frontend rejects mismatched responses, invalid or past starts, unbookable entries and dates that differ after Central-time conversion. Responses are held in memory, not persisted; final checkout always refreshes. The booking form remains authoritative for quantities, duration/customer-type selections and final charges. Automatic preselection of those checkout fields is not implemented or verified.
+
+A local mock verifies the UI contract; it is not a live availability source. In the desktop browser test, selecting 1:00 PM and clicking “Book it” opened the real FareHarbor form for The Lodge on Friday, January 8, 2027 at 1:00 PM. No booking fields were entered. The phone time screen rendered, but the browser automation could not activate its button reliably; phone time interaction remains PROVISIONAL. `node --test skipper-test/booking.test.cjs` covers exact routing, selection changes, Central/DST dates, request races, timeout, sold-out refresh and failed refresh. No test submits a booking.
+
+Read-only live evidence: The Lodge availability 2106632573 displayed January 8, 2027 at 1:00 PM. This sample verifies the URL format, **not a production mapping**. A December 2026 calendar URL automatically displayed January 2027 because no December availability was offered; month links do not meet the exact-date requirement.
 
 Official references:
 
 - [FareHarbor booking integration guidance](https://developer.fareharbor.com/api/external/v1/guides-and-faqs)
+- [FareHarbor availability API](https://developer.fareharbor.com/api/external/v1/home)
 - [Advanced Lightframe usage](https://pages.fareharbor.com/website/integrations/lightframe/lightframe-api/)
 
 ## Year-round homepage and search handoff
@@ -60,7 +81,7 @@ The titles use Brady's current FareHarbor screenshot and explicit four-house sel
 
 ## Verification
 
-- JavaScript parses; repository Baxstar Lint passes locally with zero failures or warnings.
+- JavaScript parses; repository Baxstar Lint passes locally with zero failures or warnings. All 12 checkout contract tests pass.
 - Price/feed and date-wheel/date-rail function blocks match the baseline byte for byte.
 - All 24 unique public house-page and gallery-image URLs returned HTTP 200.
 - Exact four overnight IDs and single-person group increments checked from configuration.

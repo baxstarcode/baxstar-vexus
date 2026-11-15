@@ -234,10 +234,11 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(-
 /* Brady's desktop concept: text chat above a horizontal row of past picks. */
 #chat-copy{display:none}
 .desk #line{right:40px;bottom:174px;width:auto;height:52px}
-.desk #picks{display:flex;gap:10px;justify-content:flex-end}
+.desk #picks{display:flex;gap:6px;max-width:300px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}
 .desk .pick{position:relative;inset:auto;width:52px;height:52px;flex:0 0 52px}
+.desk #picks.many .pick{width:44px;height:44px;flex-basis:44px}
 .desk .pick span{font-size:10px}
-.desk #typebar,.desk.typing #typebar{right:32px;bottom:250px;width:230px;height:120px;padding:10px;display:none;flex-wrap:wrap;gap:6px;border:1px solid #44444c;border-radius:12px;background:#16161beF;z-index:6}
+.desk #typebar,.desk.typing #typebar{right:24px;bottom:250px;width:216px;height:120px;padding:10px;display:none;flex-wrap:wrap;gap:6px;border:1px solid #44444c;border-radius:12px;background:#16161beF;z-index:6}
 .desk.open #typebar{display:flex}
 .desk #chat-copy{display:block;flex:0 0 100%;height:56px;overflow:auto;color:var(--bone);font-size:12px;line-height:1.35;overscroll-behavior:contain}
 .desk #chat-copy p{margin:0 0 6px}.desk #chat-copy .chat-you{color:var(--pearl)}
@@ -358,6 +359,10 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(-
 var CFG = {
   feedUrl: 'https://script.google.com/macros/s/AKfycbxe4eTXfXY2UeBhOnIvzeoAxTZZIn4ScjHYcfTuoKGDcJCwH7ISzU9hseNe5Ut-5rA1-w/exec',
   feedTimeoutMs: 8000,
+  /* Set only to the approved server-side FareHarbor availability bridge. Never put API keys here. */
+  availabilityUrl: '',
+  availabilityTimeoutMs: 8000,
+  availabilityMaxAgeMs: 60000,
   fh: { base: 'https://fareharbor.com/embeds/book/', shortname: 'baxstarfishing', item: '309836', flow: '576827' },
   feeLine: '6% Provider Fee added at checkout',
   hours: [3, 4, 5, 6, 8],
@@ -471,12 +476,47 @@ var CFG = {
 };
 /* ============================================================================================ */
 
+/* ---------- exact checkout helpers (also exercised by booking.test.cjs) ---------- */
+var Booking = (function(){
+  var zone = 'America/Chicago';
+  function day(d){ return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); }
+  function localDay(iso){
+    var parts = new Intl.DateTimeFormat('en-US', { timeZone: zone, year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(new Date(iso)), p = {};
+    parts.forEach(function(x){ p[x.type] = x.value; });
+    return p.year + '-' + p.month + '-' + p.day;
+  }
+  function clock(iso){ return new Intl.DateTimeFormat('en-US', { timeZone: zone, hour: 'numeric', minute: '2-digit' }).format(new Date(iso)); }
+  function key(q){ return [q.itemId, q.date, q.hours == null ? '' : q.hours, q.guests == null ? '' : q.guests].join('|'); }
+  function normalize(data, q, now){
+    if (!data || String(data.itemId) !== q.itemId || data.date !== q.date || (data.hours == null ? null : data.hours) !== q.hours || (data.guests == null ? null : data.guests) !== q.guests || !Array.isArray(data.availabilities)) throw new Error('Availability response does not match this plan');
+    var seen = {}, slots = [];
+    data.availabilities.forEach(function(a){
+      if (!a || a.bookable !== true || !/^[1-9]\d*$/.test(String(a.id)) || typeof a.startAt !== 'string' || !/(Z|[+-]\d{2}:\d{2})$/.test(a.startAt)) return;
+      var ms = Date.parse(a.startAt), id = String(a.id);
+      if (!isFinite(ms) || ms <= now || localDay(a.startAt) !== q.date || seen[id]) return;
+      seen[id] = true;
+      slots.push({ id: id, startAt: a.startAt, label: clock(a.startAt), key: key(q) });
+    });
+    return slots.sort(function(a, b){ return Date.parse(a.startAt) - Date.parse(b.startAt); });
+  }
+  function exactUrl(fh, q, slot, slots, receivedAt, now, maxAge, back){
+    if (!slot || slot.key !== key(q) || now < receivedAt || now - receivedAt > maxAge || Date.parse(slot.startAt) <= now) return null;
+    var current = slots.some(function(a){ return a.id === slot.id && a.startAt === slot.startAt && a.key === key(q); });
+    if (!current || !/^[1-9]\d*$/.test(q.itemId) || !/^[1-9]\d*$/.test(slot.id) || localDay(slot.startAt) !== q.date) return null;
+    return fh.base + fh.shortname + '/items/' + q.itemId + '/availability/' + slot.id + '/book/?' +
+      (q.itemId === fh.item ? 'flow=' + fh.flow + '&' : '') + 'full-items=yes&back=' + encodeURIComponent(back);
+  }
+  return { day: day, key: key, normalize: normalize, exactUrl: exactUrl };
+})();
+/* ---------- end exact checkout helpers ---------- */
+
 var $ = function(id){ return document.getElementById(id); };
 var stage = $('stage'), fan = $('fan'), rail = $('rail'), cap = $('cap'), medal = $('medal');
 var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 var DOW = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 var reduce = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
 var S = { open: false, step: 0, picks: [], cat: null, group: null, item: null, hours: null, guests: null, month: null, date: null, kick: null, busy: false, typing: false, said: null, feed: null, feedState: 'loading', feedAt: 0 };
+S.slot = null; S.availabilities = []; S.availabilityState = 'idle'; S.availabilityAt = 0; S.timePage = 0; S.checkoutBusy = false;
 window.__skipper = S; /* test hook, read-only use */
 
 /* ---------- price feed ---------- */
@@ -575,6 +615,55 @@ function fhUrl(){
   var u = CFG.fh.base + CFG.fh.shortname + '/items/' + id + '/';
   if (S.month) u += 'calendar/' + S.month.y + '/' + ('0' + (S.month.m + 1)).slice(-2) + '/';
   return u + '?' + (id === CFG.fh.item ? 'flow=' + CFG.fh.flow + '&' : '') + 'full-items=yes&back=' + encodeURIComponent(location.href.split('#')[0]);
+}
+
+/* The bridge is deliberately unconfigured until live FareHarbor access is connected.
+   A pricing response, guessed start time or saved availability ID cannot unlock checkout. */
+var availabilitySerial = 0;
+function availabilityQuery(){
+  return { itemId: String((S.cat !== 'open' && S.item) ? S.item.id : CFG.fh.item), date: Booking.day(S.date),
+    hours: S.cat === 'open' ? S.hours : null, guests: S.cat === 'open' ? S.guests : null };
+}
+function clearAvailability(){
+  availabilitySerial++; S.slot = null; S.availabilities = []; S.availabilityState = 'idle'; S.availabilityAt = 0; S.timePage = 0;
+}
+function readAvailability(){
+  var q = availabilityQuery(), serial = ++availabilitySerial, controller = new AbortController(), timer;
+  S.availabilityState = 'loading'; S.availabilities = []; S.availabilityAt = 0;
+  return Promise.resolve().then(function(){
+    if (!CFG.availabilityUrl) throw new Error('Availability connection is not configured');
+    var url = new URL(CFG.availabilityUrl, location.href);
+    Object.keys(q).forEach(function(k){ if (q[k] != null) url.searchParams.set(k, q[k]); });
+    var timeout = new Promise(function(resolve, reject){ timer = setTimeout(function(){ controller.abort(); reject(new Error('Availability request timed out')); }, CFG.availabilityTimeoutMs); });
+    var request = fetch(url.href, { cache: 'no-store', credentials: 'omit', signal: controller.signal })
+      .then(function(r){ if (!r.ok) throw new Error('Availability request failed'); return r.json(); });
+    return Promise.race([request, timeout]);
+  }).then(function(data){
+    if (serial !== availabilitySerial) return false;
+    S.availabilities = Booking.normalize(data, q, Date.now()); S.availabilityAt = Date.now();
+    S.availabilityState = S.availabilities.length ? 'ok' : 'empty'; return true;
+  }).catch(function(){
+    if (serial !== availabilitySerial) return false;
+    S.availabilityState = 'error'; S.availabilities = []; S.availabilityAt = 0; return false;
+  }).finally(function(){ clearTimeout(timer); });
+}
+function checkoutUrl(){
+  if (!S.date || S.availabilityState !== 'ok') return null;
+  return Booking.exactUrl(CFG.fh, availabilityQuery(), S.slot, S.availabilities, S.availabilityAt, Date.now(), CFG.availabilityMaxAgeMs, location.href.split('#')[0]);
+}
+function openCheckout(orb, g, a){
+  if (S.checkoutBusy) return;
+  if (!CFG.availabilityUrl) { pickOrb(orb, g, a).then(function(){ location.href = fhUrl(); }); return; }
+  if (!S.slot) { goStep(flow().indexOf('time')); return; }
+  S.checkoutBusy = true;
+  caption('Skipper', 'Checking your time one more time.', 'Hang tight. FareHarbor has the final say.', true);
+  pickOrb(orb, g, a, readAvailability()).then(function(){
+    var url = checkoutUrl(); S.checkoutBusy = false;
+    if (url) { location.href = url; return; }
+    S.step = flow().indexOf('time'); S.picks = S.picks.slice(0, S.step); S.slot = null; S.timePage = 0;
+    S.said = S.availabilityState === 'error' ? 'I could not confirm that time. Try again.' : 'That time is no longer offered. Pick another opening.';
+    render();
+  });
 }
 
 /* ---------- layout ---------- */
@@ -911,12 +1000,14 @@ function drawRail(){
 }
 function flow(){
   if (!S.cat || S.cat === 'consult') return ['cat'];
-  if (S.cat === 'open') return ['cat', 'hours', 'guests', 'month', 'day', 'sum'];
+  var end = CFG.availabilityUrl ? ['month', 'day', 'time', 'sum'] : ['month', 'day', 'sum'];
+  if (S.cat === 'open') return ['cat', 'hours', 'guests'].concat(end);
   var f = ['cat', 'item'];
   if (S.group && S.group.items.length > 1) f.push('house');
-  return f.concat(['month', 'day', 'sum']);
+  return f.concat(end);
 }
 function commit(key, label, patch){
+  if (key !== 'time') clearAvailability();
   for (var k in patch) S[k] = patch[k];
   S.picks.push({ key: key, label: label }); S.step++; S.said = null; S.typing = false; render();
 }
@@ -925,11 +1016,13 @@ var CLEAR = { cat: ['cat', 'group', 'item', 'hours', 'guests', 'month', 'date'],
 function goStep(i){
   if (i < 0) i = 0;
   var key = flow()[i];
+  clearAvailability();
   (CLEAR[key] || []).forEach(function(k){ S[k] = null; });
   S.picks = S.picks.slice(0, i); S.step = i; S.said = null; S.kick = null; S.typing = false; render();
 }
 function drawPicks(){
   var box = $('picks'); clear(box);
+  box.classList.toggle('many', S.picks.length > 5);
   var desk = isDesk();
   S.picks.forEach(function(p, i){
     var b = el('button', 'pick'); b.type = 'button';
@@ -938,6 +1031,7 @@ function drawPicks(){
     b.addEventListener('click', function(){ if (!S.busy) goStep(i); });
     box.appendChild(b);
   });
+  if (desk) box.scrollLeft = box.scrollWidth;
   $('lineHint').style.display = S.picks.length ? 'none' : '';
 }
 function groupOf(id){ for (var i = 0; i < CFG.sizes.length; i++) if (CFG.sizes[i].id === id) return CFG.sizes[i]; return CFG.sizes[0]; }
@@ -1007,13 +1101,35 @@ function render(){
       caption(kick, 'Pick your day.', (priced ? 'Each day shows the price for your group. ' : '') + 'Swipe sideways for more days.');
       place(null); rail.classList.add('on'); drawRail();
     }
+  } else if (key === 'time') {
+    var status = S.availabilityState, options = [], dayStep = flow().indexOf('day');
+    if (status === 'idle') {
+      readAvailability().then(function(){ if (S.open && flow()[S.step] === 'time' && !S.busy) render(); });
+      status = 'loading';
+    }
+    if (status === 'ok') {
+      caption('Skipper', S.said || 'What time works for you?', longDate(S.date) + ' · All times Central');
+      var pageSize = 4, pages = Math.ceil(S.availabilities.length / pageSize);
+      S.timePage = Math.min(S.timePage, pages - 1);
+      options = S.availabilities.slice(S.timePage * pageSize, (S.timePage + 1) * pageSize).map(function(slot){
+        return { label: slot.label, go: pick('time', slot.label, { slot: slot, kick: 'That works.' }) };
+      });
+      if (S.timePage > 0) options.unshift({ label: 'Earlier times', go: function(){ S.timePage--; render(); } });
+      if (S.timePage + 1 < pages) options.push({ label: 'Later times', go: function(){ S.timePage++; render(); } });
+    } else {
+      caption('Skipper', S.said || (status === 'loading' ? 'Checking live times.' : status === 'empty' ? 'No openings on this day.' : 'I could not load the times.'), longDate(S.date) + ' · All times Central');
+      if (status === 'error') options.push({ label: 'Try again', go: function(){ clearAvailability(); S.said = null; render(); } });
+      options.push({ label: 'Another day', go: function(){ goStep(dayStep); } });
+      if (status !== 'loading') options.push({ label: 'Open calendar', go: function(){ location.href = fhUrl(); } });
+    }
+    place(drawFan(options));
   } else {
     if (!isDesk()) $('house-peek').classList.remove('on');
     var price = dayPrice(S.date), dayTxt = MONTHS[S.date.getMonth()] + ' ' + S.date.getDate();
-    caption('Skipper', S.said || ('Your plan for ' + dayTxt + '. Check live dates and times in FareHarbor.'), '', true);
+    caption('Skipper', S.said || ('Your plan for ' + dayTxt + (S.slot ? ' at ' + S.slot.label + ' Central. Ready?' : '. Check live dates and times in FareHarbor.')), '', true);
     $('mStatus').textContent = price != null ? (S.feedState === 'ok' ? 'LIVE PRICE' : 'LAST PRICE READ') : 'PRICE AT CHECKOUT';
     $('mTitle').textContent = tripTitle();
-    $('mLine').textContent = (S.cat === 'open' ? groupOf(S.guests).say + ' · ' : '') + DOW[S.date.getDay()] + ', ' + dayTxt;
+    $('mLine').textContent = (S.cat === 'open' ? groupOf(S.guests).say + ' · ' : '') + DOW[S.date.getDay()] + ', ' + dayTxt + (S.slot ? ' · ' + S.slot.label + ' CT' : '');
     $('mPrice').textContent = price != null ? money(price) : 'See checkout';
     $('mPrice').classList.toggle('words', price == null);
     $('mFee').textContent = price != null ? CFG.feeLine : '';
@@ -1024,7 +1140,7 @@ function render(){
     medal.classList.add('on');
     place(drawFan([
       { label: 'Change it', go: function(){ S.said = 'Tap any pick and I deal that question again.'; caption('Skipper', S.said, '', true); } },
-      { label: 'See live times', primary: true, go: function(orb, g, a){ pickOrb(orb, g, a).then(function(){ location.href = fhUrl(); }); } },
+      { label: S.slot ? 'Book it' : 'See live times', primary: true, go: openCheckout },
       { label: 'Text my crew', go: function(){ shareTrip(price); } },
       { label: 'Ask Skipper', go: function(){ S.typing = true; stage.classList.add('typing'); S.said = 'Typed questions are not wired up yet. That is the next version.'; caption('Skipper', S.said, '', true); try { $('ask').focus(); } catch (e) {} } }
     ]), true);
@@ -1032,7 +1148,7 @@ function render(){
 }
 function shareTrip(price){
   var text = 'Trip idea with Baxstar Fishing: ' + tripTitle() + (S.cat === 'open' ? ', ' + groupOf(S.guests).say : '') + ', ' + longDate(S.date) + '. ' +
-    (price != null ? money(price) + ' plus a 6% provider fee. ' : '') + 'Book here: ' + fhUrl();
+    (S.slot ? S.slot.label + ' Central. ' : '') + (price != null ? money(price) + ' plus a 6% provider fee. ' : '') + 'Book here: ' + (checkoutUrl() || fhUrl());
   var done = function(msg){ S.said = msg; caption('Skipper', msg, '', true); };
   if (navigator.share) navigator.share({ text: text }).then(function(){ done('Crew text is ready. You hit send.'); }).catch(function(){});
   else if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(function(){ done('Copied. Paste it to your crew.'); }).catch(function(){ done('Your browser would not let me copy that.'); });
