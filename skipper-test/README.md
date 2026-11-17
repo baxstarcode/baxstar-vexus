@@ -2,11 +2,13 @@
 
 The preview keeps Skipper's desktop fan anchored at the bottom right and the mobile fan centered at the bottom. Houses now have real photos and a Quick View before date selection. The homepage beneath Skipper presents the year-round business and links to the existing service and house pages.
 
-## Current status — November 15, 2026
+## Current status — November 17, 2026
+
+The Blue Diamond rename from Handoff #749 updates the house label, Quick View title, home card and photo alt text. No inventory, pricing, calendar logic or checkout behavior changed. The photo feature remains on this review branch; the rename does not merge the larger preview into main.
 
 Implemented in `index.html` on `codex/skipper-house-quick-view`. This is an unindexed design preview, not a Wix homepage publication. The production boat page, Pricing Engine, FareHarbor configuration and existing knowledge updater are unchanged.
 
-- Four overnight choices, as Brady requested: The Lodge (593973), The Range Runner (422226), The Hearth (681248), and 17′ Luxury RV Edition (681247). The two 24-foot choices are omitted from this customer UI; no inventory was deleted.
+- Four overnight choices, as Brady requested: The Lodge (593973), The Range Runner (422226), The Hearth (681248), and Blue Diamond (681247). The two 24-foot choices are omitted from this customer UI; no inventory was deleted.
 - Wooden and aluminum day houses also have photo previews. The wooden house uses its verified interior photograph; no exterior or AI-generated house details are invented.
 - Quick View has the title above the carousel, a short description, verified feature chips, “Book this house,” and “Check out full description.” Booking advances to dates; it does not create a reservation.
 - A selected house can be reopened during date selection without losing the plan. Full description links open in a new tab.
@@ -63,20 +65,20 @@ Prepared production metadata:
 - H1: **Good days on the water. All year long.**
 - Intro: **Guided fishing trips, pontoon rentals and ice house rentals in Detroit Lakes. Pick your kind of lake day. We’ll help with the rest.**
 
-Keep the homepage year-round. Seasonal promotions can change below this introduction without replacing the year-round title, service navigation or internal links. Pontoons link to Baxstar Outdoors and retain that brand's identity. Keep `/icefishing` as the winter overview, `/ice-castle-rentals` as the comparison page, and each current house URL as its full description. Keep the rented-out Luxury house listed; lack of dates is not a retirement or redirect instruction. House size belongs in headings and descriptions; model names alone are not the search strategy.
+Keep the homepage year-round. Seasonal promotions can change below this introduction without replacing the year-round title, service navigation or internal links. Pontoons link to Baxstar Outdoors and retain that brand's identity. Keep `/icefishing` as the winter overview, `/ice-castle-rentals` as the comparison page, and each current house URL as its full description. Blue Diamond (681247) is open for 2026–27 per owner ruling #725, with 78 availabilities recorded for December 18, 2026 through March 7, 2027. It is not rented out; the live FareHarbor calendar remains authoritative for bookability. Per #747–#749, its customer label is exactly “Blue Diamond” with no size; size may remain in descriptive specifications. Keep its existing page URL.
 
 When applying this to Wix, place the essential service text and internal links in the indexable page body and set the actual page metadata. This test URL intentionally remains `noindex, nofollow`; publishing this preview alone does not fix the Wix homepage's SEO. Preserve established URLs and do not invent review counts, availability, prices, sleep capacities or structured-data claims. Structured data must describe the visible content. No special AI file or schema is needed; [Google's AI search guidance](https://developers.google.com/search/docs/appearance/ai-features) emphasizes accessible content and the existing search fundamentals.
 
 ## House content sources
 
-The titles use Brady's current FareHarbor screenshot and explicit four-house selection. Photographs, size and non-price feature summaries come from the corresponding public house pages. The Hearth mapping to the 17′ Hybrid is supported by Brady's supplied FareHarbor screenshot. The Luxury page has inconsistent hole counts; no hole count or sleep capacity is published in its Quick View.
+The titles use Brady's current FareHarbor screenshot and explicit four-house selection. Photographs, size and non-price feature summaries come from the corresponding public house pages. The Hearth mapping to the 17′ Hybrid is supported by Brady's supplied FareHarbor screenshot. Blue Diamond has 8 fishing holes per the November 15 owner ruling; no hole count or sleep capacity is published in its Quick View.
 
 | House | Full description and photo source |
 | --- | --- |
 | The Lodge | https://www.baxstarfishing.com/21-ice-castle-rental |
 | The Range Runner | https://www.baxstarfishing.com/ice-castle-range-runner |
 | The Hearth | https://www.baxstarfishing.com/17-hybrid-ii-ice-castle-detroit-lakes |
-| 17′ Luxury RV Edition | https://www.baxstarfishing.com/17-ice-castle-luxury-rv-edition-rental |
+| Blue Diamond | https://www.baxstarfishing.com/17-ice-castle-luxury-rv-edition-rental |
 | Wooden and aluminum day houses | https://www.baxstarfishing.com/icefishing/ice-house-rentals |
 
 ## Verification
