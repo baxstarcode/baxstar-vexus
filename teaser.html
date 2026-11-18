@@ -17,10 +17,13 @@
   --red-glow:rgba(213,24,32,.38);
 }
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%}
-/* position:fixed pins the document to the iframe viewport so iOS can never
-   scroll it internally — touch gestures fall through to the parent page */
-body{background:var(--ink);color:var(--platinum);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-weight:300;overflow:hidden;position:fixed;inset:0;width:100%;overscroll-behavior:none}
+/* Baxstar SCROLLLESS iframe standard: this embed never scrolls on its own, so
+   a touch inside the frame always moves the page it sits in. overflow:hidden
+   on html AND body is the whole rule. Do not add position:fixed or
+   overscroll-behavior here: set to none, it stops the touch from
+   passing up to the Wix page, so the section "sticks" under a finger. */
+html,body{height:100%;overflow:hidden}
+body{background:var(--ink);color:var(--platinum);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-weight:300}
 a{-webkit-tap-highlight-color:transparent}
 
 #teaser{height:100%;overflow:hidden;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:clamp(8px,2vh,20px);padding:clamp(14px,3vh,28px) 4vw;position:relative}
@@ -58,6 +61,9 @@ h2{font-family:'Saira Condensed',sans-serif;font-weight:700;text-transform:upper
   flex-shrink:0;transition:opacity .6s ease,transform .6s ease,background .3s ease}
 .play .cta{opacity:1;transform:none;pointer-events:auto;transition-delay:1.85s,1.85s,0s}
 .cta:hover{background:#ee2530}
+/* Phones: the button sat 8px under the hull, inside the boat's drop shadow.
+   Give it the same breathing room the boat has above it. */
+@media (max-width:700px){.cta{margin-top:18px}}
 .cta:focus-visible{outline:2px solid #fff;outline-offset:3px}
 .arr{transition:transform .25s}
 .cta:hover .arr{transform:translateX(4px)}
